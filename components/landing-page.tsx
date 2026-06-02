@@ -178,21 +178,21 @@ export default function LandingPage() {
             <a href="#faq" className="text-sm font-semibold text-slate-600 hover:text-[#C27BA0] transition-colors">FAQ</a>
           </div>
 
-          <div className="hidden md:flex items-center gap-3">
-            <Link href="/login" className="px-4 py-2 text-sm font-bold text-[#8C4A6E] hover:text-[#C27BA0] transition-colors">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link href="/login" className="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-bold text-[#8C4A6E] hover:text-[#C27BA0] transition-colors">
               Masuk
             </Link>
             <Link
               href="/register"
-              className="px-5 py-2.5 bg-gradient-to-r from-[#C27BA0] to-[#8C4A6E] text-white text-sm font-bold rounded-xl shadow-md shadow-[#C27BA0]/30 hover:shadow-lg hover:shadow-[#C27BA0]/40 hover:scale-[1.02] transition-all"
+              className="px-3 py-1.5 sm:px-5 sm:py-2.5 bg-gradient-to-r from-[#C27BA0] to-[#8C4A6E] text-white text-xs sm:text-sm font-bold rounded-xl shadow-md shadow-[#C27BA0]/30 hover:shadow-lg hover:shadow-[#C27BA0]/40 hover:scale-[1.02] transition-all"
             >
-              Daftar Gratis
+              Daftar
             </Link>
           </div>
 
           {/* Mobile hamburger */}
-          <button onClick={() => setMobileMenu(!mobileMenu)} className="md:hidden p-2 text-[#8C4A6E]">
-            {mobileMenu ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          <button onClick={() => setMobileMenu(!mobileMenu)} className="md:hidden p-1.5 ml-1 text-[#8C4A6E]">
+            {mobileMenu ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
 
@@ -204,10 +204,6 @@ export default function LandingPage() {
                 {href.replace("#", "").replace("-", " ")}
               </a>
             ))}
-            <div className="pt-2 flex flex-col gap-2">
-              <Link href="/login" className="text-center py-2.5 border border-[#F7D6E6] rounded-xl text-sm font-bold text-[#8C4A6E]">Masuk</Link>
-              <Link href="/register" className="text-center py-2.5 bg-gradient-to-r from-[#C27BA0] to-[#8C4A6E] text-white text-sm font-bold rounded-xl">Daftar Gratis</Link>
-            </div>
           </div>
         )}
       </nav>

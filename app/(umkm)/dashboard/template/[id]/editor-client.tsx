@@ -916,6 +916,28 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo }: E
                         onPointerMove={handlePointerMove}
                         onPointerUp={handlePointerUp}
                         onPointerLeave={handlePointerUp}
+                        onPointerCancel={handlePointerUp}
+                        onTouchStart={(e) => {
+                          if (val.imageUrl) {
+                            dragRef.current = {
+                              isDragging: true,
+                              startX: e.touches[0].clientX,
+                              startY: e.touches[0].clientY,
+                              fieldId: field.id,
+                              initialTranslateX: val.imageTranslateX,
+                              initialTranslateY: val.imageTranslateY
+                            };
+                            setActiveFieldId(field.id);
+                          }
+                        }}
+                        onTouchMove={(e) => {
+                          if (!dragRef.current.isDragging || dragRef.current.fieldId !== field.id) return;
+                          const { startX, startY, initialTranslateX, initialTranslateY } = dragRef.current;
+                          const deltaX = (e.touches[0].clientX - startX) / (zoom / 100);
+                          const deltaY = (e.touches[0].clientY - startY) / (zoom / 100);
+                          handlePanZoom(field.id, val.imageScale, initialTranslateX + deltaX, initialTranslateY + deltaY);
+                        }}
+                        onTouchEnd={() => { dragRef.current.isDragging = false; }}
                         onWheel={(e) => {
                           if (val.imageUrl) handleWheel(e, field.id);
                         }}
