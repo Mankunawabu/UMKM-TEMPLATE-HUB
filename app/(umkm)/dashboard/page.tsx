@@ -199,9 +199,9 @@ export default async function DashboardPage() {
         </div>
 
         {/* Recent Export History */}
-        <div className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h2 className="text-lg font-bold text-[#8C4A6E] font-heading">Riwayat Ekspor</h2>
+        <div className="p-6 bg-white border border-[#F7D6E6] rounded-2xl shadow-xs space-y-6">
+          <div className="flex items-center justify-between border-b border-[#F7D6E6] pb-3">
+            <h3 className="text-base font-bold text-[#3D1E30]">Riwayat Ekspor Terbaru</h3>
             <Link
               href="/dashboard/riwayat-desain"
               className="text-xs font-bold text-[#C27BA0] hover:text-[#8C4A6E] hover:underline"
@@ -209,7 +209,7 @@ export default async function DashboardPage() {
               Lihat Semua
             </Link>
           </div>
-          <div className="p-5 bg-white border border-[#F7D6E6] rounded-2xl shadow-sm space-y-3">
+          <div className="space-y-3.5 max-h-[360px] overflow-y-auto pr-2">
             {recentExports && recentExports.length > 0 ? (
               recentExports.map((log: any) => (
                 <div
