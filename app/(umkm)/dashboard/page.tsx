@@ -200,7 +200,7 @@ export default async function DashboardPage() {
 
         {/* Recent Export History */}
         <div className="p-6 bg-white border border-[#F7D6E6] rounded-2xl shadow-xs space-y-6">
-          <div className="flex items-center justify-between border-b border-[#F7D6E6] pb-3">
+          <div className="flex items-center justify-between pb-2">
             <h3 className="text-base font-bold text-[#3D1E30]">Riwayat Ekspor Terbaru</h3>
             <Link
               href="/dashboard/riwayat-desain"
