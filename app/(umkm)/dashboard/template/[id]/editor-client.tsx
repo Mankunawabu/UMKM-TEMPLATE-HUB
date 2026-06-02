@@ -398,6 +398,13 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo }: E
     }));
   };
 
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+  React.useEffect(() => {
+    if (window.innerWidth >= 1024) {
+      setIsSidebarOpen(true);
+    }
+  }, []);
+
   const [isGeneratingText, setIsGeneratingText] = React.useState<string | null>(null);
 
   const handleMagicText = async (fieldId: string) => {
@@ -610,14 +617,20 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo }: E
       <style dangerouslySetInnerHTML={{ __html: `@import url('${fontUrl}');` }} />
       
       {/* ── HEADER ── */}
-      <header className="h-16 bg-white border-b border-[#F7D6E6] flex items-center justify-between px-4 shrink-0 shadow-sm z-10">
-        <div className="flex items-center gap-4">
-          <Link href="/dashboard/template" className="w-10 h-10 rounded-xl hover:bg-[#FFF0F7] flex items-center justify-center text-[#8C4A6E] transition-colors">
+      <header className="h-16 bg-white border-b border-[#F7D6E6] flex items-center justify-between px-4 shrink-0 shadow-sm z-20 relative">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <Link href="/dashboard/template" className="w-10 h-10 rounded-xl hover:bg-[#FFF0F7] flex items-center justify-center text-[#8C4A6E] transition-colors shrink-0">
             <ArrowLeft className="w-5 h-5" />
           </Link>
-          <div className="h-6 w-px bg-[#F7D6E6]" />
-          <div>
-            <h1 className="text-sm font-bold text-[#3D1E30] truncate">{template.nama_template}</h1>
+          <div className="h-6 w-px bg-[#F7D6E6] hidden sm:block" />
+          <button 
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className={`w-10 h-10 rounded-xl flex lg:hidden items-center justify-center transition-colors shrink-0 ${isSidebarOpen ? 'bg-[#8C4A6E] text-white' : 'hover:bg-[#FFF0F7] text-[#8C4A6E]'}`}
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+          <div className="hidden sm:block">
+            <h1 className="text-sm font-bold text-[#3D1E30] truncate max-w-[150px] md:max-w-xs">{template.nama_template}</h1>
             <p className="text-[10px] text-[#C27BA0] font-medium mt-0.5">Otomatis tersimpan</p>
           </div>
         </div>
@@ -664,10 +677,18 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo }: E
       <div className="flex-1 flex overflow-hidden">
         
         {/* ── LEFT SIDEBAR (TOOLS) ── */}
-        <aside className="w-80 bg-white border-r border-[#F7D6E6] flex flex-col shrink-0 z-10 shadow-sm overflow-y-auto custom-scrollbar">
-          <div className="p-5 border-b border-[#F7D6E6]">
-            <h2 className="text-lg font-extrabold text-[#3D1E30] font-heading">Edit Konten</h2>
-            <p className="text-xs text-slate-500">Sesuaikan gambar dan teks untuk promosi Anda.</p>
+        <aside className={`absolute lg:relative w-80 h-[calc(100vh-4rem)] lg:h-auto bg-white border-r border-[#F7D6E6] flex flex-col shrink-0 z-20 shadow-2xl lg:shadow-sm overflow-y-auto custom-scrollbar transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+          <div className="p-5 border-b border-[#F7D6E6] flex justify-between items-center bg-white sticky top-0 z-10">
+            <div>
+              <h2 className="text-lg font-extrabold text-[#3D1E30] font-heading">Edit Konten</h2>
+              <p className="text-xs text-slate-500">Sesuaikan promosi Anda.</p>
+            </div>
+            <button 
+              onClick={() => setIsSidebarOpen(false)}
+              className="lg:hidden w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
 
           <div className="p-5 space-y-6">
