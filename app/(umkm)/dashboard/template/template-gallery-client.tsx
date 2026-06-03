@@ -259,6 +259,7 @@ export function TemplateGalleryClient({ templates, categories, selectedCategory 
             </div>
           )}
         </div>
+      </div>
     </div>
   );
 }
