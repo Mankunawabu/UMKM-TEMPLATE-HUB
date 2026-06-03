@@ -1,4 +1,4 @@
-import { requireAuth } from "@/lib/auth";
+import { requireUmkm } from "@/lib/auth";
 import UMKMSidebar from "@/components/sidebar/umkm-sidebar";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
@@ -9,7 +9,7 @@ interface DashboardLayoutProps {
 
 export default async function DashboardLayout({ children }: DashboardLayoutProps) {
   // Enforce UMKM auth and onboarding completion check
-  const { profile } = await requireAuth();
+  const { profile } = await requireUmkm();
 
   // Check Maintenance Mode
   const supabase = await createClient();

@@ -31,59 +31,14 @@ export async function middleware(request: NextRequest) {
     return supabaseResponse;
   }
 
-  // Logged in: Fetch profile to check role & onboarding status
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role, is_onboarding_completed")
-    .eq("id", user.id)
-    .single();
-
-  const role = profile?.role || "umkm";
-  const isOnboardingCompleted = profile?.is_onboarding_completed ?? false;
-
-  // If Admin
-  if (role === "admin") {
-    // Admin trying to access UMKM routes, onboarding, or auth pages
-    if (isDashboardRoute || isOnboardingRoute || isAuthRoute) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/admin";
-      return NextResponse.redirect(url);
-    }
-    return supabaseResponse;
-  }
-
-  // If UMKM
-  if (role === "umkm") {
-    // UMKM trying to access Admin pages
-    if (isAdminRoute) {
-      const url = request.nextUrl.clone();
-      url.pathname = isOnboardingCompleted ? "/dashboard" : "/onboarding";
-      return NextResponse.redirect(url);
-    }
-
-    // UMKM trying to access Auth pages
-    if (isAuthRoute) {
-      const url = request.nextUrl.clone();
-      url.pathname = isOnboardingCompleted ? "/dashboard" : "/onboarding";
-      return NextResponse.redirect(url);
-    }
-
-    // Onboarding flow protection
-    if (!isOnboardingCompleted) {
-      // Incomplete onboarding trying to access UMKM dashboard
-      if (isDashboardRoute) {
-        const url = request.nextUrl.clone();
-        url.pathname = "/onboarding";
-        return NextResponse.redirect(url);
-      }
-    } else {
-      // Complete onboarding trying to access onboarding page again
-      if (isOnboardingRoute) {
-        const url = request.nextUrl.clone();
-        url.pathname = "/dashboard";
-        return NextResponse.redirect(url);
-      }
-    }
+  // If logged in, prevent access to auth routes
+  if (isAuthRoute) {
+    // We don't fetch role here for performance. We redirect everyone to /dashboard.
+    // If they are admin, the /dashboard layout will redirect them to /admin.
+    // If they need onboarding, /dashboard layout will redirect to /onboarding.
+    const url = request.nextUrl.clone();
+    url.pathname = "/dashboard";
+    return NextResponse.redirect(url);
   }
 
   return supabaseResponse;

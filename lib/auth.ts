@@ -57,3 +57,11 @@ export async function requireAdmin() {
   }
   return { user, profile };
 }
+
+export async function requireUmkm() {
+  const { user, profile } = await requireAuth();
+  if (profile.role === "admin") {
+    redirect("/admin");
+  }
+  return { user, profile };
+}
