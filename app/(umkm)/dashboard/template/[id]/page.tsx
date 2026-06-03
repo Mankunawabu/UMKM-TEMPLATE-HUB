@@ -12,6 +12,26 @@ export default async function TemplateEditorPage({ params }: EditorPageProps) {
   const { id } = await params;
   const supabase = await createClient();
 
+  // Check Limits
+  const { data: settings } = await supabase
+    .from("app_settings")
+    .select("setting_value")
+    .eq("setting_key", "limits")
+    .single();
+
+  const exportLimit = settings?.setting_value?.daily_export_limit || 5;
+  const maxUploadMb = settings?.setting_value?.max_upload_mb || 2;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const { count: exportsToday } = await supabase
+    .from("export_logs")
+    .select("*", { count: "exact", head: true })
+    .eq("user_id", profile.id)
+    .gte("created_at", today.toISOString());
+
+  const currentExports = exportsToday || 0;
+
   // Fetch the template and its fields
   const [templateRes, fieldsRes] = await Promise.all([
     supabase
@@ -119,13 +139,16 @@ export default async function TemplateEditorPage({ params }: EditorPageProps) {
   const masterUrl = template.master_template_url || template.thumbnail_url;
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-      <EditorClient 
-        template={{...template, master_template_url: masterUrl}} 
-        fields={templateFields} 
+    <div className="h-full">
+      <EditorClient
+        template={{...template, master_template_url: masterUrl}}
+        fields={templateFields}
         userId={profile.id}
-        shopName={profile.nama_usaha}
-        shopLogo={profile.logo_url || profile.avatar_url}
+        shopName={profile.nama_usaha || undefined}
+        shopLogo={profile.logo_url || profile.avatar_url || undefined}
+        exportLimit={exportLimit}
+        currentExports={currentExports}
+        maxUploadMb={maxUploadMb}
       />
     </div>
   );

@@ -261,6 +261,9 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
                           </button>
                         )}
                       </div>
+                      <p className="text-[10px] text-slate-500 font-medium mt-1">
+                        Format: JPG, PNG, WEBP. Maksimal ukuran {maxUploadMb} MB.
+                      </p>
                       {uploadError && <p className="text-[10px] text-red-500">{uploadError}</p>}
                     </div>
                   </div>

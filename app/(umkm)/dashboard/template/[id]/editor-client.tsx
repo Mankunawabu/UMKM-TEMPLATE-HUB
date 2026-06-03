@@ -32,6 +32,9 @@ interface EditorClientProps {
   userId: string;
   shopName?: string;
   shopLogo?: string;
+  exportLimit?: number;
+  currentExports?: number;
+  maxUploadMb?: number;
 }
 
 interface FieldValue {
@@ -46,7 +49,7 @@ interface FieldValue {
 
 import { logExportAction } from "../actions";
 import { getExportLogData } from "./actions";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 const DeviceMockup = ({ platform, imageUrl, shopName, shopLogo }: { platform: string | null, imageUrl: string, shopName?: string, shopLogo?: string }) => {
@@ -260,8 +263,9 @@ const DeviceMockup = ({ platform, imageUrl, shopName, shopLogo }: { platform: st
   );
 };
 
-export function EditorClient({ template, fields, userId, shopName, shopLogo }: EditorClientProps) {
+export function EditorClient({ template, fields, userId, shopName, shopLogo, exportLimit = 5, currentExports = 0, maxUploadMb = 2 }: EditorClientProps) {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const exportId = searchParams.get("exportId");
 
   const [values, setValues] = React.useState<Record<string, FieldValue>>(() => {
@@ -371,6 +375,11 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo }: E
   const handleImageUpload = (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    
+    if (file.size > maxUploadMb * 1024 * 1024) {
+      alert(`Ukuran gambar tidak boleh lebih dari ${maxUploadMb} MB`);
+      return;
+    }
     
     // Convert to base64 so it persists in the JSON draft
     const reader = new FileReader();
@@ -490,6 +499,10 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo }: E
   const dropdownRef = React.useRef<HTMLDivElement>(null);
 
   const handleOpenExportMenu = async () => {
+    if (currentExports >= exportLimit) {
+      alert(`Batas ekspor harian Anda (${exportLimit}) sudah habis.`);
+      return;
+    }
     setIsExporting(true);
     try {
       if (canvasRef.current) {
@@ -522,6 +535,10 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo }: E
   }, []);
 
   const exportImage = async (format: "PNG" | "JPG" | "PDF") => {
+    if (currentExports >= exportLimit) {
+      alert(`Batas ekspor harian Anda (${exportLimit}) sudah habis.`);
+      return;
+    }
     if (!canvasRef.current) return;
     setIsExporting(true);
     setShowExportMenu(false);
@@ -592,6 +609,9 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo }: E
 
       // Log export with the image and state
       await logExportAction(template.id, userId, format, uploadedUrl, values);
+      
+      // Refresh router so the quota updates automatically in the sidebar
+      router.refresh();
       
     } catch (err) {
       console.error("Export error:", err);
@@ -707,7 +727,10 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo }: E
                       className={`p-4 rounded-xl border-2 transition-all ${isActive ? "border-[#C27BA0] bg-[#FFF0F7]" : "border-[#F7D6E6] bg-white hover:border-[#C27BA0]/50"}`}
                       onClick={() => setActiveFieldId(field.id)}
                     >
-                      <label className="text-xs font-bold text-slate-700 block mb-2">{field.placeholder_label || "Foto Produk"}</label>
+                      <div className="flex justify-between items-center mb-2">
+                        <label className="text-xs font-bold text-slate-700 block">{field.placeholder_label || "Foto Produk"}</label>
+                        <span className="text-[9px] text-slate-400 font-medium">Maks {maxUploadMb} MB</span>
+                      </div>
                       <input 
                         type="file" 
                         accept="image/*"
