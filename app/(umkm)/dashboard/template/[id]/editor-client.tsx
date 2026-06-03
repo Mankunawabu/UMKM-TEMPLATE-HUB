@@ -463,6 +463,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
       initialTranslateY: ty
     };
     setActiveFieldId(fieldId);
+    setIsSidebarOpen(true);
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -914,6 +915,11 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                   const val = values[field.id];
                   const isSelected = activeFieldId === field.id;
 
+                  // Calculate dynamic z-index based on render_mode to properly stack over/under the template image (which is z-index 10)
+                  const fieldZIndex = field.render_mode === "over" 
+                    ? 20 + field.z_index 
+                    : (field.z_index >= 10 ? 0 : field.z_index);
+
                   // Absolute PX coordinates relative to the canvas Base Width/Height.
                   const style: React.CSSProperties = {
                     position: "absolute",
@@ -921,7 +927,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                     top: `${field.y}px`,
                     width: `${field.width}px`,
                     height: `${field.height}px`,
-                    zIndex: field.z_index,
+                    zIndex: fieldZIndex,
                     outline: isSelected ? "2px dashed #C27BA0" : "none",
                   };
 
@@ -934,33 +940,14 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                         className="overflow-hidden flex items-center justify-center bg-slate-100/50 cursor-move" 
                         onPointerDown={(e) => {
                           if (val.imageUrl) handlePointerDown(e, field.id, val.imageTranslateX, val.imageTranslateY);
-                          else setActiveFieldId(field.id);
+                          else {
+                            setActiveFieldId(field.id);
+                            setIsSidebarOpen(true);
+                          }
                         }}
                         onPointerMove={handlePointerMove}
                         onPointerUp={handlePointerUp}
-                        onPointerLeave={handlePointerUp}
                         onPointerCancel={handlePointerUp}
-                        onTouchStart={(e) => {
-                          if (val.imageUrl) {
-                            dragRef.current = {
-                              isDragging: true,
-                              startX: e.touches[0].clientX,
-                              startY: e.touches[0].clientY,
-                              fieldId: field.id,
-                              initialTranslateX: val.imageTranslateX,
-                              initialTranslateY: val.imageTranslateY
-                            };
-                            setActiveFieldId(field.id);
-                          }
-                        }}
-                        onTouchMove={(e) => {
-                          if (!dragRef.current.isDragging || dragRef.current.fieldId !== field.id) return;
-                          const { startX, startY, initialTranslateX, initialTranslateY } = dragRef.current;
-                          const deltaX = (e.touches[0].clientX - startX) / (zoom / 100);
-                          const deltaY = (e.touches[0].clientY - startY) / (zoom / 100);
-                          handlePanZoom(field.id, val.imageScale, initialTranslateX + deltaX, initialTranslateY + deltaY);
-                        }}
-                        onTouchEnd={() => { dragRef.current.isDragging = false; }}
                         onWheel={(e) => {
                           if (val.imageUrl) handleWheel(e, field.id);
                         }}
@@ -1009,7 +996,10 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                           justifyContent: field.text_align === "center" ? "center" : field.text_align === "right" ? "flex-end" : "flex-start",
                         }}
                         className="cursor-pointer"
-                        onClick={() => setActiveFieldId(field.id)}
+                        onClick={() => {
+                          setActiveFieldId(field.id);
+                          setIsSidebarOpen(true);
+                        }}
                       >
                         <p style={{
                           fontFamily: `"${field.font_family || 'Inter'}", sans-serif`,
