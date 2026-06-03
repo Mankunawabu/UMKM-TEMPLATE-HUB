@@ -3,6 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { EditorClient } from "./editor-client";
 
+export const dynamic = "force-dynamic";
+
 interface EditorPageProps {
   params: Promise<{ id: string }>;
 }
