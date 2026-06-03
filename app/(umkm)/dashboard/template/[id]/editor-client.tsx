@@ -45,6 +45,10 @@ interface FieldValue {
   imageTranslateY: number;
   imageFilter?: string;
   fontSizeOverride?: number;
+  fontFamilyOverride?: string;
+  fontWeightOverride?: string;
+  colorOverride?: string;
+  textAlignOverride?: string;
 }
 
 import { logExportAction } from "../actions";
@@ -370,6 +374,10 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
 
   const handleFontSizeChange = (id: string, size: number) => {
     setValues(prev => ({ ...prev, [id]: { ...prev[id], fontSizeOverride: size } }));
+  };
+
+  const handleFieldOverrideChange = (id: string, key: keyof FieldValue, value: any) => {
+    setValues(prev => ({ ...prev, [id]: { ...prev[id], [key]: value } }));
   };
 
   const handleImageUpload = (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -837,15 +845,76 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                         className="w-full bg-white border border-[#F7D6E6] rounded-lg p-2.5 text-sm text-slate-700 focus:outline-none focus:border-[#C27BA0] resize-none"
                         rows={2}
                       />
-                      <div className="mt-2 flex items-center justify-between">
-                        <label className="text-[10px] font-bold text-slate-500">Ukuran Teks</label>
-                        <input
-                          type="number"
-                          value={val.fontSizeOverride || field.font_size || 32}
-                          onChange={(e) => handleFontSizeChange(field.id, parseInt(e.target.value) || 12)}
-                          className="w-16 px-2 py-1 text-xs border border-[#F7D6E6] rounded-md focus:outline-none focus:border-[#C27BA0]"
-                        />
-                      </div>
+                      {isActive && (
+                        <div className="mt-4 pt-3 border-t border-[#F7D6E6] grid grid-cols-2 gap-3 bg-white/50 p-2.5 rounded-lg">
+                          <div className="space-y-1.5 col-span-2">
+                            <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider">Font Family</label>
+                            <select
+                              value={val.fontFamilyOverride || field.font_family || "Poppins"}
+                              onChange={(e) => handleFieldOverrideChange(field.id, "fontFamilyOverride", e.target.value)}
+                              className="w-full px-3 py-1.5 text-xs border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white cursor-pointer"
+                            >
+                              <option value="Poppins">Poppins</option>
+                              <option value="Inter">Inter</option>
+                              <option value="Montserrat">Montserrat</option>
+                              <option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
+                              <option value="SF Pro Display">SF Pro</option>
+                            </select>
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider">Ukuran (px)</label>
+                            <input
+                              type="number"
+                              value={val.fontSizeOverride || field.font_size || 32}
+                              onChange={(e) => handleFontSizeChange(field.id, parseInt(e.target.value) || 12)}
+                              className="w-full px-3 py-1.5 text-xs border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider">Ketebalan</label>
+                            <select
+                              value={val.fontWeightOverride || field.font_weight || "normal"}
+                              onChange={(e) => handleFieldOverrideChange(field.id, "fontWeightOverride", e.target.value)}
+                              className="w-full px-3 py-1.5 text-xs border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white cursor-pointer"
+                            >
+                              <option value="normal">Normal</option>
+                              <option value="500">Medium</option>
+                              <option value="600">Semi Bold</option>
+                              <option value="bold">Bold</option>
+                              <option value="800">Extra Bold</option>
+                            </select>
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider">Warna (Hex)</label>
+                            <div className="flex gap-2">
+                              <input
+                                type="color"
+                                value={val.colorOverride || field.color || "#000000"}
+                                onChange={(e) => handleFieldOverrideChange(field.id, "colorOverride", e.target.value)}
+                                className="w-8 h-8 border border-[#F7D6E6] rounded cursor-pointer shrink-0"
+                              />
+                              <input
+                                type="text"
+                                value={val.colorOverride || field.color || "#000000"}
+                                onChange={(e) => handleFieldOverrideChange(field.id, "colorOverride", e.target.value)}
+                                className="w-full px-2 py-1.5 text-xs border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white uppercase"
+                              />
+                            </div>
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider">Align</label>
+                            <select
+                              value={val.textAlignOverride || field.text_align || "left"}
+                              onChange={(e) => handleFieldOverrideChange(field.id, "textAlignOverride", e.target.value)}
+                              className="w-full px-3 py-1.5 text-xs border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white cursor-pointer"
+                            >
+                              <option value="left">Kiri</option>
+                              <option value="center">Tengah</option>
+                              <option value="right">Kanan</option>
+                            </select>
+                          </div>
+                        </div>
+                      )}
                       <button 
                         onClick={() => handleMagicText(field.id)}
                         disabled={isGeneratingText === field.id}
@@ -993,7 +1062,11 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                           ...style,
                           display: "flex",
                           alignItems: "center", 
-                          justifyContent: field.text_align === "center" ? "center" : field.text_align === "right" ? "flex-end" : "flex-start",
+                          justifyContent: (val.textAlignOverride || field.text_align) === "center" 
+                            ? "center" 
+                            : (val.textAlignOverride || field.text_align) === "right" 
+                              ? "flex-end" 
+                              : "flex-start",
                         }}
                         className="cursor-pointer"
                         onClick={() => {
@@ -1002,11 +1075,11 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                         }}
                       >
                         <p style={{
-                          fontFamily: `"${field.font_family || 'Inter'}", sans-serif`,
+                          fontFamily: `"${val.fontFamilyOverride || field.font_family || 'Inter'}", sans-serif`,
                           fontSize: `${val.fontSizeOverride || field.font_size || 48}px`,
-                          fontWeight: field.font_weight || "400",
-                          color: field.color || "#000000",
-                          textAlign: (field.text_align as any) || "left",
+                          fontWeight: val.fontWeightOverride || field.font_weight || "400",
+                          color: val.colorOverride || field.color || "#000000",
+                          textAlign: (val.textAlignOverride || field.text_align as any) || "left",
                           lineHeight: "1.2",
                           width: "100%",
                           wordWrap: "break-word",

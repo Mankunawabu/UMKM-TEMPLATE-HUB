@@ -391,76 +391,10 @@ export function EditorClient({ template }: EditorClientProps) {
                           </div>
                         </div>
 
-                        {/* Text Styling Options */}
+                        {/* Text Options (Admin only configures max characters limit) */}
                         {f.field_role === "text" && (
-                          <div className="grid grid-cols-2 gap-3 p-3 bg-[#FFF0F7]/50 rounded-lg border border-[#F7D6E6]/50">
-                            <div className="space-y-1.5 col-span-2">
-                              <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider">Font Family (Fix)</label>
-                              <select
-                                value={f.font_family || "Poppins"}
-                                onChange={(e) => updateField(i, "font_family", e.target.value)}
-                                className="w-full px-3 py-2 text-sm border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white"
-                              >
-                                <option value="Poppins">Poppins</option>
-                                <option value="Inter">Inter</option>
-                                <option value="Montserrat">Montserrat</option>
-                                <option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
-                                <option value="SF Pro Display">SF Pro</option>
-                              </select>
-                            </div>
+                          <div className="p-3 bg-[#FFF0F7]/50 rounded-lg border border-[#F7D6E6]/50">
                             <div className="space-y-1.5">
-                              <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider">Font Size (px)</label>
-                              <input
-                                type="number"
-                                value={f.font_size || 32}
-                                onChange={(e) => updateField(i, "font_size", parseInt(e.target.value) || 12)}
-                                className="w-full px-3 py-2 text-sm border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white"
-                              />
-                            </div>
-                            <div className="space-y-1.5">
-                              <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider">Font Weight</label>
-                              <select
-                                value={f.font_weight || "normal"}
-                                onChange={(e) => updateField(i, "font_weight", e.target.value)}
-                                className="w-full px-3 py-2 text-sm border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white"
-                              >
-                                <option value="normal">Normal</option>
-                                <option value="500">Medium</option>
-                                <option value="600">Semi Bold</option>
-                                <option value="bold">Bold</option>
-                                <option value="800">Extra Bold</option>
-                              </select>
-                            </div>
-                            <div className="space-y-1.5">
-                              <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider">Warna (Hex)</label>
-                              <div className="flex gap-2">
-                                <input
-                                  type="color"
-                                  value={f.color || "#000000"}
-                                  onChange={(e) => updateField(i, "color", e.target.value)}
-                                  className="w-8 h-9 border border-[#F7D6E6] rounded cursor-pointer"
-                                />
-                                <input
-                                  type="text"
-                                  value={f.color || "#000000"}
-                                  onChange={(e) => updateField(i, "color", e.target.value)}
-                                  className="w-full px-3 py-2 text-sm border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white uppercase"
-                                />
-                              </div>
-                            </div>
-                            <div className="space-y-1.5">
-                              <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider">Align</label>
-                              <select
-                                value={f.text_align || "left"}
-                                onChange={(e) => updateField(i, "text_align", e.target.value)}
-                                className="w-full px-3 py-2 text-sm border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white"
-                              >
-                                <option value="left">Kiri</option>
-                                <option value="center">Tengah</option>
-                                <option value="right">Kanan</option>
-                              </select>
-                            </div>
-                            <div className="space-y-1.5 col-span-2">
                               <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider">Batas Karakter</label>
                               <input
                                 type="number"
