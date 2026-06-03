@@ -28,6 +28,7 @@ interface Template {
   description: string | null;
   thumbnail_url: string | null;
   categories: { id: string; name: string } | null;
+  target_platform: string | null;
 }
 
 interface TemplateGalleryClientProps {
@@ -44,6 +45,9 @@ const gradients = [
   "from-sky-100 to-blue-100",
   "from-emerald-100 to-teal-100",
 ];
+
+export function TemplateGalleryClient({ templates, categories, selectedCategory }: TemplateGalleryClientProps) {
+  const router = useRouter();
 
   const PLATFORMS = [
     { id: "INSTAGRAM_FEED", label: "Instagram Feed" },
@@ -255,5 +259,6 @@ const gradients = [
             </div>
           )}
         </div>
-      </div>
     </div>
+  );
+}
