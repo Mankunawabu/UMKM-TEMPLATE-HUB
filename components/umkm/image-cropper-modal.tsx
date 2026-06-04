@@ -160,13 +160,16 @@ export function ImageCropperModal({ isOpen, imageSrc, onClose, onCrop }: ImageCr
             <div className="w-[240px] h-[240px] rounded-full border-2 border-white/80 shadow-[0_0_0_9999px_rgba(0,0,0,0)]" />
           </div>
 
+          {/* White Canvas Background Box (representing the crop output boundary) */}
+          <div className="absolute w-[240px] h-[240px] bg-white pointer-events-none rounded-sm shadow-inner" style={{ zIndex: 0 }} />
+
           {/* Draggable Image */}
           <img
             ref={imageRef}
             src={imageSrc}
             alt="Source"
             onLoad={handleImageLoad}
-            className="max-w-none max-h-none pointer-events-none select-none shrink-0"
+            className="max-w-none max-h-none pointer-events-none select-none shrink-0 shadow-lg border border-slate-200/50"
             style={{
               width: `${imgSize.w}px`,
               height: `${imgSize.h}px`,
@@ -191,7 +194,7 @@ export function ImageCropperModal({ isOpen, imageSrc, onClose, onCrop }: ImageCr
           </div>
           <input
             type="range"
-            min="1"
+            min="0.1"
             max="3"
             step="0.05"
             value={scale}
