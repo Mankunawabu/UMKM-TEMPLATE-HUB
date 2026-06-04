@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { submitOnboarding } from "@/app/(onboarding)/onboarding/actions";
 import { createClient } from "@/lib/supabase/client";
+import { ImageCropperModal } from "../umkm/image-cropper-modal";
 
 // ─────────────────────────────────────────────
 // Instagram SVG icon (lucide doesn't have one)
@@ -82,6 +83,11 @@ function LogoUploader({ onUploadComplete, disabled, maxUploadMb }: LogoUploaderP
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Cropper states
+  const [cropperSrc, setCropperSrc] = useState<string | null>(null);
+  const [isCropperOpen, setIsCropperOpen] = useState(false);
+  const pendingFileRef = useRef<File | null>(null);
+
   const processFile = useCallback(
     async (file: File) => {
       // ── validation ──
@@ -97,41 +103,55 @@ function LogoUploader({ onUploadComplete, disabled, maxUploadMb }: LogoUploaderP
       setUploadError(null);
       setUploadDone(false);
 
-      // ── local preview ──
+      // Save file ref and open cropper modal
+      pendingFileRef.current = file;
       const objectUrl = URL.createObjectURL(file);
-      setPreview(objectUrl);
-
-      // ── upload to Supabase Storage ──
-      setUploading(true);
-      try {
-        const supabase = createClient();
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) throw new Error("Sesi tidak valid.");
-
-        const ext = ALLOWED_EXTS[file.type as keyof typeof ALLOWED_EXTS];
-        const path = `logos/${user.id}/logo-${Date.now()}.${ext}`;
-
-        const { error: uploadErr } = await supabase.storage
-          .from("umkm_assets")
-          .upload(path, file, { upsert: true, contentType: file.type });
-
-        if (uploadErr) throw uploadErr;
-
-        const { data: urlData } = supabase.storage
-          .from("umkm_assets")
-          .getPublicUrl(path);
-
-        onUploadComplete(urlData.publicUrl);
-        setUploadDone(true);
-      } catch (err: any) {
-        setUploadError(err?.message ?? "Gagal mengunggah logo. Coba lagi.");
-        setPreview(null);
-      } finally {
-        setUploading(false);
-      }
+      setCropperSrc(objectUrl);
+      setIsCropperOpen(true);
     },
-    [onUploadComplete]
+    [maxUploadMb, MAX_SIZE_BYTES]
   );
+
+  const handleCropComplete = async (croppedBlob: Blob) => {
+    setIsCropperOpen(false);
+    setCropperSrc(null);
+
+    const file = pendingFileRef.current;
+    if (!file) return;
+
+    // Show cropped preview locally
+    const objectUrl = URL.createObjectURL(croppedBlob);
+    setPreview(objectUrl);
+
+    setUploading(true);
+    try {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Sesi tidak valid.");
+
+      // Always upload cropped logo as PNG
+      const path = `logos/${user.id}/logo-${Date.now()}.png`;
+
+      const { error: uploadErr } = await supabase.storage
+        .from("umkm_assets")
+        .upload(path, croppedBlob, { upsert: true, contentType: "image/png" });
+
+      if (uploadErr) throw uploadErr;
+
+      const { data: urlData } = supabase.storage
+        .from("umkm_assets")
+        .getPublicUrl(path);
+
+      onUploadComplete(urlData.publicUrl);
+      setUploadDone(true);
+    } catch (err: any) {
+      setUploadError(err?.message ?? "Gagal mengunggah logo. Coba lagi.");
+      setPreview(null);
+    } finally {
+      setUploading(false);
+      pendingFileRef.current = null;
+    }
+  };
 
   const handleDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
@@ -248,6 +268,17 @@ function LogoUploader({ onUploadComplete, disabled, maxUploadMb }: LogoUploaderP
           </button>
         )}
       </div>
+
+      <ImageCropperModal
+        isOpen={isCropperOpen}
+        imageSrc={cropperSrc}
+        onClose={() => {
+          setIsCropperOpen(false);
+          setCropperSrc(null);
+          pendingFileRef.current = null;
+        }}
+        onCrop={handleCropComplete}
+      />
     </div>
   );
 }

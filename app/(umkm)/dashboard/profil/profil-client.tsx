@@ -21,6 +21,7 @@ import {
 import { updateBusinessInfo, updatePassword } from "./actions";
 import { createClient } from "@/lib/supabase/client";
 import { PageHeader } from "@/components/admin/page-header";
+import { ImageCropperModal } from "@/components/umkm/image-cropper-modal";
 
 // ─────────────────────────────────────────────
 // Instagram SVG icon
@@ -85,6 +86,11 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
   const [uploadError, setUploadError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Cropper states
+  const [cropperSrc, setCropperSrc] = useState<string | null>(null);
+  const [isCropperOpen, setIsCropperOpen] = useState(false);
+  const pendingFileRef = useRef<File | null>(null);
+
   const processFile = useCallback(async (file: File) => {
     if (!ALLOWED_TYPES.includes(file.type)) {
       setUploadError("Format tidak didukung. Gunakan PNG, JPG, atau WEBP.");
@@ -96,7 +102,23 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
     }
 
     setUploadError(null);
+
+    // Save file ref and open cropper modal
+    pendingFileRef.current = file;
     const objectUrl = URL.createObjectURL(file);
+    setCropperSrc(objectUrl);
+    setIsCropperOpen(true);
+  }, [maxUploadMb, MAX_SIZE_BYTES]);
+
+  const handleCropComplete = async (croppedBlob: Blob) => {
+    setIsCropperOpen(false);
+    setCropperSrc(null);
+
+    const file = pendingFileRef.current;
+    if (!file) return;
+
+    // Show cropped preview locally
+    const objectUrl = URL.createObjectURL(croppedBlob);
     setPreview(objectUrl);
 
     setUploading(true);
@@ -105,12 +127,12 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Sesi tidak valid.");
 
-      const ext = ALLOWED_EXTS[file.type as keyof typeof ALLOWED_EXTS];
-      const path = `logos/${user.id}/logo-${Date.now()}.${ext}`;
+      // Always upload cropped logo as PNG
+      const path = `logos/${user.id}/logo-${Date.now()}.png`;
 
       const { error: uploadErr } = await supabase.storage
         .from("umkm_assets")
-        .upload(path, file, { upsert: true, contentType: file.type });
+        .upload(path, croppedBlob, { upsert: true, contentType: "image/png" });
 
       if (uploadErr) throw uploadErr;
 
@@ -124,8 +146,9 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
       setPreview(initialProfile?.logo_url || null);
     } finally {
       setUploading(false);
+      pendingFileRef.current = null;
     }
-  }, [initialProfile?.logo_url]);
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -268,6 +291,17 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
                     </div>
                   </div>
                 </div>
+
+                <ImageCropperModal
+                  isOpen={isCropperOpen}
+                  imageSrc={cropperSrc}
+                  onClose={() => {
+                    setIsCropperOpen(false);
+                    setCropperSrc(null);
+                    pendingFileRef.current = null;
+                  }}
+                  onCrop={handleCropComplete}
+                />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
