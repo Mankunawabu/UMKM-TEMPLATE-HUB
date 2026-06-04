@@ -18,6 +18,22 @@ export function ImageCropperModal({ isOpen, imageSrc, onClose, onCrop }: ImageCr
   const containerRef = React.useRef<HTMLDivElement>(null);
   const imageRef = React.useRef<HTMLImageElement>(null);
 
+  const [imgSize, setImgSize] = React.useState({ w: 240, h: 240 });
+
+  const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const { naturalWidth, naturalHeight } = e.currentTarget;
+    if (naturalWidth && naturalHeight) {
+      const aspect = naturalWidth / naturalHeight;
+      if (aspect >= 1) {
+        // Landscape: lock height to 240px, scale width
+        setImgSize({ w: 240 * aspect, h: 240 });
+      } else {
+        // Portrait: lock width to 240px, scale height
+        setImgSize({ w: 240, h: 240 / aspect });
+      }
+    }
+  };
+
   // Reset state when opening a new image
   React.useEffect(() => {
     if (isOpen) {
@@ -61,39 +77,36 @@ export function ImageCropperModal({ isOpen, imageSrc, onClose, onCrop }: ImageCr
 
     if (!ctx) return;
 
-    // Clear background to white or transparency
+    // Clear background to white
     ctx.fillStyle = "#FFFFFF";
     ctx.fillRect(0, 0, cropSize, cropSize);
 
-    // Calculate dimensions
-    const imgWidth = img.naturalWidth;
-    const imgHeight = img.naturalHeight;
-    const minNatural = Math.min(imgWidth, imgHeight);
+    // Get actual bounding rectangles of container and transformed image
+    const containerRect = containerRef.current.getBoundingClientRect();
+    const imgRect = img.getBoundingClientRect();
 
-    // Draw parameters
-    const containerWidth = containerRef.current.clientWidth;
-    const containerHeight = containerRef.current.clientHeight;
-    
-    // Guide size is 240px inside the container.
-    // Calculate scaling factor between screen pixels and natural image pixels
+    if (imgRect.width === 0 || imgRect.height === 0) return;
+
     const guideSize = 240;
-    const scaleFactor = minNatural / (guideSize * scale);
 
-    // Center offsets
-    const dx = (offset.x + (containerWidth - img.clientWidth * scale) / 2) * (imgWidth / (img.clientWidth * scale));
-    const dy = (offset.y + (containerHeight - img.clientHeight * scale) / 2) * (imgHeight / (img.clientHeight * scale));
+    // Calculate crop guide viewport coordinates (centered in the container)
+    const cropLeftViewport = containerRect.left + containerRect.width / 2 - guideSize / 2;
+    const cropTopViewport = containerRect.top + containerRect.height / 2 - guideSize / 2;
+
+    // Calculate scale factor between natural image pixels and screen pixels
+    const scaleFactor = img.naturalWidth / imgRect.width;
+
+    // Crop box relative to image top-left in screen pixels, then scaled to natural image dimensions
+    const sx = (cropLeftViewport - imgRect.left) * scaleFactor;
+    const sy = (cropTopViewport - imgRect.top) * scaleFactor;
+    const sWidth = guideSize * scaleFactor;
+    const sHeight = guideSize * scaleFactor;
 
     ctx.save();
     // Make output circular
     ctx.beginPath();
     ctx.arc(cropSize / 2, cropSize / 2, cropSize / 2, 0, Math.PI * 2);
     ctx.clip();
-
-    // Map screen crop parameters to natural coordinates
-    const sx = (containerWidth / 2 - guideSize / 2 - offset.x - (containerWidth - img.clientWidth * scale) / 2) * scaleFactor;
-    const sy = (containerHeight / 2 - guideSize / 2 - offset.y - (containerHeight - img.clientHeight * scale) / 2) * scaleFactor;
-    const sWidth = guideSize * scaleFactor;
-    const sHeight = guideSize * scaleFactor;
 
     ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, cropSize, cropSize);
     ctx.restore();
@@ -152,10 +165,11 @@ export function ImageCropperModal({ isOpen, imageSrc, onClose, onCrop }: ImageCr
             ref={imageRef}
             src={imageSrc}
             alt="Source"
-            className="max-w-none max-h-none pointer-events-none select-none"
+            onLoad={handleImageLoad}
+            className="max-w-none max-h-none pointer-events-none select-none shrink-0"
             style={{
-              width: "240px",
-              height: "auto",
+              width: `${imgSize.w}px`,
+              height: `${imgSize.h}px`,
               transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
               transformOrigin: "center center"
             }}
