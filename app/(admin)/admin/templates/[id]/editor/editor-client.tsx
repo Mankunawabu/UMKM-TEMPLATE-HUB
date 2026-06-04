@@ -31,11 +31,10 @@ interface DraggableBoxProps {
   onUpdate: (x: number, y: number, w: number, h: number) => void;
   isActive: boolean;
   onClick: () => void;
-  isLogo?: boolean;
 }
 
 function DraggableBox({
-  label, color, renderedX, renderedY, renderedW, renderedH, zIndex, onUpdate, isActive, onClick, isLogo
+  label, color, renderedX, renderedY, renderedW, renderedH, zIndex, onUpdate, isActive, onClick
 }: DraggableBoxProps) {
   const [isDragging, setIsDragging] = React.useState(false);
   const [isResizing, setIsResizing] = React.useState<string | null>(null); // 'nw', 'ne', 'sw', 'se'
@@ -130,7 +129,6 @@ function DraggableBox({
         cursor: isDragging ? 'grabbing' : 'grab',
         boxShadow: isActive ? `0 0 0 2px rgba(255,255,255,0.5), 0 0 10px ${color}` : 'none',
         transition: isDragging || isResizing ? 'none' : 'box-shadow 0.2s',
-        borderRadius: isLogo ? '50%' : 'none',
       }}
       className="group flex items-center justify-center overflow-hidden touch-none"
     >
@@ -494,25 +492,11 @@ export function EditorClient({ template }: EditorClientProps) {
                 const color = PALETTE[i % PALETTE.length];
                 const isActive = activeFieldIndex === i;
 
-                const isLogo = f.field_role === "image" && (
-                  f.placeholder_label?.toLowerCase().includes("logo") || 
-                  f.shape_type === "circle"
-                );
-
-                // For circular logos, enforce 1:1 aspect ratio based on the smaller dimension
-                const size = isLogo ? Math.min(f.width, f.height) : 0;
-                const renderWidth = isLogo ? size : f.width;
-                const renderHeight = isLogo ? size : f.height;
-
-                // Center the circular logo inside its original rectangle bounds
-                const renderX = isLogo ? f.x + (f.width - size) / 2 : f.x;
-                const renderY = isLogo ? f.y + (f.height - size) / 2 : f.y;
-
                 // Konversi dari pixel asli (database) ke pixel layar (rendered)
-                const renderedX = renderX * imgScale;
-                const renderedY = renderY * imgScale;
-                const renderedW = renderWidth * imgScale;
-                const renderedH = renderHeight * imgScale;
+                const renderedX = f.x * imgScale;
+                const renderedY = f.y * imgScale;
+                const renderedW = f.width * imgScale;
+                const renderedH = f.height * imgScale;
 
                 return (
                   <DraggableBox
@@ -527,7 +511,6 @@ export function EditorClient({ template }: EditorClientProps) {
                     isActive={isActive}
                     onClick={() => setActiveFieldIndex(i)}
                     onUpdate={(rx, ry, rw, rh) => handleBoxUpdate(i, rx, ry, rw, rh)}
-                    isLogo={isLogo}
                   />
                 );
               })}

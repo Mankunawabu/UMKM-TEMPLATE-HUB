@@ -191,17 +191,17 @@ function LogoUploader({ onUploadComplete, disabled, maxUploadMb }: LogoUploaderP
           </span>
         </div>
 
-        {/* Preview Area (Square on the right) */}
-        <div className="w-12 h-12 shrink-0 rounded-xl border border-[#F7D6E6] bg-white flex items-center justify-center overflow-hidden shadow-xs relative">
+        {/* Preview Area (Circle on the right) */}
+        <div className="w-12 h-12 shrink-0 rounded-full border border-[#F7D6E6] bg-white flex items-center justify-center overflow-hidden shadow-xs relative">
           {preview ? (
             <img
                src={preview}
                alt="Logo Usaha"
-               className="w-full h-full object-contain p-1"
+               className="w-full h-full object-cover rounded-full"
             />
           ) : (
             // Placeholder when no preview is uploaded
-            <div className="w-full h-full bg-[#FFF9FC] flex items-center justify-center text-[#C27BA0]/40">
+            <div className="w-full h-full bg-[#FFF9FC] flex items-center justify-center text-[#C27BA0]/40 rounded-full">
               <User className="w-5 h-5" />
             </div>
           )}

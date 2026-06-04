@@ -221,11 +221,11 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
                 <div className="mb-6">
                   <label className="block text-xs font-bold uppercase tracking-wider text-[#8C4A6E] mb-2">Logo Usaha</label>
                   <div className="flex items-center gap-4">
-                    <div className="w-20 h-20 rounded-2xl border-2 border-dashed border-[#F7D6E6] bg-[#FFF0F7]/50 flex items-center justify-center overflow-hidden relative">
+                    <div className="w-20 h-20 rounded-full border-2 border-dashed border-[#F7D6E6] bg-[#FFF0F7]/50 flex items-center justify-center overflow-hidden relative">
                       {preview ? (
-                        <img src={preview} alt="Logo" className="w-full h-full object-contain p-2" />
+                        <img src={preview} alt="Logo" className="w-full h-full object-cover rounded-full" />
                       ) : (
-                        <User className="w-8 h-8 text-[#C27BA0]/40" />
+                        <User className="w-8 h-8 text-[#C27BA0]/40 rounded-full" />
                       )}
                       {uploading && (
                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">

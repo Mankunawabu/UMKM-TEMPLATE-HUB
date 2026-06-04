@@ -275,14 +275,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
   const [values, setValues] = React.useState<Record<string, FieldValue>>(() => {
     const init: Record<string, FieldValue> = {};
     fields.forEach((f) => {
-      const isLogoField = f.field_role === "image" && (f.placeholder_label?.toLowerCase().includes("logo") || f.shape_type === "circle");
-      init[f.id] = { 
-        text: "", 
-        imageUrl: (isLogoField && shopLogo) ? shopLogo : undefined,
-        imageScale: 1, 
-        imageTranslateX: 0, 
-        imageTranslateY: 0 
-      };
+      init[f.id] = { text: "", imageScale: 1, imageTranslateX: 0, imageTranslateY: 0 };
     });
     return init;
   });
@@ -404,8 +397,6 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
         ...prev, 
         [id]: { ...prev[id], imageUrl: base64Url, imageScale: 1, imageTranslateX: 0, imageTranslateY: 0 } 
       }));
-      setActiveFieldId(id);
-      setIsSidebarOpen(true);
     };
     reader.readAsDataURL(file);
   };
@@ -998,31 +989,15 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                     ? 20 + field.z_index 
                     : (field.z_index >= 10 ? 0 : field.z_index);
 
-                  const isLogo = field.field_role === "image" && (
-                    field.placeholder_label?.toLowerCase().includes("logo") || 
-                    field.shape_type === "circle"
-                  );
-
-                  // For circular logos, enforce 1:1 aspect ratio based on the smaller dimension
-                  const size = isLogo ? Math.min(field.width, field.height) : 0;
-                  const renderWidth = isLogo ? size : field.width;
-                  const renderHeight = isLogo ? size : field.height;
-
-                  // Center the circular logo inside its original rectangle bounds
-                  const renderX = isLogo ? field.x + (field.width - size) / 2 : field.x;
-                  const renderY = isLogo ? field.y + (field.height - size) / 2 : field.y;
-
                   // Absolute PX coordinates relative to the canvas Base Width/Height.
                   const style: React.CSSProperties = {
                     position: "absolute",
-                    left: `${renderX}px`,
-                    top: `${renderY}px`,
-                    width: `${renderWidth}px`,
-                    height: `${renderHeight}px`,
+                    left: `${field.x}px`,
+                    top: `${field.y}px`,
+                    width: `${field.width}px`,
+                    height: `${field.height}px`,
                     zIndex: fieldZIndex,
-                    outline: isSelected && !isLogo ? "2px dashed #C27BA0" : "none",
-                    borderRadius: isLogo ? "50%" : "none",
-                    border: isLogo && isSelected ? "2px dashed #C27BA0" : "none",
+                    outline: isSelected ? "2px dashed #C27BA0" : "none",
                   };
 
                   // IMAGE FIELD (Z-Index Usually 0 for Underlay)

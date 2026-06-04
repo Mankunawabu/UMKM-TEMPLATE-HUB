@@ -82,11 +82,11 @@ export default function UMKMSidebar({ profile, exportLimit = 5, currentExports =
       <div className="lg:hidden flex items-center justify-between p-4 bg-white border-b border-[#F7D6E6] text-[#8C4A6E] fixed top-0 left-0 right-0 z-40">
         <div className="flex items-center gap-2">
           {profile?.logo_url ? (
-            <div className="w-8 h-8 rounded-lg bg-[#FFF0F7] border border-[#F7D6E6] flex items-center justify-center overflow-hidden shrink-0">
+            <div className="w-8 h-8 rounded-full bg-[#FFF0F7] border border-[#F7D6E6] flex items-center justify-center overflow-hidden shrink-0">
               <img
                 src={profile.logo_url}
                 alt="Logo Usaha"
-                className="w-full h-full object-contain p-0.5"
+                className="w-full h-full object-cover rounded-full"
               />
             </div>
           ) : (
@@ -123,11 +123,11 @@ export default function UMKMSidebar({ profile, exportLimit = 5, currentExports =
           <div className="flex items-center justify-between p-6 border-b border-[#F7D6E6]">
             <div className="flex items-center gap-2">
               {profile?.logo_url ? (
-                <div className="w-8 h-8 rounded-lg bg-[#FFF0F7] border border-[#F7D6E6] flex items-center justify-center overflow-hidden shrink-0">
+                <div className="w-8 h-8 rounded-full bg-[#FFF0F7] border border-[#F7D6E6] flex items-center justify-center overflow-hidden shrink-0">
                   <img
                     src={profile.logo_url}
                     alt="Logo Usaha"
-                    className="w-full h-full object-contain p-0.5"
+                    className="w-full h-full object-cover rounded-full"
                   />
                 </div>
               ) : (
@@ -225,11 +225,11 @@ export default function UMKMSidebar({ profile, exportLimit = 5, currentExports =
           <div className="flex items-center justify-between p-6 border-b border-[#F7D6E6] relative">
             <div className="flex items-center gap-2 overflow-hidden">
               {profile?.logo_url ? (
-                <div className="w-8 h-8 rounded-lg bg-[#FFF0F7] border border-[#F7D6E6] flex items-center justify-center overflow-hidden shrink-0">
+                <div className="w-8 h-8 rounded-full bg-[#FFF0F7] border border-[#F7D6E6] flex items-center justify-center overflow-hidden shrink-0">
                   <img
                     src={profile.logo_url}
                     alt="Logo Usaha"
-                    className="w-full h-full object-contain p-0.5"
+                    className="w-full h-full object-cover rounded-full"
                   />
                 </div>
               ) : (
