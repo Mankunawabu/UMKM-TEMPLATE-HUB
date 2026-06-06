@@ -8,7 +8,7 @@ export default async function AdminUsersPage() {
 
   const supabase = await createClient();
 
-  // Fetch profiles that are UMKM
+  // Fetch profiles (both UMKM and Admin)
   const { data: users, error: usersError } = await supabase
     .from("profiles")
     .select(`
@@ -18,7 +18,6 @@ export default async function AdminUsersPage() {
       ),
       export_logs (count)
     `)
-    .eq("role", "umkm")
     .order("created_at", { ascending: false });
 
   if (usersError) {

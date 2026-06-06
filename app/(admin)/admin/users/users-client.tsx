@@ -42,6 +42,7 @@ interface UserProfile {
   last_login: string | null;
   created_at: string;
   export_count?: number;
+  role: string;
   categories: {
     name: string;
   } | null;
@@ -154,6 +155,7 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
                 no_wa: formData.get("no_wa") as string,
                 instagram: formData.get("instagram") as string,
                 alamat: formData.get("alamat") as string,
+                role: (formData.get("role") as string) || "umkm",
                 categories: updatedCatName ? { name: updatedCatName } : null,
               }
             : u
@@ -270,6 +272,20 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
         <div className="flex items-center gap-1.5 justify-center w-8 h-8 rounded-full bg-[#FFF0F7] text-[#C27BA0] font-bold text-xs mx-auto">
           {row.export_count || 0}
         </div>
+      ),
+    },
+    {
+      header: "Peran",
+      accessorKey: "role",
+      sortable: true,
+      render: (row) => (
+        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+          row.role === "admin"
+            ? "bg-purple-100 text-purple-700 border-purple-200"
+            : "bg-blue-100 text-blue-700 border-blue-200"
+        }`}>
+          {row.role === "admin" ? "Admin" : "UMKM"}
+        </span>
       ),
     },
     {
@@ -425,6 +441,19 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
                 </select>
               </div>
 
+              {/* Peran Akses */}
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-[#8C4A6E] uppercase">Peran Akses</label>
+                <select
+                  name="role"
+                  defaultValue={editingUser.role || "umkm"}
+                  className="w-full px-3 py-2 text-sm border border-[#F7D6E6] bg-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C27BA0]"
+                >
+                  <option value="umkm">Mitra UMKM</option>
+                  <option value="admin">Administrator</option>
+                </select>
+              </div>
+
               {/* WhatsApp */}
               <div className="space-y-1">
                 <label className="text-[10px] font-bold text-[#8C4A6E] uppercase">No. WhatsApp</label>
@@ -502,6 +531,18 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
               <div className="space-y-1">
                 <label className="text-[10px] font-bold text-[#8C4A6E] uppercase">Email Login</label>
                 <input type="email" name="email" required placeholder="umkm@email.com" className="w-full px-3 py-2 text-sm border border-[#F7D6E6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C27BA0]" />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-[#8C4A6E] uppercase">Peran Akses</label>
+                <select
+                  name="role"
+                  defaultValue="umkm"
+                  className="w-full px-3 py-2 text-sm border border-[#F7D6E6] bg-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C27BA0]"
+                >
+                  <option value="umkm">Mitra UMKM</option>
+                  <option value="admin">Administrator</option>
+                </select>
               </div>
 
               <div className="space-y-1">

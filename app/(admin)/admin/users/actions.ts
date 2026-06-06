@@ -59,23 +59,34 @@ export async function updateUser(id: string, prevState: any, formData: FormData)
     const no_wa = formData.get("no_wa") as string;
     const instagram = formData.get("instagram") as string;
     const alamat = formData.get("alamat") as string;
+    const role = formData.get("role") as string;
 
     if (!nama_lengkap || !nama_usaha || !no_wa) {
       return { success: false, error: "Nama, Nama Usaha, dan Nomor WhatsApp wajib diisi." };
     }
 
+    if (role && !["umkm", "admin"].includes(role)) {
+      return { success: false, error: "Role tidak valid." };
+    }
+
     const supabase = await createClient();
+
+    const updateData: any = {
+      nama_lengkap,
+      nama_usaha,
+      category_id: category_id || null,
+      no_wa,
+      instagram,
+      alamat,
+    };
+
+    if (role) {
+      updateData.role = role;
+    }
 
     const { error } = await supabase
       .from("profiles")
-      .update({
-        nama_lengkap,
-        nama_usaha,
-        category_id: category_id || null,
-        no_wa,
-        instagram,
-        alamat,
-      })
+      .update(updateData)
       .eq("id", id);
 
     if (error) {
@@ -87,7 +98,7 @@ export async function updateUser(id: string, prevState: any, formData: FormData)
       "user_updated",
       "profile",
       id,
-      { nama_usaha, nama_lengkap },
+      { nama_usaha, nama_lengkap, role },
       "info"
     );
 
@@ -157,9 +168,14 @@ export async function createUserAction(prevState: any, formData: FormData) {
     
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
+    const role = (formData.get("role") as string) || "umkm";
 
     if (!email || !password) {
       return { success: false, error: "Email dan Password wajib diisi." };
+    }
+
+    if (!["umkm", "admin"].includes(role)) {
+      return { success: false, error: "Role tidak valid." };
     }
 
     const adminClient = getAdminClient();
@@ -179,13 +195,13 @@ export async function createUserAction(prevState: any, formData: FormData) {
       return { success: false, error: "Gagal membuat user." };
     }
 
-    // 2. Upsert profile (Hanya data dasar, biarkan UMKM mengisi sisanya saat onboarding)
+    // 2. Upsert profile (Hanya data dasar, biarkan UMKM mengisi sisanya saat onboarding jika umkm)
     const { error: profileError } = await adminClient
       .from("profiles")
       .upsert({
         id: authData.user.id,
-        role: "umkm",
-        is_onboarding_completed: false,
+        role: role,
+        is_onboarding_completed: role === "admin",
         is_active: true,
       });
 
@@ -199,7 +215,7 @@ export async function createUserAction(prevState: any, formData: FormData) {
       "user_created",
       "profile",
       authData.user.id,
-      { email: email },
+      { email: email, role: role },
       "success"
     );
 
