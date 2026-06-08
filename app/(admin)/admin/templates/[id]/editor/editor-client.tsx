@@ -31,17 +31,34 @@ interface DraggableBoxProps {
   onUpdate: (x: number, y: number, w: number, h: number) => void;
   isActive: boolean;
   onClick: () => void;
+  shapeType?: string;
+  points?: string;
+  onPointsUpdate?: (points: string) => void;
 }
 
 function DraggableBox({
-  label, color, renderedX, renderedY, renderedW, renderedH, zIndex, onUpdate, isActive, onClick
+  label, color, renderedX, renderedY, renderedW, renderedH, zIndex, onUpdate, isActive, onClick, shapeType, points, onPointsUpdate
 }: DraggableBoxProps) {
   const [isDragging, setIsDragging] = React.useState(false);
   const [isResizing, setIsResizing] = React.useState<string | null>(null); // 'nw', 'ne', 'sw', 'se'
   
-  // Track start positions
+  // Track active vertex drag
+  const [activeVertexIdx, setActiveVertexIdx] = React.useState<number | null>(null);
+  const startVertexPos = React.useRef({ x: 0, y: 0 });
+  const startVertexVal = React.useRef({ x: 0, y: 0 });
+
+  // Track start positions for main box
   const startPos = React.useRef({ x: 0, y: 0 });
   const startDim = React.useRef({ x: 0, y: 0, w: 0, h: 0 });
+
+  // Parse points
+  const pts = React.useMemo(() => {
+    if (!points) return [{ x: 0, y: 0 }, { x: 100, y: 0 }, { x: 100, y: 100 }, { x: 0, y: 100 }];
+    return points.split(" ").map(p => {
+      const [px, py] = p.split(",").map(Number);
+      return { x: isNaN(px) ? 0 : px, y: isNaN(py) ? 0 : py };
+    });
+  }, [points]);
 
   const handlePointerDown = (e: React.PointerEvent, action: string) => {
     e.stopPropagation();
@@ -109,6 +126,56 @@ function DraggableBox({
     setIsResizing(null);
   };
 
+  // Vertex drag handlers
+  const handleVertexPointerDown = (e: React.PointerEvent, idx: number) => {
+    e.stopPropagation();
+    e.preventDefault();
+    onClick();
+    
+    const el = e.currentTarget as HTMLElement;
+    el.setPointerCapture(e.pointerId);
+    
+    setActiveVertexIdx(idx);
+    startVertexPos.current = { x: e.clientX, y: e.clientY };
+    startVertexVal.current = { ...pts[idx] };
+  };
+
+  const handleVertexPointerMove = (e: React.PointerEvent) => {
+    if (activeVertexIdx === null) return;
+    e.stopPropagation();
+    e.preventDefault();
+
+    const dx = e.clientX - startVertexPos.current.x;
+    const dy = e.clientY - startVertexPos.current.y;
+
+    // Convert pixel delta to percentage
+    const pctDx = (dx / renderedW) * 100;
+    const pctDy = (dy / renderedH) * 100;
+
+    let newX = Math.round(startVertexVal.current.x + pctDx);
+    let newY = Math.round(startVertexVal.current.y + pctDy);
+
+    if (newX < 0) newX = 0;
+    if (newX > 100) newX = 100;
+    if (newY < 0) newY = 0;
+    if (newY > 100) newY = 100;
+
+    const newPts = [...pts];
+    newPts[activeVertexIdx] = { x: newX, y: newY };
+
+    const newPointsStr = newPts.map(p => `${p.x},${p.y}`).join(" ");
+    if (onPointsUpdate) {
+      onPointsUpdate(newPointsStr);
+    }
+  };
+
+  const handleVertexPointerUp = (e: React.PointerEvent) => {
+    e.stopPropagation();
+    const el = e.currentTarget as HTMLElement;
+    el.releasePointerCapture(e.pointerId);
+    setActiveVertexIdx(null);
+  };
+
   const handleSize = 10;
 
   return (
@@ -124,19 +191,32 @@ function DraggableBox({
         width: renderedW,
         height: renderedH,
         zIndex,
-        border: `2px ${isActive ? 'solid' : 'dashed'} ${color}`,
-        backgroundColor: `${color}33`,
+        border: shapeType === "polygon" ? "none" : `2px ${isActive ? 'solid' : 'dashed'} ${color}`,
+        backgroundColor: shapeType === "polygon" ? "transparent" : `${color}33`,
         cursor: isDragging ? 'grabbing' : 'grab',
-        boxShadow: isActive ? `0 0 0 2px rgba(255,255,255,0.5), 0 0 10px ${color}` : 'none',
-        transition: isDragging || isResizing ? 'none' : 'box-shadow 0.2s',
+        boxShadow: isActive && shapeType !== "polygon" ? `0 0 0 2px rgba(255,255,255,0.5), 0 0 10px ${color}` : 'none',
+        transition: isDragging || isResizing || activeVertexIdx !== null ? 'none' : 'box-shadow 0.2s',
       }}
       className="group flex items-center justify-center overflow-hidden touch-none"
     >
-      <span className="bg-[#3D1E30]/80 text-white text-xs font-bold px-2 py-1 rounded truncate max-w-[90%] pointer-events-none select-none">
+      {shapeType === "polygon" && (
+        <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }} viewBox="0 0 100 100" preserveAspectRatio="none">
+          <polygon
+            points={pts.map(p => `${p.x},${p.y}`).join(" ")}
+            fill={`${color}33`}
+            stroke={color}
+            strokeWidth={2}
+            strokeDasharray={isActive ? "none" : "4,4"}
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
+      )}
+
+      <span className="bg-[#3D1E30]/80 text-white text-xs font-bold px-2 py-1 rounded truncate max-w-[90%] pointer-events-none select-none z-10">
         {label}
       </span>
 
-      {/* Resize Handles (only visible when active or hovered) */}
+      {/* Resize Handles (only visible when active) */}
       {isActive && (
         <>
           {/* NW */}
@@ -145,7 +225,7 @@ function DraggableBox({
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             className="absolute bg-white border border-[#3D1E30] rounded-full"
-            style={{ width: handleSize, height: handleSize, top: -handleSize/2, left: -handleSize/2, cursor: 'nwse-resize' }}
+            style={{ width: handleSize, height: handleSize, top: -handleSize/2, left: -handleSize/2, cursor: 'nwse-resize', zIndex: 110 }}
           />
           {/* NE */}
           <div
@@ -153,7 +233,7 @@ function DraggableBox({
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             className="absolute bg-white border border-[#3D1E30] rounded-full"
-            style={{ width: handleSize, height: handleSize, top: -handleSize/2, right: -handleSize/2, cursor: 'nesw-resize' }}
+            style={{ width: handleSize, height: handleSize, top: -handleSize/2, right: -handleSize/2, cursor: 'nesw-resize', zIndex: 110 }}
           />
           {/* SW */}
           <div
@@ -161,7 +241,7 @@ function DraggableBox({
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             className="absolute bg-white border border-[#3D1E30] rounded-full"
-            style={{ width: handleSize, height: handleSize, bottom: -handleSize/2, left: -handleSize/2, cursor: 'nesw-resize' }}
+            style={{ width: handleSize, height: handleSize, bottom: -handleSize/2, left: -handleSize/2, cursor: 'nesw-resize', zIndex: 110 }}
           />
           {/* SE */}
           <div
@@ -169,10 +249,33 @@ function DraggableBox({
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             className="absolute bg-white border border-[#3D1E30] rounded-full"
-            style={{ width: handleSize, height: handleSize, bottom: -handleSize/2, right: -handleSize/2, cursor: 'nwse-resize' }}
+            style={{ width: handleSize, height: handleSize, bottom: -handleSize/2, right: -handleSize/2, cursor: 'nwse-resize', zIndex: 110 }}
           />
         </>
       )}
+
+      {/* Draggable Vertex Handles for Polygon */}
+      {isActive && shapeType === "polygon" && pts.map((p, idx) => (
+        <div
+          key={idx}
+          onPointerDown={(e) => handleVertexPointerDown(e, idx)}
+          onPointerMove={handleVertexPointerMove}
+          onPointerUp={handleVertexPointerUp}
+          onPointerCancel={handleVertexPointerUp}
+          className="absolute bg-white border-2 rounded-full shadow-md hover:scale-125 transition-transform"
+          style={{
+            width: 12,
+            height: 12,
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            transform: 'translate(-6px, -6px)',
+            borderColor: color,
+            cursor: 'move',
+            zIndex: 120,
+            touchAction: 'none',
+          }}
+        />
+      ))}
     </div>
   );
 }
@@ -270,7 +373,17 @@ export function EditorClient({ template }: EditorClientProps) {
 
   const handleSave = async () => {
     setSaving(true);
-    const res = await saveTemplateFields(template.id, fields);
+    // Sanitize image fields to prevent check_font_family check constraint violations
+    const sanitizedFields = fields.map(f => {
+      if (f.field_role === "image") {
+        return {
+          ...f,
+          font_family: "Inter",
+        };
+      }
+      return f;
+    });
+    const res = await saveTemplateFields(template.id, sanitizedFields);
     setSaving(false);
     if (res.success) {
       alert("Area berhasil disimpan!");
@@ -390,6 +503,85 @@ export function EditorClient({ template }: EditorClientProps) {
                             </select>
                           </div>
                         </div>
+
+                        {f.field_role === "image" && (
+                          <div className="space-y-3 p-3 bg-slate-50 rounded-lg border border-[#F7D6E6]/50">
+                            <div className="space-y-1.5">
+                              <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider block">Bentuk Area</label>
+                              <select
+                                value={f.shape_type || "rect"}
+                                onChange={(e) => {
+                                  const shape = e.target.value;
+                                  updateField(i, "shape_type", shape);
+                                  if (shape === "polygon" && !f.font_weight) {
+                                    // Default: 4-corner polygon
+                                    updateField(i, "font_weight", "0,0 100,0 100,100 0,100");
+                                  }
+                                }}
+                                className="w-full px-3 py-2 text-sm border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white cursor-pointer"
+                              >
+                                <option value="rect">Kotak (Standar)</option>
+                                <option value="polygon">Kustom (Poligon / Banyak Sudut)</option>
+                              </select>
+                            </div>
+
+                            {f.shape_type === "polygon" && (
+                              <div className="space-y-2 pt-2 border-t border-[#F7D6E6]/30">
+                                <p className="text-[9px] text-slate-500 font-medium leading-tight">
+                                  💡 Seret titik-titik bulat di kanvas untuk menyesuaikan bentuk lubang secara presisi.
+                                </p>
+                                <div className="grid grid-cols-2 gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      const pts = f.font_weight ? f.font_weight.split(" ") : ["0,0", "100,0", "100,100", "0,100"];
+                                      if (pts.length >= 10) {
+                                        alert("Maksimal 10 titik sudut.");
+                                        return;
+                                      }
+                                      // Add midway point at center
+                                      pts.push("50,50");
+                                      updateField(i, "font_weight", pts.join(" "));
+                                    }}
+                                    className="px-2 py-1.5 bg-white border border-[#C27BA0] text-[#C27BA0] hover:bg-[#FFF0F7] rounded-lg text-[9px] font-bold transition-all active:scale-95"
+                                  >
+                                    + Titik Sudut
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      const pts = f.font_weight ? f.font_weight.split(" ") : ["0,0", "100,0", "100,100", "0,100"];
+                                      if (pts.length <= 3) {
+                                        alert("Minimal harus ada 3 titik sudut.");
+                                        return;
+                                      }
+                                      pts.pop();
+                                      updateField(i, "font_weight", pts.join(" "));
+                                    }}
+                                    className="px-2 py-1.5 bg-white border border-red-300 text-red-500 hover:bg-red-50 rounded-lg text-[9px] font-bold transition-all active:scale-95"
+                                  >
+                                    - Hapus Titik
+                                  </button>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (confirm("Reset bentuk kembali ke kotak biasa?")) {
+                                      updateField(i, "shape_type", "rect");
+                                      updateField(i, "font_weight", "");
+                                    }
+                                  }}
+                                  className="w-full px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-[9px] font-bold transition-colors"
+                                >
+                                  Reset ke Kotak
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        )}
 
                         {/* Text Options (Admin only configures max characters limit) */}
                         {f.field_role === "text" && (
@@ -511,6 +703,9 @@ export function EditorClient({ template }: EditorClientProps) {
                     isActive={isActive}
                     onClick={() => setActiveFieldIndex(i)}
                     onUpdate={(rx, ry, rw, rh) => handleBoxUpdate(i, rx, ry, rw, rh)}
+                    shapeType={f.shape_type}
+                    points={f.font_weight}
+                    onPointsUpdate={(newPoints) => updateField(i, "font_weight", newPoints)}
                   />
                 );
               })}

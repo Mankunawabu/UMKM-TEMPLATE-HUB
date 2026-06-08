@@ -754,7 +754,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                               <span>{Math.round(val.imageScale * 100)}%</span>
                             </label>
                             <input 
-                              type="range" min="0.5" max="3" step="0.1" 
+                              type="range" min="0.1" max="5" step="0.05" 
                               value={val.imageScale}
                               onChange={(e) => handlePanZoom(field.id, parseFloat(e.target.value), val.imageTranslateX, val.imageTranslateY)}
                               className="w-full accent-[#C27BA0]"
@@ -764,7 +764,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                             <div>
                               <label className="text-[10px] font-bold text-slate-500">Geser X</label>
                               <input 
-                                type="range" min="-500" max="500" step="10" 
+                                type="range" min="-1500" max="1500" step="5" 
                                 value={val.imageTranslateX}
                                 onChange={(e) => handlePanZoom(field.id, val.imageScale, parseFloat(e.target.value), val.imageTranslateY)}
                                 className="w-full accent-[#C27BA0]"
@@ -773,7 +773,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                             <div>
                               <label className="text-[10px] font-bold text-slate-500">Geser Y</label>
                               <input 
-                                type="range" min="-500" max="500" step="10" 
+                                type="range" min="-1500" max="1500" step="5" 
                                 value={val.imageTranslateY}
                                 onChange={(e) => handlePanZoom(field.id, val.imageScale, val.imageTranslateX, parseFloat(e.target.value))}
                                 className="w-full accent-[#C27BA0]"
@@ -1000,6 +1000,22 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                     outline: isSelected ? "2px dashed #C27BA0" : "none",
                   };
 
+                  // Custom polygon shape clipping (only for image fields)
+                  if (field.field_role === "image" && field.shape_type === "polygon" && field.font_weight) {
+                    const points = field.font_weight.trim();
+                    if (points) {
+                      const cssPolygon = `polygon(${points
+                        .split(" ")
+                        .map((p) => {
+                          const [px, py] = p.split(",");
+                          return `${px}% ${py}%`;
+                        })
+                        .join(", ")})`;
+                      style.clipPath = cssPolygon;
+                      (style as any).WebkitClipPath = cssPolygon;
+                    }
+                  }
+
                   // IMAGE FIELD (Z-Index Usually 0 for Underlay)
                   if (field.field_role === "image") {
                     return (
@@ -1026,7 +1042,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                             src={val.imageUrl} 
                             alt="Upload"
                             crossOrigin="anonymous"
-                            className="w-full h-full object-cover select-none pointer-events-none"
+                            className="w-full h-full object-contain select-none pointer-events-none"
                             style={{
                               transform: `translate(${val.imageTranslateX}px, ${val.imageTranslateY}px) scale(${val.imageScale})`,
                               transformOrigin: "center center",

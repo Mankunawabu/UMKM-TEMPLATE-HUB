@@ -64,11 +64,12 @@ export async function saveTemplateFields(templateId: string, fields: TemplateFie
 
     // Jika ada field baru, insert
     if (fields && fields.length > 0) {
-      // Pastikan template_id terset
+      // Pastikan template_id terset dan bersihkan font_family pada image field agar tidak melanggar check constraint
       const fieldsToInsert = fields.map((f, index) => {
         return {
           ...f,
           template_id: templateId,
+          font_family: f.field_role === "image" ? "Inter" : f.font_family,
         };
       });
 
