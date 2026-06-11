@@ -70,14 +70,14 @@ const DeviceMockup = ({ platform, imageUrl, shopName, shopLogo }: { platform: st
           <img src={imageUrl} alt="Preview" className="absolute inset-0 w-full h-full object-contain bg-black" />
           
           {platform === "tiktok_post" && (
-            <div className="absolute right-3 bottom-16 flex flex-col gap-4 text-slate-800 drop-shadow-md items-center z-10">
+            <div className="absolute right-3 bottom-16 flex flex-col gap-4 text-white drop-shadow-md items-center z-10">
               <div className="w-10 h-10 rounded-full bg-white p-0.5 overflow-hidden border-2 border-white mb-2 shadow-sm">
                 {shopLogo ? <img src={shopLogo} className="w-full h-full object-cover rounded-full" /> : <div className="w-full h-full bg-slate-300 rounded-full" />}
               </div>
-              <div className="flex flex-col items-center"><Heart className="w-6 h-6 fill-slate-800 text-slate-800" /><span className="text-[10px] font-bold mt-1">12K</span></div>
-              <div className="flex flex-col items-center"><MessageCircle className="w-6 h-6 fill-slate-800 text-slate-800" /><span className="text-[10px] font-bold mt-1">134</span></div>
-              <div className="flex flex-col items-center"><Bookmark className="w-6 h-6 fill-slate-800 text-slate-800" /><span className="text-[10px] font-bold mt-1">Simpan</span></div>
-              <div className="flex flex-col items-center"><Share2 className="w-6 h-6 fill-slate-800 text-slate-800" /><span className="text-[10px] font-bold mt-1">Share</span></div>
+              <div className="flex flex-col items-center"><Heart className="w-6 h-6 fill-white text-white drop-shadow-md" /><span className="text-[10px] font-bold mt-1 drop-shadow-md">12K</span></div>
+              <div className="flex flex-col items-center"><MessageCircle className="w-6 h-6 fill-white text-white drop-shadow-md" /><span className="text-[10px] font-bold mt-1 drop-shadow-md">134</span></div>
+              <div className="flex flex-col items-center"><Bookmark className="w-6 h-6 fill-white text-white drop-shadow-md" /><span className="text-[10px] font-bold mt-1 drop-shadow-md">Simpan</span></div>
+              <div className="flex flex-col items-center"><Share2 className="w-6 h-6 fill-white text-white drop-shadow-md" /><span className="text-[10px] font-bold mt-1 drop-shadow-md">Share</span></div>
               <div className="w-9 h-9 rounded-full bg-slate-800 border-[3px] border-slate-700 animate-[spin_4s_linear_infinite] mt-2 flex items-center justify-center overflow-hidden shadow-md">
                 {shopLogo ? <img src={shopLogo} className="w-full h-full object-cover rounded-full opacity-80" /> : <div className="w-3 h-3 bg-slate-400 rounded-full" />}
               </div>
@@ -87,21 +87,21 @@ const DeviceMockup = ({ platform, imageUrl, shopName, shopLogo }: { platform: st
           {(platform === "instagram_story" || platform === "whatsapp_status") && (
             <>
               <div className="absolute top-2 inset-x-2 flex gap-1.5 z-10">
-                <div className="h-1 bg-slate-800/20 w-full rounded-full overflow-hidden"><div className="w-2/3 h-full bg-slate-800"></div></div>
-                <div className="h-1 bg-slate-800/20 w-full rounded-full"></div>
-                <div className="h-1 bg-slate-800/20 w-full rounded-full"></div>
+                <div className="h-1 bg-white/30 w-full rounded-full overflow-hidden"><div className="w-2/3 h-full bg-white drop-shadow-md"></div></div>
+                <div className="h-1 bg-white/30 w-full rounded-full"></div>
+                <div className="h-1 bg-white/30 w-full rounded-full"></div>
               </div>
               <div className="absolute top-6 left-3 flex items-center gap-2 z-10">
                 <div className="w-8 h-8 rounded-full bg-white p-[1px] overflow-hidden shadow-sm">
                   {shopLogo ? <img src={shopLogo} className="w-full h-full object-cover rounded-full" /> : <div className="w-full h-full bg-slate-300 rounded-full" />}
                 </div>
-                <span className="text-xs font-bold text-slate-800 drop-shadow-sm">{displayName}</span>
-                <span className="text-[10px] text-slate-600 drop-shadow-sm">2j</span>
+                <span className="text-xs font-bold text-white drop-shadow-md">{displayName}</span>
+                <span className="text-[10px] text-white/80 drop-shadow-md">2j</span>
               </div>
               <div className="absolute bottom-6 inset-x-4 z-10 flex gap-3">
-                <div className="flex-1 rounded-full border border-slate-800/30 bg-white/50 text-slate-800 text-xs px-4 py-2.5 backdrop-blur-md font-medium">Kirim pesan...</div>
-                <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-white/50 backdrop-blur-md border border-slate-800/20"><Heart className="w-5 h-5 text-slate-800" /></div>
-                <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-white/50 backdrop-blur-md border border-slate-800/20"><Send className="w-5 h-5 text-slate-800 ml-1" /></div>
+                <div className="flex-1 rounded-full border border-white/30 bg-black/20 text-white text-xs px-4 py-2.5 backdrop-blur-md font-medium">Kirim pesan...</div>
+                <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-black/20 backdrop-blur-md border border-white/30"><Heart className="w-5 h-5 text-white drop-shadow-md" /></div>
+                <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-black/20 backdrop-blur-md border border-white/30"><Send className="w-5 h-5 text-white ml-1 drop-shadow-md" /></div>
               </div>
             </>
           )}
