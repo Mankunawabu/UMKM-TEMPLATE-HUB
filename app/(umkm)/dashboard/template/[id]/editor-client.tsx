@@ -1200,10 +1200,10 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                   <h4 className="text-sm font-bold text-[#1E293B] mb-3">Pilih Tampilan Mockup:</h4>
                   <div className="flex flex-wrap gap-2">
                     {[
-                      { id: "instagram_story", label: "IG Story" },
-                      { id: "instagram_post", label: "IG Feed" },
-                      { id: "tiktok_post", label: "TikTok" },
-                      { id: "facebook_post", label: "Facebook" },
+                      { id: "instagram_feed", label: "Instagram Feed" },
+                      { id: "instagram_story", label: "IG Story / WA" },
+                      { id: "tiktok_post", label: "TikTok Post" },
+                      { id: "facebook_post", label: "Facebook Post" },
                       { id: "marketplace", label: "Marketplace" },
                       { id: null, label: "Asli (Polos)" },
                     ].map(mockup => (
