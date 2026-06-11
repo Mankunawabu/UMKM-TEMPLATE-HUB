@@ -1201,7 +1201,6 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                       { id: "tiktok_post", label: "TikTok Post" },
                       { id: "facebook_post", label: "Facebook Post" },
                       { id: "marketplace", label: "Marketplace" },
-                      { id: null, label: "Asli (Polos)" },
                     ].map(mockup => (
                       <button
                         key={mockup.id || "asli"}
