@@ -1254,11 +1254,10 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                 </button>
               </div>
             </div>
-
           </div>
         </div>
+      </div>
       )}
-
     </div>
   );
 }
