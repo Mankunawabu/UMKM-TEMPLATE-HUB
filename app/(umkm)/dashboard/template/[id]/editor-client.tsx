@@ -86,11 +86,7 @@ const DeviceMockup = ({ platform, imageUrl, shopName, shopLogo }: { platform: st
           
           {(platform === "instagram_story" || platform === "whatsapp_status") && (
             <>
-              <div className="absolute top-2 inset-x-2 flex gap-1.5 z-10">
-                <div className="h-1 bg-white/30 w-full rounded-full overflow-hidden"><div className="w-2/3 h-full bg-white drop-shadow-md"></div></div>
-                <div className="h-1 bg-white/30 w-full rounded-full"></div>
-                <div className="h-1 bg-white/30 w-full rounded-full"></div>
-              </div>
+              {/* Progress bars removed due to overlap with phone status bar */}
               <div className="absolute top-6 left-3 flex items-center gap-2 z-10">
                 <div className="w-8 h-8 rounded-full bg-white p-[1px] overflow-hidden shadow-sm">
                   {shopLogo ? <img src={shopLogo} className="w-full h-full object-cover rounded-full" /> : <div className="w-full h-full bg-slate-300 rounded-full" />}
