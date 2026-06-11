@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { translateError } from "@/lib/error-translator";
 
 export async function getExportLogs(userId: string) {
   const supabase = await createClient();
@@ -76,7 +77,7 @@ export async function deleteExportLog(logId: string) {
     revalidatePath("/dashboard/riwayat-desain");
     return { success: true };
   } catch (err: any) {
-    return { success: false, error: err.message };
+    return { success: false, error: translateError(err.message) };
   }
 }
 
@@ -126,6 +127,6 @@ export async function deleteMultipleExportLogs(logIds: string[]) {
     revalidatePath("/dashboard/riwayat-desain");
     return { success: true, count: logIds.length };
   } catch (err: any) {
-    return { success: false, error: err.message };
+    return { success: false, error: translateError(err.message) };
   }
 }

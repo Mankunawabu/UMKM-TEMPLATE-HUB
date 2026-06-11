@@ -14,7 +14,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "UMKM Template Hub",
+  title: "KANCING",
   description: "Platform Desain Instan Premium untuk Wirausaha Wanita (IWAPI)",
 };
 
@@ -28,7 +28,7 @@ export default function RootLayout({
       lang="en"
       className={`${plusJakartaSans.variable} ${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#FFF9FC] text-slate-800">
+      <body className="min-h-full flex flex-col bg-white text-slate-800">
         <Providers>{children}</Providers>
       </body>
     </html>

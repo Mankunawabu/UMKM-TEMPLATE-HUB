@@ -38,10 +38,10 @@ interface TemplateGalleryClientProps {
 }
 
 const gradients = [
-  "from-[#F7D6E6] via-[#C27BA0]/45 to-[#FFF9FC]",
-  "from-[#C27BA0]/20 to-[#8C4A6E]/40",
-  "from-purple-100 to-pink-100",
-  "from-rose-100 to-orange-50",
+  "from-[#E5E7EB] via-[#111827]/45 to-[#FFFFFF]",
+  "from-[#FF9100]/20 to-[#E07A00]/40",
+  "from-[#FFE6D5] to-[#FFF9F5]",
+  "from-[#FFF5EE] to-[#FFF9F5]",
   "from-sky-100 to-blue-100",
   "from-emerald-100 to-teal-100",
 ];
@@ -119,18 +119,18 @@ export function TemplateGalleryClient({ templates, categories, selectedCategory 
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-[#8C4A6E] font-heading">Galeri Template</h1>
+          <h1 className="text-2xl font-extrabold text-[#1E293B] font-heading">Galeri Template</h1>
           <p className="text-sm text-slate-500 mt-0.5">
             {filtered.length} template tersedia
-            {activePlatform && <span className="ml-1 font-semibold text-[#C27BA0]">• {PLATFORMS.find(p => p.id === activePlatform)?.label}</span>}
-            {activeCategory && <span className="ml-1 font-semibold text-[#8C4A6E]">• {categories.find(c => c.id === activeCategory)?.name}</span>}
+            {activePlatform && <span className="ml-1 font-semibold text-[#1E293B]">• {PLATFORMS.find(p => p.id === activePlatform)?.label}</span>}
+            {activeCategory && <span className="ml-1 font-semibold text-[#1E293B]">• {categories.find(c => c.id === activeCategory)?.name}</span>}
           </p>
         </div>
 
         {/* Mobile filter toggle */}
         <button
           onClick={() => setShowMobileFilter(!showMobileFilter)}
-          className="lg:hidden flex items-center gap-2 px-4 py-2 border border-[#F7D6E6] rounded-xl text-sm font-bold text-[#8C4A6E] bg-white"
+          className="lg:hidden flex items-center gap-2 px-4 py-2 border border-[#FFE6D5] rounded-xl text-sm font-bold text-[#1E293B] bg-white"
         >
           <Filter className="w-4 h-4" />
           Filter
@@ -143,8 +143,8 @@ export function TemplateGalleryClient({ templates, categories, selectedCategory 
         
         {/* Left Sidebar Filter (Tokopedia Style) */}
         <div className={`${showMobileFilter ? "block" : "hidden"} lg:block w-full lg:w-64 shrink-0 space-y-6`}>
-          <div className="bg-white border border-[#F7D6E6] rounded-2xl p-5 shadow-sm sticky top-24">
-            <h3 className="font-bold text-[#8C4A6E] mb-4 text-sm uppercase tracking-wider border-b border-[#F7D6E6] pb-2">
+          <div className="bg-white border border-[#FFE6D5] rounded-2xl p-5 shadow-sm sticky top-24">
+            <h3 className="font-bold text-[#1E293B] mb-4 text-sm uppercase tracking-wider border-b border-[#FFE6D5] pb-2">
               Filter Template
             </h3>
 
@@ -154,7 +154,7 @@ export function TemplateGalleryClient({ templates, categories, selectedCategory 
                 onClick={() => handlePlatformClick(null)}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold transition-all ${
                   activePlatform === null && activeCategory === null
-                    ? "bg-[#FFF0F7] text-[#C27BA0]"
+                    ? "bg-[#F3F4F6] text-[#1E293B]"
                     : "text-slate-600 hover:bg-slate-50"
                 }`}
               >
@@ -173,27 +173,27 @@ export function TemplateGalleryClient({ templates, categories, selectedCategory 
                       onClick={() => handlePlatformClick(plat.id)}
                       className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold transition-all ${
                         isPlatformActive
-                          ? "bg-[#FFF0F7] text-[#C27BA0]"
+                          ? "bg-[#F3F4F6] text-[#1E293B]"
                           : "text-slate-600 hover:bg-slate-50"
                       }`}
                     >
                       <span>{plat.label}</span>
                       {platformCats.length > 0 && (
-                        <ChevronDown className={`w-4 h-4 transition-transform ${isPlatformActive ? "rotate-180 text-[#C27BA0]" : "text-slate-400"}`} />
+                        <ChevronDown className={`w-4 h-4 transition-transform ${isPlatformActive ? "rotate-180 text-[#1E293B]" : "text-slate-400"}`} />
                       )}
                     </button>
 
                     {/* Sub-categories for this platform */}
                     {isPlatformActive && platformCats.length > 0 && (
-                      <div className="pl-4 pr-2 mt-1 space-y-1 border-l-2 border-[#F7D6E6] ml-3 mb-2 animate-in slide-in-from-top-2">
+                      <div className="pl-4 pr-2 mt-1 space-y-1 border-l-2 border-[#FFE6D5] ml-3 mb-2 animate-in slide-in-from-top-2">
                         {platformCats.map(cat => (
                           <button
                             key={cat.id}
                             onClick={() => handleCategoryClick(plat.id, cat.id)}
                             className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
                               activeCategory === cat.id
-                                ? "bg-[#C27BA0] text-white shadow-sm"
-                                : "text-slate-500 hover:text-[#8C4A6E] hover:bg-slate-50"
+                                ? "bg-[#FF9100] text-white shadow-sm"
+                                : "text-slate-500 hover:text-[#1E293B] hover:bg-slate-50"
                             }`}
                           >
                             <CategoryIcon name={cat.icon_name} className="w-3.5 h-3.5" />
@@ -220,13 +220,13 @@ export function TemplateGalleryClient({ templates, categories, selectedCategory 
         <div className="flex-1 min-w-0 space-y-6">
           {/* Search Bar */}
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#C27BA0]" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1E293B]" />
             <input
               type="text"
               placeholder="Cari template berdasarkan nama..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-12 pr-10 py-3.5 bg-white border border-[#F7D6E6] rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C27BA0] focus:border-transparent transition-all shadow-sm"
+              className="w-full pl-12 pr-10 py-3.5 bg-white border border-[#FFE6D5] rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#FF9100] focus:border-transparent transition-all shadow-sm"
             />
             {search && (
               <button onClick={() => setSearch("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
@@ -243,15 +243,15 @@ export function TemplateGalleryClient({ templates, categories, selectedCategory 
               ))}
             </div>
           ) : (
-            <div className="py-20 flex flex-col items-center justify-center text-center space-y-4 bg-white border border-dashed border-[#F7D6E6] rounded-2xl">
-              <div className="w-20 h-20 rounded-full bg-[#FFF0F7] flex items-center justify-center">
-                <Palette className="w-9 h-9 text-[#F7D6E6]" />
+            <div className="py-20 flex flex-col items-center justify-center text-center space-y-4 bg-white border border-dashed border-[#FFE6D5] rounded-2xl">
+              <div className="w-20 h-20 rounded-full bg-[#F3F4F6] flex items-center justify-center">
+                <Palette className="w-9 h-9 text-[#E5E7EB]" />
               </div>
               <div>
-                <p className="font-bold text-[#8C4A6E] text-lg">Tidak ada template ditemukan</p>
+                <p className="font-bold text-[#1E293B] text-lg">Tidak ada template ditemukan</p>
                 <p className="text-sm text-slate-400 mt-1">
                   {search ? `Coba kata kunci lain atau` : "Belum ada template di filter ini,"}{" "}
-                  <button onClick={() => { setSearch(""); setActiveCategory(null); setActivePlatform(null); }} className="text-[#C27BA0] hover:underline font-bold">
+                  <button onClick={() => { setSearch(""); setActiveCategory(null); setActivePlatform(null); }} className="text-[#1E293B] hover:underline font-bold">
                     lihat semua template
                   </button>
                 </p>

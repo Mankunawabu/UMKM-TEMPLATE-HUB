@@ -1,4 +1,5 @@
 "use server";
+import { translateError } from "@/lib/error-translator";
 
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
@@ -113,7 +114,7 @@ export async function updateTemplate(
 
     if (error) {
       console.error("Error updating template:", error.message);
-      return { success: false, error: error.message };
+      return { success: false, error: translateError(error.message) };
     }
 
     await logActivity("template_updated", "template", id, { name }, "info");
@@ -144,7 +145,7 @@ export async function deleteTemplate(id: string) {
 
     if (error) {
       console.error("Error deleting template:", error.message);
-      return { success: false, error: error.message };
+      return { success: false, error: translateError(error.message) };
     }
 
     await logActivity(
@@ -185,7 +186,7 @@ export async function togglePublish(id: string, status: string) {
 
     if (error) {
       console.error("Error toggling template status:", error.message);
-      return { success: false, error: error.message };
+      return { success: false, error: translateError(error.message) };
     }
 
     await logActivity(

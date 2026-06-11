@@ -62,7 +62,7 @@ export function CreateTemplateForm({ categories, maxUploadMb }: CreateTemplateFo
       {/* Send empty object for legacy fabric_json support */}
       <input type="hidden" name="fabric_json" value="{}" />
 
-      <div className="bg-white rounded-2xl border border-[#F7D6E6] p-6 shadow-sm space-y-6">
+      <div className="bg-white rounded-2xl border border-[#FFE6D5] p-6 shadow-sm space-y-6">
         {state?.error && (
           <div className="p-4 bg-red-50 border border-red-200 text-red-700 text-sm font-medium rounded-xl">
             {state.error}
@@ -72,13 +72,13 @@ export function CreateTemplateForm({ categories, maxUploadMb }: CreateTemplateFo
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* LEFT COLUMN: Metadata & Settings */}
           <div className="space-y-6">
-            <h3 className="text-sm font-bold text-[#3D1E30] border-b border-[#F7D6E6] pb-2">
+            <h3 className="text-sm font-bold text-[#3D1E30] border-b border-[#FFE6D5] pb-2">
               Informasi Template
             </h3>
 
             {/* Nama */}
             <div className="space-y-1.5">
-              <label htmlFor="name" className="text-xs font-semibold text-[#8C4A6E] tracking-wide uppercase">
+              <label htmlFor="name" className="text-xs font-semibold text-[#E07A00] tracking-wide uppercase">
                 Nama Template
               </label>
               <input
@@ -89,13 +89,13 @@ export function CreateTemplateForm({ categories, maxUploadMb }: CreateTemplateFo
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Contoh: Banner Promo Lebaran"
-                className="w-full px-4 py-2.5 text-sm border border-[#F7D6E6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C27BA0] focus:border-[#C27BA0] transition-colors placeholder-[#8C4A6E]/30 text-[#3D1E30]"
+                className="w-full px-4 py-2.5 text-sm border border-[#FFE6D5] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF9100] focus:border-[#FF9100] transition-colors placeholder-[#E07A00]/30 text-[#3D1E30]"
               />
             </div>
 
             {/* Slug */}
             <div className="space-y-1.5">
-              <label htmlFor="slug" className="text-xs font-semibold text-[#8C4A6E] tracking-wide uppercase">
+              <label htmlFor="slug" className="text-xs font-semibold text-[#E07A00] tracking-wide uppercase">
                 Slug Template
               </label>
               <input
@@ -106,20 +106,20 @@ export function CreateTemplateForm({ categories, maxUploadMb }: CreateTemplateFo
                 value={slug}
                 onChange={(e) => setSlug(e.target.value)}
                 placeholder="banner-promo-lebaran"
-                className="w-full px-4 py-2.5 text-sm border border-[#F7D6E6] bg-slate-50/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C27BA0] focus:border-[#C27BA0] transition-colors placeholder-[#8C4A6E]/30 text-[#3D1E30]"
+                className="w-full px-4 py-2.5 text-sm border border-[#FFE6D5] bg-slate-50/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF9100] focus:border-[#FF9100] transition-colors placeholder-[#E07A00]/30 text-[#3D1E30]"
               />
             </div>
 
             {/* Kategori */}
             <div className="space-y-1.5">
-              <label htmlFor="category_id" className="text-xs font-semibold text-[#8C4A6E] tracking-wide uppercase">
+              <label htmlFor="category_id" className="text-xs font-semibold text-[#E07A00] tracking-wide uppercase">
                 Kategori Bisnis
               </label>
               <select
                 id="category_id"
                 name="category_id"
                 required
-                className="w-full px-4 py-2.5 text-sm border border-[#F7D6E6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C27BA0] focus:border-[#C27BA0] transition-colors text-[#3D1E30] bg-white"
+                className="w-full px-4 py-2.5 text-sm border border-[#FFE6D5] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF9100] focus:border-[#FF9100] transition-colors text-[#3D1E30] bg-white"
               >
                 <option value="">-- Pilih Kategori --</option>
                 {categories.map((c) => (
@@ -132,7 +132,7 @@ export function CreateTemplateForm({ categories, maxUploadMb }: CreateTemplateFo
 
             {/* Target Platform */}
             <div className="space-y-1.5">
-              <label htmlFor="target_platform" className="text-xs font-semibold text-[#8C4A6E] tracking-wide uppercase">
+              <label htmlFor="target_platform" className="text-xs font-semibold text-[#E07A00] tracking-wide uppercase">
                 Target Platform
               </label>
               <select
@@ -140,7 +140,7 @@ export function CreateTemplateForm({ categories, maxUploadMb }: CreateTemplateFo
                 name="target_platform"
                 value={targetPlatform}
                 onChange={(e) => setTargetPlatform(e.target.value)}
-                className="w-full px-4 py-2.5 text-sm border border-[#F7D6E6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C27BA0] focus:border-[#C27BA0] transition-colors text-[#3D1E30] bg-white"
+                className="w-full px-4 py-2.5 text-sm border border-[#FFE6D5] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF9100] focus:border-[#FF9100] transition-colors text-[#3D1E30] bg-white"
               >
                 <option value="instagram_feed">Instagram Feed</option>
                 <option value="instagram_story">Instagram Story</option>
@@ -153,7 +153,7 @@ export function CreateTemplateForm({ categories, maxUploadMb }: CreateTemplateFo
 
             {/* Deskripsi */}
             <div className="space-y-1.5">
-              <label htmlFor="description" className="text-xs font-semibold text-[#8C4A6E] tracking-wide uppercase">
+              <label htmlFor="description" className="text-xs font-semibold text-[#E07A00] tracking-wide uppercase">
                 Deskripsi Template
               </label>
               <textarea
@@ -161,14 +161,14 @@ export function CreateTemplateForm({ categories, maxUploadMb }: CreateTemplateFo
                 name="description"
                 rows={3}
                 placeholder="Berikan deskripsi atau panduan singkat penggunaan template ini..."
-                className="w-full px-4 py-2.5 text-sm border border-[#F7D6E6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C27BA0] focus:border-[#C27BA0] transition-colors placeholder-[#8C4A6E]/30 text-[#3D1E30] resize-none"
+                className="w-full px-4 py-2.5 text-sm border border-[#FFE6D5] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF9100] focus:border-[#FF9100] transition-colors placeholder-[#E07A00]/30 text-[#3D1E30] resize-none"
               />
             </div>
           </div>
 
           {/* RIGHT COLUMN: Media Uploads & Actions */}
           <div className="space-y-6">
-            <h3 className="text-sm font-bold text-[#3D1E30] border-b border-[#F7D6E6] pb-2">
+            <h3 className="text-sm font-bold text-[#3D1E30] border-b border-[#FFE6D5] pb-2">
               Media & Status Publikasi
             </h3>
 
@@ -207,7 +207,7 @@ export function CreateTemplateForm({ categories, maxUploadMb }: CreateTemplateFo
 
             {/* Status Option */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[#8C4A6E] tracking-wide uppercase">
+              <label className="text-xs font-semibold text-[#E07A00] tracking-wide uppercase">
                 Status Publikasi
               </label>
               <div className="grid grid-cols-2 gap-3">
@@ -216,8 +216,8 @@ export function CreateTemplateForm({ categories, maxUploadMb }: CreateTemplateFo
                   onClick={() => setStatus("draft")}
                   className={`p-3 rounded-xl border text-xs font-bold transition-all ${
                     status === "draft"
-                      ? "border-[#C27BA0] bg-[#FFF0F7] text-[#C27BA0] shadow-sm"
-                      : "border-[#F7D6E6] bg-white text-[#8C4A6E] hover:bg-[#FFF0F7]/10"
+                      ? "border-[#FF9100] bg-[#FFF5EE] text-[#FF9100] shadow-sm"
+                      : "border-[#FFE6D5] bg-white text-[#E07A00] hover:bg-[#FFF5EE]/10"
                   }`}
                 >
                   Draft (Simpan Internal)
@@ -227,8 +227,8 @@ export function CreateTemplateForm({ categories, maxUploadMb }: CreateTemplateFo
                   onClick={() => setStatus("published")}
                   className={`p-3 rounded-xl border text-xs font-bold transition-all ${
                     status === "published"
-                      ? "border-[#C27BA0] bg-[#FFF0F7] text-[#C27BA0] shadow-sm"
-                      : "border-[#F7D6E6] bg-white text-[#8C4A6E] hover:bg-[#FFF0F7]/10"
+                      ? "border-[#FF9100] bg-[#FFF5EE] text-[#FF9100] shadow-sm"
+                      : "border-[#FFE6D5] bg-white text-[#E07A00] hover:bg-[#FFF5EE]/10"
                   }`}
                 >
                   Published (Tersedia untuk UMKM)
@@ -243,14 +243,14 @@ export function CreateTemplateForm({ categories, maxUploadMb }: CreateTemplateFo
       <div className="flex items-center justify-end gap-3">
         <Link
           href="/admin/templates"
-          className="px-5 py-2.5 text-sm font-bold border border-[#F7D6E6] bg-white rounded-xl text-[#8C4A6E] hover:bg-[#FFF0F7] transition-all"
+          className="px-5 py-2.5 text-sm font-bold border border-[#FFE6D5] bg-white rounded-xl text-[#E07A00] hover:bg-[#FFF5EE] transition-all"
         >
           Batal
         </Link>
         <button
           type="submit"
           disabled={isPending || !masterTemplateUrl}
-          className="flex items-center gap-2 px-5 py-2.5 text-sm font-bold bg-[#C27BA0] text-white rounded-xl hover:bg-[#8C4A6E] transition-all disabled:opacity-50"
+          className="flex items-center gap-2 px-5 py-2.5 text-sm font-bold bg-[#FF9100] text-white rounded-xl hover:bg-[#E07A00] transition-all disabled:opacity-50"
         >
           {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
           Buat Template

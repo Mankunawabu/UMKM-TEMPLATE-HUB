@@ -4,10 +4,10 @@
   --font-heading: var(--font-plus-jakarta-sans), var(--font-inter), sans-serif;
   --font-sans: var(--font-plus-jakarta-sans), var(--font-inter), sans-serif;
 
-  --color-primary: #C27BA0;
-  --color-secondary: #F7D6E6;
-  --color-accent: #8C4A6E;
-  --color-bg-custom: #FFF9FC;
+  --color-primary: #FF9100;
+  --color-secondary: #FFE6D5;
+  --color-accent: #E07A00;
+  --color-bg-custom: #FFFFFF;
 }
 
 body {

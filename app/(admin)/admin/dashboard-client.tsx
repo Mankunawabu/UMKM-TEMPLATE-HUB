@@ -68,17 +68,13 @@ interface DailyChartData {
   count: number;
 }
 
-interface FormatChartData {
-  name: string;
-  value: number;
-}
+
 
 interface DashboardClientProps {
   stats: StatItem[];
   recentActivities: ActivityLog[];
   recentExports: ExportItem[];
   dailyChartData: DailyChartData[];
-  formatChartData: FormatChartData[];
 }
 
 function getActionLabel(action: string, metadata: any, actorName?: string) {
@@ -146,9 +142,9 @@ const SEVERITY_DOTS: Record<string, string> = {
 };
 
 const FORMAT_COLORS = {
-  PNG: "#C27BA0",
+  PNG: "#FF9100",
   JPG: "#A65D8A",
-  PDF: "#8C4A6E",
+  PDF: "#E07A00",
 };
 
 const ICON_MAP = {
@@ -163,7 +159,6 @@ export function DashboardClient({
   recentActivities,
   recentExports,
   dailyChartData,
-  formatChartData,
 }: DashboardClientProps) {
   const [isMounted, setIsMounted] = React.useState(false);
 
@@ -181,13 +176,13 @@ export function DashboardClient({
             <Link
               href={stat.link}
               key={idx}
-              className="p-6 bg-white border border-[#F7D6E6] rounded-2xl shadow-xs flex items-center justify-between transition-all hover:shadow-md hover:scale-102"
+              className="p-6 bg-white border border-[#FFE6D5] rounded-2xl shadow-xs flex items-center justify-between transition-all hover:shadow-md hover:scale-102"
             >
               <div className="space-y-1">
                 <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                   {stat.name}
                 </p>
-                <h3 className="text-3xl font-extrabold text-[#8C4A6E] tracking-tight">
+                <h3 className="text-3xl font-extrabold text-[#E07A00] tracking-tight">
                   {stat.value}
                 </h3>
                 <p className="text-[10px] text-slate-500 font-semibold flex items-center gap-0.5">
@@ -205,15 +200,15 @@ export function DashboardClient({
       </div>
 
       {/* ANALYTICS SECTION */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6">
         {/* Line/Area Chart 7 Days */}
-        <div className="lg:col-span-2 min-w-0 p-6 bg-white border border-[#F7D6E6] rounded-2xl shadow-xs space-y-4">
+        <div className="w-full min-w-0 p-6 bg-white border border-[#FFE6D5] rounded-2xl shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-base font-bold text-[#3D1E30]">Tren Ekspor Desain</h3>
               <p className="text-xs text-slate-500 font-semibold">Total unduhan/ekspor desain oleh UMKM 7 hari terakhir</p>
             </div>
-            <span className="text-xs font-bold text-[#C27BA0] bg-[#FFF0F7] px-2.5 py-1 rounded-lg border border-[#F7D6E6]">
+            <span className="text-xs font-bold text-[#FF9100] bg-[#FFF5EE] px-2.5 py-1 rounded-lg border border-[#FFE6D5]">
               7 Hari Terakhir
             </span>
           </div>
@@ -224,17 +219,17 @@ export function DashboardClient({
                 <AreaChart data={dailyChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorExports" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#C27BA0" stopOpacity={0.2}/>
-                      <stop offset="95%" stopColor="#C27BA0" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#FF9100" stopOpacity={0.2}/>
+                      <stop offset="95%" stopColor="#FF9100" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#F7D6E6" opacity={0.5} />
-                  <XAxis dataKey="date" stroke="#8C4A6E" fontSize={10} fontWeight="semibold" />
-                  <YAxis stroke="#8C4A6E" fontSize={10} fontWeight="semibold" allowDecimals={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#FFE6D5" opacity={0.5} />
+                  <XAxis dataKey="date" stroke="#E07A00" fontSize={10} fontWeight="semibold" />
+                  <YAxis stroke="#E07A00" fontSize={10} fontWeight="semibold" allowDecimals={false} />
                   <Tooltip
                     contentStyle={{
                       backgroundColor: "#fff",
-                      borderColor: "#F7D6E6",
+                      borderColor: "#FFE6D5",
                       borderRadius: "12px",
                       fontSize: "12px",
                       fontWeight: "bold",
@@ -244,7 +239,7 @@ export function DashboardClient({
                     type="monotone"
                     dataKey="count"
                     name="Ekspor"
-                    stroke="#C27BA0"
+                    stroke="#FF9100"
                     strokeWidth={2.5}
                     fillOpacity={1}
                     fill="url(#colorExports)"
@@ -252,86 +247,29 @@ export function DashboardClient({
                 </AreaChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-full flex items-center justify-center bg-[#FFF0F7]/10 rounded-2xl">
+              <div className="h-full flex items-center justify-center bg-[#FFF5EE]/10 rounded-2xl">
                 <span className="text-xs text-slate-400">Loading chart...</span>
               </div>
             )}
           </div>
         </div>
 
-        {/* File Format Bar Chart */}
-        <div className="p-6 bg-white border border-[#F7D6E6] rounded-2xl shadow-xs space-y-4 flex flex-col justify-between min-w-0">
-          <div className="space-y-1">
-            <h3 className="text-base font-bold text-[#3D1E30]">Format File Terpopuler</h3>
-            <p className="text-xs text-slate-500 font-semibold">Distribusi tipe file hasil ekspor desain</p>
-          </div>
 
-          <div className="h-44 w-full flex items-center justify-center min-w-0">
-            {isMounted ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={formatChartData} barSize={32}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#F7D6E6" opacity={0.3} vertical={false} />
-                  <XAxis dataKey="name" stroke="#8C4A6E" fontSize={10} fontWeight="semibold" />
-                  <YAxis stroke="#8C4A6E" fontSize={10} fontWeight="semibold" allowDecimals={false} />
-                  <Tooltip
-                    cursor={{ fill: "#FFF0F7", opacity: 0.3 }}
-                    contentStyle={{
-                      backgroundColor: "#fff",
-                      borderColor: "#F7D6E6",
-                      borderRadius: "12px",
-                      fontSize: "12px",
-                      fontWeight: "bold",
-                    }}
-                  />
-                  <Bar dataKey="value" name="Total">
-                    {formatChartData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={(FORMAT_COLORS as any)[entry.name] || "#8C4A6E"}
-                      />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="h-full flex items-center justify-center bg-[#FFF0F7]/10 rounded-2xl">
-                <span className="text-xs text-slate-400">Loading chart...</span>
-              </div>
-            )}
-          </div>
-
-          {/* Legends */}
-          <div className="grid grid-cols-3 gap-2 pt-3 border-t border-[#F7D6E6]">
-            {formatChartData.map((item) => (
-              <div key={item.name} className="flex flex-col items-center text-center">
-                <span
-                  style={{ color: (FORMAT_COLORS as any)[item.name] || "#8C4A6E" }}
-                  className="text-xs font-black"
-                >
-                  {item.name}
-                </span>
-                <span className="text-sm font-black text-slate-700 mt-0.5">
-                  {item.value}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
 
       {/* FEEDS ROW */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Activity Feed */}
-        <div className="p-6 bg-white border border-[#F7D6E6] rounded-2xl shadow-xs space-y-6">
-          <div className="flex items-center justify-between border-b border-[#F7D6E6] pb-3">
+        <div className="p-6 bg-white border border-[#FFE6D5] rounded-2xl shadow-xs space-y-6">
+          <div className="flex items-center justify-between border-b border-[#FFE6D5] pb-3">
             <h3 className="text-base font-bold text-[#3D1E30]">Aktivitas Terbaru</h3>
-            <span className="text-xs font-bold text-[#8C4A6E] bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-md flex items-center gap-1">
+            <span className="text-xs font-bold text-[#E07A00] bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-md flex items-center gap-1">
               <Clock className="h-3 w-3" /> Real-time
             </span>
           </div>
 
           {recentActivities.length === 0 ? (
-            <div className="text-center py-12 text-xs font-medium text-[#8C4A6E]">
+            <div className="text-center py-12 text-xs font-medium text-[#E07A00]">
               Belum ada log aktivitas tercatat.
             </div>
           ) : (
@@ -367,16 +305,16 @@ export function DashboardClient({
         </div>
 
         {/* Recent Exports */}
-        <div className="p-6 bg-white border border-[#F7D6E6] rounded-2xl shadow-xs space-y-6">
-          <div className="flex items-center justify-between border-b border-[#F7D6E6] pb-3">
+        <div className="p-6 bg-white border border-[#FFE6D5] rounded-2xl shadow-xs space-y-6">
+          <div className="flex items-center justify-between border-b border-[#FFE6D5] pb-3">
             <h3 className="text-base font-bold text-[#3D1E30]">Ekspor Desain Terbaru</h3>
-            <span className="text-xs font-bold text-[#C27BA0] bg-[#FFF0F7] border border-[#F7D6E6] px-2 py-0.5 rounded-md flex items-center gap-1">
+            <span className="text-xs font-bold text-[#FF9100] bg-[#FFF5EE] border border-[#FFE6D5] px-2 py-0.5 rounded-md flex items-center gap-1">
               <TrendingUp className="h-3 w-3" /> Live Feed
             </span>
           </div>
 
           {recentExports.length === 0 ? (
-            <div className="text-center py-12 text-xs font-medium text-[#8C4A6E]">
+            <div className="text-center py-12 text-xs font-medium text-[#E07A00]">
               Belum ada data ekspor terekam.
             </div>
           ) : (
@@ -384,10 +322,10 @@ export function DashboardClient({
               {recentExports.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between p-3 border border-[#F7D6E6] rounded-xl hover:bg-[#FFF0F7]/10 transition-colors"
+                  className="flex items-center justify-between p-3 border border-[#FFE6D5] rounded-xl hover:bg-[#FFF5EE]/10 transition-colors"
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0 pr-2">
-                    <div className="w-10 h-10 rounded-lg bg-[#FFF0F7] border border-[#F7D6E6] flex items-center justify-center text-[#8C4A6E] shrink-0 overflow-hidden">
+                    <div className="w-10 h-10 rounded-lg bg-[#FFF5EE] border border-[#FFE6D5] flex items-center justify-center text-[#E07A00] shrink-0 overflow-hidden">
                       {item.exported_image_url || (item.templates as any)?.thumbnail_url ? (
                         <img src={item.exported_image_url || (item.templates as any)?.thumbnail_url} className="w-full h-full object-cover" alt="Export" />
                       ) : (
@@ -407,7 +345,7 @@ export function DashboardClient({
                     <span
                       style={{
                         backgroundColor: (FORMAT_COLORS as any)[item.file_type] + "1A",
-                        color: (FORMAT_COLORS as any)[item.file_type] || "#8C4A6E",
+                        color: (FORMAT_COLORS as any)[item.file_type] || "#E07A00",
                       }}
                       className="px-2 py-0.5 rounded text-[9px] font-black border border-current"
                     >

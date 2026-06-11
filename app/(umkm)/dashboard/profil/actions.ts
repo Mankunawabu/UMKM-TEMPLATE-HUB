@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/auth";
 import { logActivity } from "@/lib/activity";
+import { translateError } from "@/lib/error-translator";
 
 export async function updateBusinessInfo(prevState: any, formData: FormData) {
   try {
@@ -39,7 +40,7 @@ export async function updateBusinessInfo(prevState: any, formData: FormData) {
 
     if (error) {
       console.error("Update profile error:", error);
-      return { error: "Gagal menyimpan profil: " + error.message };
+      return { error: "Gagal menyimpan profil: " + translateError(error.message) };
     }
 
     revalidatePath("/dashboard/profil");
@@ -50,7 +51,7 @@ export async function updateBusinessInfo(prevState: any, formData: FormData) {
     return { success: true };
 
   } catch (err: any) {
-    return { error: err.message || "Terjadi kesalahan internal." };
+    return { error: translateError(err.message) };
   }
 }
 
@@ -102,7 +103,7 @@ export async function updatePassword(prevState: any, formData: FormData) {
     });
 
     if (error) {
-      return { error: error.message };
+      return { error: translateError(error.message) };
     }
 
     await logActivity("Memperbarui Password", "security", user.id, undefined, "warning", user.id);
@@ -110,6 +111,6 @@ export async function updatePassword(prevState: any, formData: FormData) {
     return { success: true };
 
   } catch (err: any) {
-    return { error: err.message || "Terjadi kesalahan internal." };
+    return { error: translateError(err.message) };
   }
 }

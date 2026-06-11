@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { Plus, Edit, Trash2, Globe, EyeOff, ExternalLink } from "lucide-react";
+import toast from "react-hot-toast";
 import { PageHeader } from "@/components/admin/page-header";
 import { DataTable, Column } from "@/components/admin/data-table";
 import { StatusBadge } from "@/components/admin/status-badge";
@@ -41,7 +42,7 @@ export function TemplatesClient({ initialTemplates }: TemplatesClientProps) {
         prev.map((t) => (t.id === id ? { ...t, status: newStatus } : t))
       );
     } else {
-      alert("Gagal mengubah status: " + result.error);
+      toast.error("Gagal mengubah status: " + result.error);
     }
     setLoadingMap((prev) => ({ ...prev, [id]: false }));
   };
@@ -53,7 +54,7 @@ export function TemplatesClient({ initialTemplates }: TemplatesClientProps) {
       if (result.success) {
         setTemplates((prev) => prev.filter((t) => t.id !== id));
       } else {
-        alert("Gagal menghapus template: " + result.error);
+        toast.error("Gagal menghapus template: " + result.error);
       }
       setLoadingMap((prev) => ({ ...prev, [id]: false }));
     }
@@ -64,7 +65,7 @@ export function TemplatesClient({ initialTemplates }: TemplatesClientProps) {
       header: "Thumbnail",
       accessorKey: "thumbnail_url",
       render: (row) => (
-        <div className="w-12 h-12 rounded-lg bg-[#FFF0F7] border border-[#F7D6E6] flex items-center justify-center p-0.5 overflow-hidden shadow-sm shrink-0">
+        <div className="w-12 h-12 rounded-lg bg-[#FFF5EE] border border-[#FFE6D5] flex items-center justify-center p-0.5 overflow-hidden shadow-sm shrink-0">
           {row.thumbnail_url ? (
             <img
               src={row.thumbnail_url}
@@ -72,7 +73,7 @@ export function TemplatesClient({ initialTemplates }: TemplatesClientProps) {
               className="w-full h-full object-contain rounded"
             />
           ) : (
-            <span className="text-[10px] text-[#8C4A6E] font-bold uppercase">Logo</span>
+            <span className="text-[10px] text-[#E07A00] font-bold uppercase">Logo</span>
           )}
         </div>
       ),
@@ -84,7 +85,7 @@ export function TemplatesClient({ initialTemplates }: TemplatesClientProps) {
       render: (row) => (
         <div className="flex flex-col">
           <span className="font-bold text-[#3D1E30]">{row.name}</span>
-          <code className="text-[10px] text-[#8C4A6E] font-semibold mt-0.5">{row.slug}</code>
+          <code className="text-[10px] text-[#E07A00] font-semibold mt-0.5">{row.slug}</code>
         </div>
       ),
     },
@@ -93,7 +94,7 @@ export function TemplatesClient({ initialTemplates }: TemplatesClientProps) {
       accessorKey: "categories.name",
       sortable: true,
       render: (row) => (
-        <span className="px-2.5 py-1 rounded-lg bg-[#FFF0F7] text-[#8C4A6E] text-xs font-bold border border-[#F7D6E6]">
+        <span className="px-2.5 py-1 rounded-lg bg-[#FFF5EE] text-[#E07A00] text-xs font-bold border border-[#FFE6D5]">
           {row.categories?.name || "-"}
         </span>
       ),
@@ -117,7 +118,7 @@ export function TemplatesClient({ initialTemplates }: TemplatesClientProps) {
           <button
             onClick={() => handleToggleStatus(row.id, row.status)}
             disabled={loadingMap[row.id]}
-            className="text-[#8C4A6E] hover:text-[#C27BA0] transition-colors disabled:opacity-50"
+            className="text-[#E07A00] hover:text-[#FF9100] transition-colors disabled:opacity-50"
             title={row.status === "published" ? "Jadikan Draft" : "Publikasikan"}
           >
             {row.status === "published" ? (
@@ -149,14 +150,14 @@ export function TemplatesClient({ initialTemplates }: TemplatesClientProps) {
         <div className="flex items-center gap-2">
           <Link
             href={`/admin/templates/${row.id}/edit`}
-            className="p-1.5 rounded-lg border border-[#F7D6E6] bg-white text-[#8C4A6E] hover:bg-[#FFF0F7] hover:text-[#C27BA0] transition-all"
+            className="p-1.5 rounded-lg border border-[#FFE6D5] bg-white text-[#E07A00] hover:bg-[#FFF5EE] hover:text-[#FF9100] transition-all"
             title="Edit Info Template"
           >
             <Edit className="h-4 w-4" />
           </Link>
           <Link
             href={`/admin/templates/${row.id}/editor`}
-            className="p-1.5 rounded-lg border border-[#F7D6E6] bg-white text-[#8C4A6E] hover:bg-[#FFF0F7] hover:text-[#C27BA0] transition-all"
+            className="p-1.5 rounded-lg border border-[#FFE6D5] bg-white text-[#E07A00] hover:bg-[#FFF5EE] hover:text-[#FF9100] transition-all"
             title="Editor Area Lubang"
           >
             <ExternalLink className="h-4 w-4" />
@@ -182,7 +183,7 @@ export function TemplatesClient({ initialTemplates }: TemplatesClientProps) {
         action={
           <Link
             href="/admin/templates/create"
-            className="flex items-center gap-2 bg-[#C27BA0] hover:bg-[#8C4A6E] text-white text-sm font-bold px-4 py-2.5 rounded-xl shadow-sm transition-all"
+            className="flex items-center gap-2 bg-[#FF9100] hover:bg-[#E07A00] text-white text-sm font-bold px-4 py-2.5 rounded-xl shadow-sm transition-all"
           >
             <Plus className="h-4.5 w-4.5" />
             Buat Template

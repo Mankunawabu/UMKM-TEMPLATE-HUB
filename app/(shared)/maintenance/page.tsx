@@ -15,12 +15,12 @@ export default async function MaintenancePage() {
   const maintenanceMessage = settings?.setting_value?.maintenance_message || "Sistem sedang dalam perbaikan rutin. Silakan kembali dalam beberapa jam.";
 
   return (
-    <div className="min-h-screen bg-[#FFF9FC] flex flex-col items-center justify-center p-6 text-center font-sans">
+    <div className="min-h-screen bg-[#FFFFFF] flex flex-col items-center justify-center p-6 text-center font-sans">
       <div className="w-20 h-20 bg-rose-100 rounded-full flex items-center justify-center mb-6 animate-pulse">
         <ShieldAlert className="h-10 w-10 text-rose-500" />
       </div>
       
-      <h1 className="text-3xl font-extrabold text-[#3D1E30] mb-4">Sistem Sedang Diperbaiki</h1>
+      <h1 className="text-3xl font-extrabold text-slate-800 mb-4">Sistem Sedang Diperbaiki</h1>
       
       <p className="text-slate-600 max-w-md mx-auto mb-8 leading-relaxed">
         {maintenanceMessage}
@@ -29,7 +29,7 @@ export default async function MaintenancePage() {
       {!isMaintenanceMode && (
         <a 
           href="/dashboard"
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#C27BA0] hover:bg-[#8C4A6E] text-white rounded-xl font-bold transition-all shadow-md shadow-[#C27BA0]/20"
+          className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#FF9100] hover:bg-[#E07A00] text-white rounded-xl font-bold transition-all shadow-md shadow-[#111827]/20"
         >
           <RefreshCcw className="h-5 w-5" />
           Coba Akses Kembali

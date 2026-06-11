@@ -10,7 +10,6 @@ if (fs.existsSync(envPath)) {
     if (match) {
       const key = match[1];
       let value = match[2] || '';
-      // Remove surrounding quotes if any
       if (value.length > 0 && value.charAt(0) === '"' && value.charAt(value.length - 1) === '"') {
         value = value.substring(1, value.length - 1);
       }
@@ -26,14 +25,31 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 );
 
-async function checkSchema() {
+async function testUpdate() {
+  // Try to update shape_type of a field to 'polygon'
+  const { data: fields } = await supabase.from('template_fields').select('id').limit(1);
+  if (!fields || fields.length === 0) {
+    console.log("No fields found to test");
+    return;
+  }
+  const fieldId = fields[0].id;
+  console.log("Testing update on field ID:", fieldId);
+
+  // Try dry-run update
   const { data, error } = await supabase
     .from('template_fields')
-    .select('*')
-    .limit(1);
-  
-  if (error) console.error("Error:", error);
-  else console.log("Data row:", data);
+    .update({ shape_type: 'polygon' })
+    .eq('id', fieldId)
+    .select();
+
+  if (error) {
+    console.error("Update failed (shape_type might be constrained):", error.message);
+  } else {
+    console.log("Update succeeded! Data:", data);
+    // Revert it back to 'rect'
+    await supabase.from('template_fields').update({ shape_type: 'rect' }).eq('id', fieldId);
+    console.log("Reverted successfully");
+  }
 }
 
-checkSchema();
+testUpdate();

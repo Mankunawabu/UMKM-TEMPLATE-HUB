@@ -52,18 +52,20 @@ export default async function OnboardingPage() {
   }
 
   return (
-    <main className="min-h-screen w-full flex flex-col items-center justify-center bg-[#FFF9FC] p-6 relative overflow-hidden font-sans">
+    <main className="min-h-screen w-full flex flex-col items-center justify-center bg-[#FFF9F5] p-6 relative overflow-hidden font-sans">
       {/* Soft Background Blurs */}
-      <div className="absolute top-[-15%] left-[-15%] w-[50vw] h-[50vw] rounded-full bg-[#F7D6E6]/40 blur-[130px] pointer-events-none" />
-      <div className="absolute bottom-[-15%] right-[-15%] w-[50vw] h-[50vw] rounded-full bg-[#C27BA0]/15 blur-[150px] pointer-events-none" />
+      <div className="absolute top-[-15%] left-[-15%] w-[50vw] h-[50vw] rounded-full bg-[#FFE6D5]/40 blur-[130px] pointer-events-none" />
+      <div className="absolute bottom-[-15%] right-[-15%] w-[50vw] h-[50vw] rounded-full bg-[#FF9100]/15 blur-[150px] pointer-events-none" />
 
       {/* Top logo */}
       <div className="mb-6 flex items-center gap-2 relative z-10 select-none">
-        <div className="w-8 h-8 rounded-lg bg-[#C27BA0] flex items-center justify-center text-white">
-          <Palette className="w-4 h-4" />
-        </div>
-        <span className="text-sm font-bold tracking-tight text-[#8C4A6E] font-heading">
-          UMKM Template Hub
+        <img
+          src="/logo_umkm_P.png"
+          alt="Logo Kancing"
+          className="w-12 h-12 object-contain shrink-0"
+        />
+        <span className="text-sm font-bold tracking-tight text-[#E07A00] font-heading">
+          KANCING
         </span>
       </div>
 

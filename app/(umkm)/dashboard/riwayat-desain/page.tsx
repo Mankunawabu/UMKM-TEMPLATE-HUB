@@ -5,7 +5,7 @@ import { History } from "lucide-react";
 import { RiwayatClient } from "./riwayat-client";
 
 export const metadata = {
-  title: "Riwayat Desain - UMKM Template Hub",
+  title: "Riwayat Desain - KANCING",
 };
 
 export default async function RiwayatDesainPage() {
@@ -22,8 +22,8 @@ export default async function RiwayatDesainPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[#8C4A6E] flex items-center gap-2 font-heading">
-            <History className="w-6 h-6 text-[#C27BA0]" />
+          <h1 className="text-2xl font-bold tracking-tight text-[#E07A00] flex items-center gap-2 font-heading">
+            <History className="w-6 h-6 text-[#FF9100]" />
             Riwayat Desain
           </h1>
           <p className="text-slate-500 mt-1">

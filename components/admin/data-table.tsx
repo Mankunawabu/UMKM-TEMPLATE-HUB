@@ -102,14 +102,14 @@ export function DataTable<T extends Record<string, any>>({
         {/* Search Input */}
         <div className="relative w-full sm:max-w-md flex-1">
           <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
-            <Search className="h-4 w-4 text-[#8C4A6E]" />
+            <Search className="h-4 w-4 text-[#E07A00]" />
           </span>
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder={searchPlaceholder}
-            className="w-full pl-9 pr-4 py-2 text-sm border border-[#F7D6E6] rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#C27BA0] focus:border-[#C27BA0] transition-colors placeholder-[#8C4A6E]/50 text-[#3D1E30]"
+            className="w-full pl-9 pr-4 py-2 text-sm border border-[#FFE6D5] rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#FF9100] focus:border-[#FF9100] transition-colors placeholder-[#E07A00]/50 text-[#3D1E30]"
           />
         </div>
         
@@ -122,15 +122,15 @@ export function DataTable<T extends Record<string, any>>({
       </div>
 
       {/* Table Card */}
-      <div className="bg-white rounded-2xl border border-[#F7D6E6] overflow-hidden shadow-sm">
+      <div className="bg-white rounded-2xl border border-[#FFE6D5] overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left">
             <thead>
-              <tr className="border-b border-[#F7D6E6] bg-[#FFF0F7]">
+              <tr className="border-b border-[#FFE6D5] bg-[#FFF5EE]">
                 {columns.map((column, idx) => (
                   <th
                     key={idx}
-                    className={`p-4 text-xs font-semibold uppercase tracking-wider text-[#8C4A6E] ${
+                    className={`p-4 text-xs font-semibold uppercase tracking-wider text-[#E07A00] ${
                       column.sortable && column.accessorKey ? "cursor-pointer select-none hover:bg-[#FCDDEC]" : ""
                     }`}
                     onClick={() => {
@@ -149,14 +149,14 @@ export function DataTable<T extends Record<string, any>>({
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#F7D6E6]">
+            <tbody className="divide-y divide-[#FFE6D5]">
               {loading ? (
                 // Loading skeletons
                 Array.from({ length: 5 }).map((_, rIdx) => (
                   <tr key={rIdx} className="animate-pulse">
                     {columns.map((_, cIdx) => (
                       <td key={cIdx} className="p-4">
-                        <div className="h-4 bg-[#FFF0F7] rounded-md w-full"></div>
+                        <div className="h-4 bg-[#FFF5EE] rounded-md w-full"></div>
                       </td>
                     ))}
                   </tr>
@@ -165,7 +165,7 @@ export function DataTable<T extends Record<string, any>>({
                 <tr>
                   <td
                     colSpan={columns.length}
-                    className="p-8 text-center text-sm font-medium text-[#8C4A6E]"
+                    className="p-8 text-center text-sm font-medium text-[#E07A00]"
                   >
                     Tidak ada data ditemukan.
                   </td>
@@ -174,7 +174,7 @@ export function DataTable<T extends Record<string, any>>({
                 paginatedData.map((row, rIdx) => (
                   <tr
                     key={row.id || rIdx}
-                    className="hover:bg-[#FFF0F7]/40 transition-colors"
+                    className="hover:bg-[#FFF5EE]/40 transition-colors"
                   >
                     {columns.map((column, cIdx) => (
                       <td key={cIdx} className="p-4 text-sm text-[#3D1E30] font-sans">
@@ -194,8 +194,8 @@ export function DataTable<T extends Record<string, any>>({
 
         {/* Pagination Footer */}
         {!loading && totalPages > 1 && (
-          <div className="flex items-center justify-between p-4 border-t border-[#F7D6E6] bg-[#FFF0F7]/20">
-            <div className="text-xs font-medium text-[#8C4A6E]">
+          <div className="flex items-center justify-between p-4 border-t border-[#FFE6D5] bg-[#FFF5EE]/20">
+            <div className="text-xs font-medium text-[#E07A00]">
               Menampilkan {Math.min(filteredData.length, (currentPage - 1) * itemsPerPage + 1)} sampai{" "}
               {Math.min(filteredData.length, currentPage * itemsPerPage)} dari {filteredData.length} entri
             </div>
@@ -203,7 +203,7 @@ export function DataTable<T extends Record<string, any>>({
               <button
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="p-1.5 rounded-lg border border-[#F7D6E6] bg-white text-[#8C4A6E] hover:bg-[#FFF0F7] disabled:opacity-50 disabled:pointer-events-none transition-colors"
+                className="p-1.5 rounded-lg border border-[#FFE6D5] bg-white text-[#E07A00] hover:bg-[#FFF5EE] disabled:opacity-50 disabled:pointer-events-none transition-colors"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
@@ -215,8 +215,8 @@ export function DataTable<T extends Record<string, any>>({
                     onClick={() => setCurrentPage(pageNum)}
                     className={`w-7 h-7 flex items-center justify-center text-xs font-semibold rounded-lg transition-colors ${
                       currentPage === pageNum
-                        ? "bg-[#C27BA0] text-white"
-                        : "border border-[#F7D6E6] bg-white text-[#8C4A6E] hover:bg-[#FFF0F7]"
+                        ? "bg-[#FF9100] text-white"
+                        : "border border-[#FFE6D5] bg-white text-[#E07A00] hover:bg-[#FFF5EE]"
                     }`}
                   >
                     {pageNum}
@@ -226,7 +226,7 @@ export function DataTable<T extends Record<string, any>>({
               <button
                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
-                className="p-1.5 rounded-lg border border-[#F7D6E6] bg-white text-[#8C4A6E] hover:bg-[#FFF0F7] disabled:opacity-50 disabled:pointer-events-none transition-colors"
+                className="p-1.5 rounded-lg border border-[#FFE6D5] bg-white text-[#E07A00] hover:bg-[#FFF5EE] disabled:opacity-50 disabled:pointer-events-none transition-colors"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>

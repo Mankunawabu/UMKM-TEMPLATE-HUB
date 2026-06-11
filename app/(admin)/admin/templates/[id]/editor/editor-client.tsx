@@ -3,11 +3,12 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Plus, Save, Trash2, ArrowLeft, ChevronDown, ChevronUp } from "lucide-react";
+import toast from "react-hot-toast";
 import Link from "next/link";
 import { getTemplateFields, saveTemplateFields, TemplateField } from "../../editor-actions";
 
 // Palette for field indicators
-const PALETTE = ["#C27BA0", "#8C4A6E", "#E0B0FF", "#FFB6C1", "#F7D6E6", "#FF99CC"];
+const PALETTE = ["#FF9100", "#E07A00", "#E0B0FF", "#FFB6C1", "#FFE6D5", "#FF99CC"];
 
 interface EditorClientProps {
   template: {
@@ -303,7 +304,7 @@ export function EditorClient({ template }: EditorClientProps) {
       if (res.success && res.data) {
         setFields(res.data);
       } else {
-        alert("Gagal memuat field: " + res.error);
+        toast.error("Gagal memuat field: " + res.error);
       }
       setLoading(false);
     }
@@ -386,17 +387,17 @@ export function EditorClient({ template }: EditorClientProps) {
     const res = await saveTemplateFields(template.id, sanitizedFields);
     setSaving(false);
     if (res.success) {
-      alert("Area berhasil disimpan!");
+      toast.success("Area berhasil disimpan!");
       router.push("/admin/templates");
     } else {
-      alert("Gagal menyimpan: " + res.error);
+      toast.error("Gagal menyimpan: " + res.error);
     }
   };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center p-12 h-[50vh]">
-        <Loader2 className="h-8 w-8 animate-spin text-[#C27BA0]" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#FF9100]" />
       </div>
     );
   }
@@ -405,17 +406,17 @@ export function EditorClient({ template }: EditorClientProps) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <Link href="/admin/templates" className="inline-flex items-center text-sm font-semibold text-[#8C4A6E] hover:text-[#C27BA0] mb-2 transition-colors">
+          <Link href="/admin/templates" className="inline-flex items-center text-sm font-semibold text-[#E07A00] hover:text-[#FF9100] mb-2 transition-colors">
             <ArrowLeft className="h-4 w-4 mr-1" />
             Kembali ke Daftar
           </Link>
           <h1 className="text-2xl font-bold text-[#3D1E30]">Editor Interaktif: {template.name}</h1>
-          <p className="text-sm text-[#8C4A6E] mt-1">Geser (Drag) dan Tarik Sudut (Resize) kotak pada gambar di panel kanan.</p>
+          <p className="text-sm text-[#E07A00] mt-1">Geser (Drag) dan Tarik Sudut (Resize) kotak pada gambar di panel kanan.</p>
         </div>
         <button
           onClick={handleSave}
           disabled={saving}
-          className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#C27BA0] to-[#8C4A6E] text-white text-sm font-bold rounded-xl hover:shadow-md hover:scale-105 transition-all disabled:opacity-50 disabled:scale-100"
+          className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#FF9100] to-[#E07A00] text-white text-sm font-bold rounded-xl hover:shadow-md hover:scale-105 transition-all disabled:opacity-50 disabled:scale-100"
         >
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
           Simpan Konfigurasi
@@ -426,14 +427,14 @@ export function EditorClient({ template }: EditorClientProps) {
         
         {/* LEFT PANEL: Simplified Inputs */}
         <div className="lg:col-span-4 space-y-4">
-          <div className="bg-white rounded-2xl border border-[#F7D6E6] shadow-sm overflow-hidden flex flex-col h-[calc(100vh-200px)]">
-            <div className="p-4 border-b border-[#F7D6E6] bg-[#FFF0F7] flex items-center justify-between">
+          <div className="bg-white rounded-2xl border border-[#FFE6D5] shadow-sm overflow-hidden flex flex-col h-[calc(100vh-200px)]">
+            <div className="p-4 border-b border-[#FFE6D5] bg-[#FFF5EE] flex items-center justify-between">
               <h3 className="font-bold text-[#3D1E30] flex items-center gap-2">
-                Daftar Area <span className="px-2 py-0.5 bg-[#C27BA0] text-white text-[10px] rounded-full">{fields.length}</span>
+                Daftar Area <span className="px-2 py-0.5 bg-[#FF9100] text-white text-[10px] rounded-full">{fields.length}</span>
               </h3>
               <button
                 onClick={addField}
-                className="flex items-center gap-1 px-3 py-1.5 bg-white border-2 border-[#C27BA0] text-[#C27BA0] hover:bg-[#C27BA0] hover:text-white rounded-xl text-xs font-bold transition-all shadow-sm"
+                className="flex items-center gap-1 px-3 py-1.5 bg-white border-2 border-[#FF9100] text-[#FF9100] hover:bg-[#FF9100] hover:text-white rounded-xl text-xs font-bold transition-all shadow-sm"
               >
                 <Plus className="h-3.5 w-3.5" /> Tambah Area
               </button>
@@ -441,7 +442,7 @@ export function EditorClient({ template }: EditorClientProps) {
             
             <div className="p-4 flex-1 overflow-y-auto space-y-4 bg-slate-50/50" onClick={() => setActiveFieldIndex(null)}>
               {fields.length === 0 ? (
-                <div className="text-center py-12 text-[#8C4A6E]/60 text-sm">
+                <div className="text-center py-12 text-[#E07A00]/60 text-sm">
                   Belum ada area lubang.<br/>Klik <b>Tambah Area</b> untuk mulai.
                 </div>
               ) : (
@@ -454,7 +455,7 @@ export function EditorClient({ template }: EditorClientProps) {
                       key={i} 
                       onClick={(e) => { e.stopPropagation(); setActiveFieldIndex(i); }}
                       className={`p-4 bg-white rounded-xl border-2 transition-all shadow-sm relative cursor-pointer
-                        ${isActive ? 'border-[#C27BA0] ring-4 ring-[#FFF0F7]' : 'border-[#F7D6E6] hover:border-[#C27BA0]/50'}`}
+                        ${isActive ? 'border-[#FF9100] ring-4 ring-[#FFF5EE]' : 'border-[#FFE6D5] hover:border-[#FF9100]/50'}`}
                     >
                       {/* Color Indicator */}
                       <div className="absolute top-0 left-0 bottom-0 w-2 rounded-l-lg" style={{ backgroundColor: color }} />
@@ -469,34 +470,34 @@ export function EditorClient({ template }: EditorClientProps) {
                       
                       <div className="pl-3 space-y-3">
                         <div className="space-y-1.5 pr-6">
-                          <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider">Nama Label</label>
+                          <label className="text-[10px] font-bold text-[#E07A00] uppercase tracking-wider">Nama Label</label>
                           <input
                             type="text"
                             value={f.placeholder_label}
                             onChange={(e) => updateField(i, "placeholder_label", e.target.value)}
-                            className="w-full px-3 py-2 text-sm font-semibold border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white transition-shadow"
+                            className="w-full px-3 py-2 text-sm font-semibold border border-[#FFE6D5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF9100] bg-white transition-shadow"
                             placeholder="Contoh: Foto Produk"
                           />
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
                           <div className="space-y-1.5">
-                            <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider">Tipe Konten</label>
+                            <label className="text-[10px] font-bold text-[#E07A00] uppercase tracking-wider">Tipe Konten</label>
                             <select
                               value={f.field_role}
                               onChange={(e) => updateField(i, "field_role", e.target.value)}
-                              className="w-full px-3 py-2 text-sm border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white"
+                              className="w-full px-3 py-2 text-sm border border-[#FFE6D5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF9100] bg-white"
                             >
                               <option value="image">Gambar (Image)</option>
                               <option value="text">Teks (Text)</option>
                             </select>
                           </div>
                           <div className="space-y-1.5">
-                            <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider">Posisi Z</label>
+                            <label className="text-[10px] font-bold text-[#E07A00] uppercase tracking-wider">Posisi Z</label>
                             <select
                               value={f.render_mode}
                               onChange={(e) => updateField(i, "render_mode", e.target.value)}
-                              className="w-full px-3 py-2 text-sm border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white"
+                              className="w-full px-3 py-2 text-sm border border-[#FFE6D5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF9100] bg-white"
                             >
                               <option value="under">Di Bawah Template</option>
                               <option value="over">Di Atas Template</option>
@@ -505,9 +506,9 @@ export function EditorClient({ template }: EditorClientProps) {
                         </div>
 
                         {f.field_role === "image" && (
-                          <div className="space-y-3 p-3 bg-slate-50 rounded-lg border border-[#F7D6E6]/50">
+                          <div className="space-y-3 p-3 bg-slate-50 rounded-lg border border-[#FFE6D5]/50">
                             <div className="space-y-1.5">
-                              <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider block">Bentuk Area</label>
+                              <label className="text-[10px] font-bold text-[#E07A00] uppercase tracking-wider block">Bentuk Area</label>
                               <select
                                 value={f.shape_type || "rect"}
                                 onChange={(e) => {
@@ -518,7 +519,7 @@ export function EditorClient({ template }: EditorClientProps) {
                                     updateField(i, "font_weight", "0,0 100,0 100,100 0,100");
                                   }
                                 }}
-                                className="w-full px-3 py-2 text-sm border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white cursor-pointer"
+                                className="w-full px-3 py-2 text-sm border border-[#FFE6D5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF9100] bg-white cursor-pointer"
                               >
                                 <option value="rect">Kotak (Standar)</option>
                                 <option value="polygon">Kustom (Poligon / Banyak Sudut)</option>
@@ -526,7 +527,7 @@ export function EditorClient({ template }: EditorClientProps) {
                             </div>
 
                             {f.shape_type === "polygon" && (
-                              <div className="space-y-2 pt-2 border-t border-[#F7D6E6]/30">
+                              <div className="space-y-2 pt-2 border-t border-[#FFE6D5]/30">
                                 <p className="text-[9px] text-slate-500 font-medium leading-tight">
                                   💡 Seret titik-titik bulat di kanvas untuk menyesuaikan bentuk lubang secara presisi.
                                 </p>
@@ -537,14 +538,14 @@ export function EditorClient({ template }: EditorClientProps) {
                                       e.stopPropagation();
                                       const pts = f.font_weight ? f.font_weight.split(" ") : ["0,0", "100,0", "100,100", "0,100"];
                                       if (pts.length >= 10) {
-                                        alert("Maksimal 10 titik sudut.");
+                                        toast.error("Maksimal 10 titik sudut.");
                                         return;
                                       }
                                       // Add midway point at center
                                       pts.push("50,50");
                                       updateField(i, "font_weight", pts.join(" "));
                                     }}
-                                    className="px-2 py-1.5 bg-white border border-[#C27BA0] text-[#C27BA0] hover:bg-[#FFF0F7] rounded-lg text-[9px] font-bold transition-all active:scale-95"
+                                    className="px-2 py-1.5 bg-white border border-[#FF9100] text-[#FF9100] hover:bg-[#FFF5EE] rounded-lg text-[9px] font-bold transition-all active:scale-95"
                                   >
                                     + Titik Sudut
                                   </button>
@@ -554,7 +555,7 @@ export function EditorClient({ template }: EditorClientProps) {
                                       e.stopPropagation();
                                       const pts = f.font_weight ? f.font_weight.split(" ") : ["0,0", "100,0", "100,100", "0,100"];
                                       if (pts.length <= 3) {
-                                        alert("Minimal harus ada 3 titik sudut.");
+                                        toast.error("Minimal harus ada 3 titik sudut.");
                                         return;
                                       }
                                       pts.pop();
@@ -585,15 +586,15 @@ export function EditorClient({ template }: EditorClientProps) {
 
                         {/* Text Options (Admin only configures max characters limit) */}
                         {f.field_role === "text" && (
-                          <div className="p-3 bg-[#FFF0F7]/50 rounded-lg border border-[#F7D6E6]/50">
+                          <div className="p-3 bg-[#FFF5EE]/50 rounded-lg border border-[#FFE6D5]/50">
                             <div className="space-y-1.5">
-                              <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider">Batas Karakter</label>
+                              <label className="text-[10px] font-bold text-[#E07A00] uppercase tracking-wider">Batas Karakter</label>
                               <input
                                 type="number"
                                 value={f.max_chars || ""}
                                 onChange={(e) => updateField(i, "max_chars", parseInt(e.target.value) || undefined)}
                                 placeholder="Kosongkan jika tidak ada"
-                                className="w-full px-3 py-2 text-sm border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white"
+                                className="w-full px-3 py-2 text-sm border border-[#FFE6D5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF9100] bg-white"
                               />
                             </div>
                           </div>
@@ -606,21 +607,21 @@ export function EditorClient({ template }: EditorClientProps) {
                               e.stopPropagation();
                               setShowAdvancedIndex(showAdvancedIndex === i ? null : i);
                             }}
-                            className="flex items-center text-[11px] font-bold text-[#8C4A6E] hover:text-[#C27BA0] transition-colors"
+                            className="flex items-center text-[11px] font-bold text-[#E07A00] hover:text-[#FF9100] transition-colors"
                           >
                             {showAdvancedIndex === i ? <ChevronUp className="h-3 w-3 mr-1" /> : <ChevronDown className="h-3 w-3 mr-1" />}
                             Data Koordinat Asli (Manual)
                           </button>
                           
                           {showAdvancedIndex === i && (
-                            <div className="grid grid-cols-4 gap-2 mt-3 pt-3 border-t border-[#F7D6E6]/50">
+                            <div className="grid grid-cols-4 gap-2 mt-3 pt-3 border-t border-[#FFE6D5]/50">
                               <div className="space-y-1">
                                 <label className="text-[9px] font-bold text-slate-500 uppercase">X (px)</label>
                                 <input
                                   type="number"
                                   value={f.x}
                                   onChange={(e) => updateField(i, "x", parseInt(e.target.value) || 0)}
-                                  className="w-full px-2 py-1.5 text-xs border border-slate-200 rounded focus:outline-none focus:border-[#C27BA0]"
+                                  className="w-full px-2 py-1.5 text-xs border border-slate-200 rounded focus:outline-none focus:border-[#FF9100]"
                                 />
                               </div>
                               <div className="space-y-1">
@@ -629,7 +630,7 @@ export function EditorClient({ template }: EditorClientProps) {
                                   type="number"
                                   value={f.y}
                                   onChange={(e) => updateField(i, "y", parseInt(e.target.value) || 0)}
-                                  className="w-full px-2 py-1.5 text-xs border border-slate-200 rounded focus:outline-none focus:border-[#C27BA0]"
+                                  className="w-full px-2 py-1.5 text-xs border border-slate-200 rounded focus:outline-none focus:border-[#FF9100]"
                                 />
                               </div>
                               <div className="space-y-1">
@@ -638,7 +639,7 @@ export function EditorClient({ template }: EditorClientProps) {
                                   type="number"
                                   value={f.width}
                                   onChange={(e) => updateField(i, "width", parseInt(e.target.value) || 0)}
-                                  className="w-full px-2 py-1.5 text-xs border border-slate-200 rounded focus:outline-none focus:border-[#C27BA0]"
+                                  className="w-full px-2 py-1.5 text-xs border border-slate-200 rounded focus:outline-none focus:border-[#FF9100]"
                                 />
                               </div>
                               <div className="space-y-1">
@@ -647,7 +648,7 @@ export function EditorClient({ template }: EditorClientProps) {
                                   type="number"
                                   value={f.height}
                                   onChange={(e) => updateField(i, "height", parseInt(e.target.value) || 0)}
-                                  className="w-full px-2 py-1.5 text-xs border border-slate-200 rounded focus:outline-none focus:border-[#C27BA0]"
+                                  className="w-full px-2 py-1.5 text-xs border border-slate-200 rounded focus:outline-none focus:border-[#FF9100]"
                                 />
                               </div>
                             </div>
@@ -666,7 +667,7 @@ export function EditorClient({ template }: EditorClientProps) {
         {/* RIGHT PANEL: Visual Interactive Preview */}
         <div className="lg:col-span-8">
           <div 
-            className="bg-[url('https://transparenttextures.com/patterns/cubes.png')] bg-[#e5e5e5] rounded-2xl border-2 border-[#F7D6E6] overflow-hidden shadow-inner flex items-center justify-center p-8 min-h-[calc(100vh-200px)] relative"
+            className="bg-[url('https://transparenttextures.com/patterns/cubes.png')] bg-[#e5e5e5] rounded-2xl border-2 border-[#FFE6D5] overflow-hidden shadow-inner flex items-center justify-center p-8 min-h-[calc(100vh-200px)] relative"
             onClick={() => setActiveFieldIndex(null)}
           >
             <div className="relative shadow-2xl bg-white/50" style={{ display: "inline-block" }}>
@@ -712,7 +713,7 @@ export function EditorClient({ template }: EditorClientProps) {
             </div>
           </div>
           
-          <div className="flex justify-between items-center mt-3 text-xs text-[#8C4A6E] font-medium px-2">
+          <div className="flex justify-between items-center mt-3 text-xs text-[#E07A00] font-medium px-2">
             <p>💡 Tips: Klik pada kotak di atas gambar untuk menggeser (drag) atau menarik ujungnya (resize).</p>
             <p>Skala Layar: {Math.round(imgScale * 100)}%</p>
           </div>

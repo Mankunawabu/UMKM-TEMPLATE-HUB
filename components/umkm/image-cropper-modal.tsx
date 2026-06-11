@@ -129,12 +129,12 @@ export function ImageCropperModal({ isOpen, imageSrc, onClose, onCrop }: ImageCr
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
           <div>
-            <h3 className="text-lg font-black text-[#3D1E30]">Sesuaikan Foto</h3>
-            <p className="text-xs font-semibold text-[#8C4A6E]">Geser dan perbesar agar pas di dalam lingkaran.</p>
+            <h3 className="text-lg font-black text-[#1E293B]">Sesuaikan Foto</h3>
+            <p className="text-xs font-semibold text-[#1E293B]">Geser dan perbesar agar pas di dalam lingkaran.</p>
           </div>
           <button 
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-[#8C4A6E] hover:bg-[#FFF0F7] rounded-full transition-colors"
+            className="p-2 text-slate-400 hover:text-[#1E293B] hover:bg-[#F3F4F6] rounded-full transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -199,7 +199,7 @@ export function ImageCropperModal({ isOpen, imageSrc, onClose, onCrop }: ImageCr
             step="0.05"
             value={scale}
             onChange={(e) => setScale(parseFloat(e.target.value))}
-            className="w-full accent-[#C27BA0] h-2 bg-slate-100 rounded-lg cursor-pointer appearance-none"
+            className="w-full accent-[#FF9100] h-2 bg-slate-100 rounded-lg cursor-pointer appearance-none"
           />
         </div>
 
@@ -207,13 +207,13 @@ export function ImageCropperModal({ isOpen, imageSrc, onClose, onCrop }: ImageCr
         <div className="mt-6 flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 py-3 border-2 border-[#F7D6E6] hover:bg-[#FFF0F7] text-slate-700 font-bold rounded-xl text-sm transition-colors"
+            className="flex-1 py-3 border-2 border-[#FFE6D5] hover:bg-[#F3F4F6] text-slate-700 font-bold rounded-xl text-sm transition-colors"
           >
             Batal
           </button>
           <button
             onClick={handleSave}
-            className="flex-1 py-3 bg-gradient-to-r from-[#C27BA0] to-[#8C4A6E] text-white font-bold rounded-xl text-sm shadow-md hover:shadow-lg transition-all"
+            className="flex-1 py-3 bg-gradient-to-r from-[#FF9100] to-[#E07A00] text-white font-bold rounded-xl text-sm shadow-md hover:shadow-lg transition-all"
           >
             Selesai
           </button>

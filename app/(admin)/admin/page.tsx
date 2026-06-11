@@ -116,16 +116,6 @@ export default async function AdminDashboardPage() {
     count,
   }));
 
-  // File Format Distribution
-  const pngCount = analyticsData.filter((e) => (e.file_type || "PNG").toUpperCase() === "PNG").length;
-  const jpgCount = analyticsData.filter((e) => (e.file_type || "").toUpperCase() === "JPG").length;
-  const pdfCount = analyticsData.filter((e) => (e.file_type || "").toUpperCase() === "PDF").length;
-
-  const formatChartData = [
-    { name: "PNG", value: pngCount },
-    { name: "JPG", value: jpgCount },
-    { name: "PDF", value: pdfCount },
-  ];
 
   // 4. Map stats items
   const stats = [
@@ -133,14 +123,14 @@ export default async function AdminDashboardPage() {
       name: "Total Template",
       value: templatesCount.toLocaleString("id-ID"),
       icon: "template",
-      color: "bg-[#FFF9FC] text-[#8C4A6E]",
+      color: "bg-[#FFFFFF] text-[#E07A00]",
       link: "/admin/templates",
     },
     {
       name: "Total Kategori",
       value: categoriesCount.toLocaleString("id-ID"),
       icon: "category",
-      color: "bg-[#F7D6E6]/40 text-[#8C4A6E]",
+      color: "bg-[#FFE6D5]/40 text-[#E07A00]",
       link: "/admin/categories",
     },
     {
@@ -166,24 +156,24 @@ export default async function AdminDashboardPage() {
         <h1 className="text-3xl font-extrabold text-[#3D1E30] tracking-tight">
           Admin Command Center
         </h1>
-        <p className="text-sm text-[#8C4A6E] font-medium mt-1">
+        <p className="text-sm text-[#E07A00] font-medium mt-1">
           Pantau kesehatan platform, volume ekspor desain, logs aktivitas terbaru, dan pendaftaran UMKM di satu halaman dashboard terpadu.
         </p>
       </div>
 
       {/* Extra KPI banner for exports breakdown */}
-      <div className="grid grid-cols-3 gap-4 bg-white border border-[#F7D6E6] p-4 rounded-2xl shadow-xs">
+      <div className="grid grid-cols-3 gap-4 bg-white border border-[#FFE6D5] p-4 rounded-2xl shadow-xs">
         <div className="text-center py-2 border-r border-slate-100">
           <p className="text-[10px] font-bold text-slate-400 uppercase">Ekspor Hari Ini</p>
-          <p className="text-lg font-extrabold text-[#8C4A6E] mt-1">{exportsToday}</p>
+          <p className="text-lg font-extrabold text-[#E07A00] mt-1">{exportsToday}</p>
         </div>
         <div className="text-center py-2 border-r border-slate-100">
           <p className="text-[10px] font-bold text-slate-400 uppercase">Ekspor Minggu Ini</p>
-          <p className="text-lg font-extrabold text-[#8C4A6E] mt-1">{exportsWeek}</p>
+          <p className="text-lg font-extrabold text-[#E07A00] mt-1">{exportsWeek}</p>
         </div>
         <div className="text-center py-2">
           <p className="text-[10px] font-bold text-slate-400 uppercase">Ekspor Bulan Ini</p>
-          <p className="text-lg font-extrabold text-[#8C4A6E] mt-1">{exportsMonth}</p>
+          <p className="text-lg font-extrabold text-[#E07A00] mt-1">{exportsMonth}</p>
         </div>
       </div>
 
@@ -192,7 +182,6 @@ export default async function AdminDashboardPage() {
         recentActivities={recentActivities}
         recentExports={recentExports}
         dailyChartData={dailyChartData}
-        formatChartData={formatChartData}
       />
     </div>
   );

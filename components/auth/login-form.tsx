@@ -5,6 +5,7 @@ import { useActionState, startTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, Loader2, AlertCircle, Check, Eye, EyeOff } from "lucide-react";
+import toast from "react-hot-toast";
 import { loginAction, googleLoginAction } from "@/app/(auth)/actions";
 
 export default function LoginForm() {
@@ -61,18 +62,18 @@ export default function LoginForm() {
     if (res?.success && res.url) {
       window.location.href = res.url;
     } else if (res?.error) {
-      alert(`OAuth Error: ${res.error}`);
+      toast.error(`Gagal masuk dengan Google: ${res.error}`);
     }
   };
 
   return (
-    <div className="w-full max-w-md p-8 bg-white/85 backdrop-blur-md rounded-[24px] shadow-[0_8px_30px_rgb(194,123,160,0.12)] border border-[#F7D6E6] transition-all duration-300 hover:shadow-[0_8px_40px_rgb(194,123,160,0.18)]">
+    <div className="w-full max-w-md p-8 bg-white/85 backdrop-blur-md rounded-[24px] shadow-[0_8px_30px_rgb(224,122,0,0.12)] border border-[#FFE6D5] transition-all duration-300 hover:shadow-[0_8px_40px_rgb(224,122,0,0.18)]">
       {/* Title */}
       <div className="mb-8 text-center">
-        <h2 className="text-3xl font-bold tracking-tight text-[#8C4A6E] font-heading">
+        <h2 className="text-3xl font-bold tracking-tight text-[#E07A00] font-heading">
           Selamat Datang
         </h2>
-        <p className="mt-2 text-sm text-[#C27BA0] font-sans">
+        <p className="mt-2 text-sm text-[#FF9100] font-sans">
           Masuk ke UMKM Template Hub untuk mulai mendesain.
         </p>
       </div>
@@ -87,8 +88,8 @@ export default function LoginForm() {
 
       {/* Error Message */}
       {state?.error && (
-        <div className="flex items-center gap-2 p-3 mb-6 text-sm text-[#8C4A6E] bg-[#FFF9FC] border border-[#F7D6E6] rounded-xl">
-          <AlertCircle className="w-4 h-4 shrink-0 text-[#C27BA0]" />
+        <div className="flex items-center gap-2 p-3 mb-6 text-sm text-[#E07A00] bg-[#FFF9F5] border border-[#FFE6D5] rounded-xl">
+          <AlertCircle className="w-4 h-4 shrink-0 text-[#FF9100]" />
           <span>{state.error}</span>
         </div>
       )}
@@ -115,12 +116,12 @@ export default function LoginForm() {
       >
         {/* Email Input */}
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-[#8C4A6E] mb-2">
+          <label className="block text-xs font-semibold uppercase tracking-wider text-[#E07A00] mb-2">
             Email
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
-              <Mail className="w-4 h-4 text-[#C27BA0]" />
+              <Mail className="w-4 h-4 text-[#FF9100]" />
             </div>
             <input
               type="email"
@@ -130,7 +131,7 @@ export default function LoginForm() {
               onChange={(e) => setEmail(e.target.value)}
               disabled={isPending}
               placeholder="nama@usaha.com"
-              className="w-full pl-10 pr-4 py-3 bg-[#FFF9FC] text-slate-800 placeholder-slate-400 border border-[#F7D6E6] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C27BA0] focus:border-transparent transition-all duration-200"
+              className="w-full pl-10 pr-4 py-3 bg-[#FFF9F5] text-slate-800 placeholder-slate-400 border border-[#FFE6D5] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FF9100] focus:border-transparent transition-all duration-200"
             />
           </div>
         </div>
@@ -138,13 +139,13 @@ export default function LoginForm() {
         {/* Password Input */}
         <div>
           <div className="mb-2">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[#8C4A6E]">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#E07A00]">
               Password
             </label>
           </div>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
-              <Lock className="w-4 h-4 text-[#C27BA0]" />
+              <Lock className="w-4 h-4 text-[#FF9100]" />
             </div>
             <input
               type={showPassword ? "text" : "password"}
@@ -154,12 +155,12 @@ export default function LoginForm() {
               onChange={(e) => setPassword(e.target.value)}
               disabled={isPending}
               placeholder="••••••••"
-              className="w-full pl-10 pr-10 py-3 bg-[#FFF9FC] text-slate-800 placeholder-slate-400 border border-[#F7D6E6] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C27BA0] focus:border-transparent transition-all duration-200"
+              className="w-full pl-10 pr-10 py-3 bg-[#FFF9F5] text-slate-800 placeholder-slate-400 border border-[#FFE6D5] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FF9100] focus:border-transparent transition-all duration-200"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-[#C27BA0] hover:text-[#8C4A6E] transition-colors"
+              className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-[#FF9100] hover:text-[#E07A00] transition-colors"
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
@@ -173,14 +174,14 @@ export default function LoginForm() {
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              className="w-4 h-4 accent-[#C27BA0] rounded border-[#F7D6E6] text-[#C27BA0] focus:ring-[#C27BA0] cursor-pointer"
+              className="w-4 h-4 accent-[#FF9100] rounded border-[#FFE6D5] text-[#FF9100] focus:ring-[#FF9100] cursor-pointer"
             />
-            <span className="text-xs font-bold text-[#8C4A6E]">Ingat Saya</span>
+            <span className="text-xs font-bold text-[#E07A00]">Ingat Saya</span>
           </label>
 
           <Link
             href="/forgot-password"
-            className="text-xs font-bold text-[#C27BA0] hover:text-[#8C4A6E] hover:underline transition-all"
+            className="text-xs font-bold text-[#FF9100] hover:text-[#E07A00] hover:underline transition-all"
           >
             Lupa Password?
           </Link>
@@ -190,7 +191,7 @@ export default function LoginForm() {
         <button
           type="submit"
           disabled={isPending}
-          className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#C27BA0] hover:bg-[#8C4A6E] text-white font-semibold rounded-xl text-sm transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-75 disabled:cursor-not-allowed group active:scale-[0.98]"
+          className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#FF9100] hover:bg-[#E07A00] text-white font-semibold rounded-xl text-sm transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-75 disabled:cursor-not-allowed group active:scale-[0.98]"
         >
           {isPending ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -203,10 +204,10 @@ export default function LoginForm() {
       {/* Divider */}
       <div className="relative my-6">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-[#F7D6E6]"></div>
+          <div className="w-full border-t border-[#FFE6D5]"></div>
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="px-3 bg-white text-[#C27BA0] text-[10px] tracking-widest font-semibold">
+          <span className="px-3 bg-white text-[#FF9100] text-[10px] tracking-widest font-semibold">
             atau
           </span>
         </div>
@@ -217,7 +218,7 @@ export default function LoginForm() {
         onClick={handleGoogleLogin}
         type="button"
         disabled={isPending}
-        className="w-full flex items-center justify-center gap-3 py-3 bg-white border border-[#F7D6E6] hover:bg-[#FFF9FC] text-slate-700 font-semibold rounded-xl text-sm transition-all duration-200 active:scale-[0.98]"
+        className="w-full flex items-center justify-center gap-3 py-3 bg-white border border-[#FFE6D5] hover:bg-[#FFF9F5] text-slate-700 font-semibold rounded-xl text-sm transition-all duration-200 active:scale-[0.98]"
       >
         <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
           <path
@@ -245,7 +246,7 @@ export default function LoginForm() {
         <span className="text-slate-500">Belum punya akun? </span>
         <Link
           href="/register"
-          className="font-bold text-[#8C4A6E] hover:text-[#C27BA0] hover:underline transition-all"
+          className="font-bold text-[#E07A00] hover:text-[#FF9100] hover:underline transition-all"
         >
           Daftar Sekarang
         </Link>

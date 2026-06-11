@@ -51,7 +51,7 @@ export function EditCategoryForm({ category }: EditCategoryFormProps) {
 
   return (
     <form action={formAction} className="space-y-6">
-      <div className="bg-white rounded-2xl border border-[#F7D6E6] p-6 shadow-sm space-y-6">
+      <div className="bg-white rounded-2xl border border-[#FFE6D5] p-6 shadow-sm space-y-6">
         {state?.error && (
           <div className="p-4 bg-red-50 border border-red-200 text-red-700 text-sm font-medium rounded-xl">
             {state.error}
@@ -60,7 +60,7 @@ export function EditCategoryForm({ category }: EditCategoryFormProps) {
 
         {/* Nama Kategori */}
         <div className="space-y-1.5">
-          <label htmlFor="name" className="text-xs font-semibold text-[#8C4A6E] tracking-wide uppercase">
+          <label htmlFor="name" className="text-xs font-semibold text-[#E07A00] tracking-wide uppercase">
             Nama Kategori
           </label>
           <input
@@ -70,13 +70,13 @@ export function EditCategoryForm({ category }: EditCategoryFormProps) {
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-2.5 text-sm border border-[#F7D6E6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C27BA0] focus:border-[#C27BA0] transition-colors placeholder-[#8C4A6E]/30 text-[#3D1E30]"
+            className="w-full px-4 py-2.5 text-sm border border-[#FFE6D5] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF9100] focus:border-[#FF9100] transition-colors placeholder-[#E07A00]/30 text-[#3D1E30]"
           />
         </div>
 
         {/* Slug Kategori */}
         <div className="space-y-1.5">
-          <label htmlFor="slug" className="text-xs font-semibold text-[#8C4A6E] tracking-wide uppercase">
+          <label htmlFor="slug" className="text-xs font-semibold text-[#E07A00] tracking-wide uppercase">
             Slug Kategori
           </label>
           <input
@@ -86,7 +86,7 @@ export function EditCategoryForm({ category }: EditCategoryFormProps) {
             required
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
-            className="w-full px-4 py-2.5 text-sm border border-[#F7D6E6] bg-slate-50/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C27BA0] focus:border-[#C27BA0] transition-colors placeholder-[#8C4A6E]/30 text-[#3D1E30]"
+            className="w-full px-4 py-2.5 text-sm border border-[#FFE6D5] bg-slate-50/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF9100] focus:border-[#FF9100] transition-colors placeholder-[#E07A00]/30 text-[#3D1E30]"
           />
         </div>
 
@@ -94,7 +94,7 @@ export function EditCategoryForm({ category }: EditCategoryFormProps) {
 
         {/* Icon Picker */}
         <div className="space-y-2">
-          <label className="text-xs font-semibold text-[#8C4A6E] tracking-wide uppercase">
+          <label className="text-xs font-semibold text-[#E07A00] tracking-wide uppercase">
             Pilih Icon
           </label>
           <input type="hidden" name="icon_name" value={selectedIcon} />
@@ -109,8 +109,8 @@ export function EditCategoryForm({ category }: EditCategoryFormProps) {
                   onClick={() => setSelectedIcon(item.name)}
                   className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all ${
                     isSelected
-                      ? "border-[#C27BA0] bg-[#FFF0F7] text-[#C27BA0] scale-102 shadow-sm font-bold"
-                      : "border-[#F7D6E6] bg-white text-[#8C4A6E] hover:border-[#C27BA0] hover:bg-[#FFF0F7]/10"
+                      ? "border-[#FF9100] bg-[#FFF5EE] text-[#FF9100] scale-102 shadow-sm font-bold"
+                      : "border-[#FFE6D5] bg-white text-[#E07A00] hover:border-[#FF9100] hover:bg-[#FFF5EE]/10"
                   }`}
                 >
                   <IconComp className="h-6 w-6 mb-1.5" />
@@ -122,10 +122,10 @@ export function EditCategoryForm({ category }: EditCategoryFormProps) {
         </div>
 
         {/* Status Toggle */}
-        <div className="flex items-center justify-between p-4 border border-[#F7D6E6] bg-[#FFF0F7]/10 rounded-2xl">
+        <div className="flex items-center justify-between p-4 border border-[#FFE6D5] bg-[#FFF5EE]/10 rounded-2xl">
           <div>
             <h4 className="text-sm font-bold text-[#3D1E30]">Aktifkan Kategori</h4>
-            <p className="text-xs font-semibold text-[#8C4A6E] mt-0.5">
+            <p className="text-xs font-semibold text-[#E07A00] mt-0.5">
               Kategori yang aktif akan langsung muncul di halaman dropdown onboarding dan filter template UMKM.
             </p>
           </div>
@@ -138,7 +138,7 @@ export function EditCategoryForm({ category }: EditCategoryFormProps) {
               onChange={(e) => setIsActive(e.target.checked)}
               className="sr-only peer"
             />
-            <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#C27BA0]"></div>
+            <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#FF9100]"></div>
           </div>
         </div>
       </div>
@@ -147,14 +147,14 @@ export function EditCategoryForm({ category }: EditCategoryFormProps) {
       <div className="flex items-center justify-end gap-3">
         <Link
           href="/admin/categories"
-          className="px-5 py-2.5 text-sm font-bold border border-[#F7D6E6] bg-white rounded-xl text-[#8C4A6E] hover:bg-[#FFF0F7] transition-all"
+          className="px-5 py-2.5 text-sm font-bold border border-[#FFE6D5] bg-white rounded-xl text-[#E07A00] hover:bg-[#FFF5EE] transition-all"
         >
           Batal
         </Link>
         <button
           type="submit"
           disabled={isPending}
-          className="flex items-center gap-2 px-5 py-2.5 text-sm font-bold bg-[#C27BA0] text-white rounded-xl hover:bg-[#8C4A6E] transition-all disabled:opacity-50"
+          className="flex items-center gap-2 px-5 py-2.5 text-sm font-bold bg-[#FF9100] text-white rounded-xl hover:bg-[#E07A00] transition-all disabled:opacity-50"
         >
           {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
           Simpan Perubahan

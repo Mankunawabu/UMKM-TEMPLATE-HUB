@@ -79,10 +79,10 @@ export default function UMKMSidebar({ profile, exportLimit = 5, currentExports =
   return (
     <>
       {/* Mobile Toggle Navbar */}
-      <div className="lg:hidden flex items-center justify-between p-4 bg-white border-b border-[#F7D6E6] text-[#8C4A6E] fixed top-0 left-0 right-0 z-40">
+      <div className="lg:hidden flex items-center justify-between p-4 bg-white border-b border-[#FFE6D5] text-[#E07A00] fixed top-0 left-0 right-0 z-40">
         <div className="flex items-center gap-2">
           {profile?.logo_url ? (
-            <div className="w-8 h-8 rounded-full bg-[#FFF0F7] border border-[#F7D6E6] flex items-center justify-center overflow-hidden shrink-0">
+            <div className="w-8 h-8 rounded-full bg-[#FFF5EE] border border-[#FFE6D5] flex items-center justify-center overflow-hidden shrink-0">
               <img
                 src={profile.logo_url}
                 alt="Logo Usaha"
@@ -90,15 +90,19 @@ export default function UMKMSidebar({ profile, exportLimit = 5, currentExports =
               />
             </div>
           ) : (
-            <Palette className="w-6 h-6 text-[#C27BA0]" />
+            <img
+              src="/logo_umkm_P.png"
+              alt="Logo Kancing"
+              className="w-10 h-10 object-contain shrink-0"
+            />
           )}
           <span className="font-extrabold text-sm tracking-tight truncate">
-            {profile?.nama_usaha || "UMKM Hub"}
+            {profile?.nama_usaha || "KANCING"}
           </span>
         </div>
         <button
           onClick={() => setIsMobileOpen(true)}
-          className="p-2 hover:bg-[#FFF9FC] rounded-lg transition-colors"
+          className="p-2 hover:bg-[#FFF9F5] rounded-lg transition-colors"
         >
           <Menu className="w-6 h-6" />
         </button>
@@ -114,16 +118,16 @@ export default function UMKMSidebar({ profile, exportLimit = 5, currentExports =
 
       {/* Mobile Drawer Menu */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 w-64 bg-white border-r border-[#F7D6E6] z-50 flex flex-col justify-between transition-transform duration-300 transform lg:hidden ${
+        className={`fixed top-0 bottom-0 left-0 w-64 bg-white border-r border-[#FFE6D5] z-50 flex flex-col justify-between transition-transform duration-300 transform lg:hidden ${
           isMobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div>
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-[#F7D6E6]">
+          <div className="flex items-center justify-between p-6 border-b border-[#FFE6D5]">
             <div className="flex items-center gap-2">
               {profile?.logo_url ? (
-                <div className="w-8 h-8 rounded-full bg-[#FFF0F7] border border-[#F7D6E6] flex items-center justify-center overflow-hidden shrink-0">
+                <div className="w-8 h-8 rounded-full bg-[#FFF5EE] border border-[#FFE6D5] flex items-center justify-center overflow-hidden shrink-0">
                   <img
                     src={profile.logo_url}
                     alt="Logo Usaha"
@@ -131,15 +135,19 @@ export default function UMKMSidebar({ profile, exportLimit = 5, currentExports =
                   />
                 </div>
               ) : (
-                <Palette className="w-6 h-6 text-[#C27BA0]" />
+                <img
+                  src="/logo_umkm_P.png"
+                  alt="Logo Kancing"
+                  className="w-10 h-10 object-contain shrink-0"
+                />
               )}
-              <span className="font-bold text-md tracking-tight text-[#8C4A6E] truncate">
-                {profile?.nama_usaha || "UMKM Hub"}
+              <span className="font-bold text-md tracking-tight text-[#E07A00] truncate">
+                {profile?.nama_usaha || "KANCING"}
               </span>
             </div>
             <button
               onClick={() => setIsMobileOpen(false)}
-              className="p-1 hover:bg-[#FFF9FC] rounded-lg text-slate-400 hover:text-[#8C4A6E] transition-colors"
+              className="p-1 hover:bg-[#FFF9F5] rounded-lg text-slate-400 hover:text-[#E07A00] transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -157,8 +165,8 @@ export default function UMKMSidebar({ profile, exportLimit = 5, currentExports =
                   onClick={() => setIsMobileOpen(false)}
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
                     isActive
-                      ? "bg-[#F7D6E6] text-[#8C4A6E]"
-                      : "text-slate-600 hover:bg-[#FFF9FC] hover:text-[#8C4A6E]"
+                      ? "bg-[#FFE6D5] text-[#E07A00]"
+                      : "text-slate-600 hover:bg-[#FFF9F5] hover:text-[#E07A00]"
                   }`}
                 >
                   <Icon className="w-5 h-5 shrink-0" />
@@ -170,25 +178,25 @@ export default function UMKMSidebar({ profile, exportLimit = 5, currentExports =
         </div>
 
         {/* Footer Quota & Profile & Logout */}
-        <div className="p-4 border-t border-[#F7D6E6] space-y-4 bg-[#FFF9FC]">
+        <div className="p-4 border-t border-[#FFE6D5] space-y-4 bg-[#FFF9F5]">
           
           {/* Quota Indicator */}
           <div className="px-2">
             <div className="flex items-center justify-between text-xs font-bold mb-1.5">
-              <span className="text-[#8C4A6E]">Sisa Ekspor</span>
-              <span className={currentExports >= exportLimit ? "text-red-500" : "text-[#C27BA0]"}>
+              <span className="text-[#E07A00]">Sisa Ekspor</span>
+              <span className={currentExports >= exportLimit ? "text-red-500" : "text-[#FF9100]"}>
                 {exportLimit - currentExports} / {exportLimit}
               </span>
             </div>
-            <div className="w-full h-1.5 bg-white border border-[#F7D6E6] rounded-full overflow-hidden">
+            <div className="w-full h-1.5 bg-white border border-[#FFE6D5] rounded-full overflow-hidden">
               <div 
-                className={`h-full rounded-full transition-all duration-500 ${currentExports >= exportLimit ? 'bg-red-500' : 'bg-[#C27BA0]'}`}
+                className={`h-full rounded-full transition-all duration-500 ${currentExports >= exportLimit ? 'bg-red-500' : 'bg-[#FF9100]'}`}
                 style={{ width: `${Math.min((currentExports / exportLimit) * 100, 100)}%` }}
               />
             </div>
           </div>
           <div className="flex items-center gap-3 px-2">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#C27BA0] to-[#8C4A6E] border-2 border-[#F7D6E6] flex items-center justify-center text-white text-xs font-extrabold font-sans overflow-hidden shrink-0 shadow-sm">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#FF9100] to-[#E07A00] border-2 border-[#FFE6D5] flex items-center justify-center text-white text-xs font-extrabold font-sans overflow-hidden shrink-0 shadow-sm">
               {profile?.avatar_url ? (
                 <img
                   src={profile.avatar_url}
@@ -200,10 +208,10 @@ export default function UMKMSidebar({ profile, exportLimit = 5, currentExports =
               )}
             </div>
             <div className="truncate">
-              <p className="text-xs font-bold text-[#8C4A6E] truncate">
+              <p className="text-xs font-bold text-[#E07A00] truncate">
                 {profile?.nama_lengkap || "Pemilik UMKM"}
               </p>
-              <p className="text-[10px] text-[#C27BA0]">Pemilik Usaha</p>
+              <p className="text-[10px] text-[#FF9100]">Pemilik Usaha</p>
             </div>
           </div>
           <button
@@ -218,14 +226,14 @@ export default function UMKMSidebar({ profile, exportLimit = 5, currentExports =
 
       {/* Desktop Sidebar (Persistent) */}
       <aside
-        className={`hidden lg:flex flex-col justify-between bg-white border-r border-[#F7D6E6] shrink-0 sticky top-0 h-screen transition-all duration-300 ${sidebarWidthClass} z-30`}
+        className={`hidden lg:flex flex-col justify-between bg-white border-r border-[#FFE6D5] shrink-0 sticky top-0 h-screen transition-all duration-300 ${sidebarWidthClass} z-30`}
       >
         <div>
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-[#F7D6E6] relative">
+          <div className="flex items-center justify-between p-6 border-b border-[#FFE6D5] relative">
             <div className="flex items-center gap-2 overflow-hidden">
               {profile?.logo_url ? (
-                <div className="w-8 h-8 rounded-full bg-[#FFF0F7] border border-[#F7D6E6] flex items-center justify-center overflow-hidden shrink-0">
+                <div className="w-8 h-8 rounded-full bg-[#FFF5EE] border border-[#FFE6D5] flex items-center justify-center overflow-hidden shrink-0">
                   <img
                     src={profile.logo_url}
                     alt="Logo Usaha"
@@ -233,11 +241,15 @@ export default function UMKMSidebar({ profile, exportLimit = 5, currentExports =
                   />
                 </div>
               ) : (
-                <Palette className="w-6 h-6 text-[#C27BA0] shrink-0" />
+                <img
+                  src="/logo_umkm_P.png"
+                  alt="Logo Kancing"
+                  className="w-10 h-10 object-contain shrink-0"
+                />
               )}
               {!isCollapsed && (
-                <span className="font-extrabold text-md tracking-tight text-[#8C4A6E] font-heading truncate">
-                  {profile?.nama_usaha || "UMKM Hub"}
+                <span className="font-extrabold text-md tracking-tight text-[#E07A00] font-heading truncate">
+                  {profile?.nama_usaha || "KANCING"}
                 </span>
               )}
             </div>
@@ -245,7 +257,7 @@ export default function UMKMSidebar({ profile, exportLimit = 5, currentExports =
             {/* Collapse toggle button */}
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="absolute right-[-14px] top-1/2 -translate-y-1/2 w-7 h-7 bg-white border border-[#F7D6E6] rounded-full flex items-center justify-center text-[#8C4A6E] hover:bg-[#FFF9FC] shadow-sm cursor-pointer z-40 active:scale-95"
+              className="absolute right-[-14px] top-1/2 -translate-y-1/2 w-7 h-7 bg-white border border-[#FFE6D5] rounded-full flex items-center justify-center text-[#E07A00] hover:bg-[#FFF9F5] shadow-sm cursor-pointer z-40 active:scale-95"
             >
               {isCollapsed ? (
                 <ChevronRight className="w-4 h-4" />
@@ -266,8 +278,8 @@ export default function UMKMSidebar({ profile, exportLimit = 5, currentExports =
                   href={item.href}
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all relative group/item ${
                     isActive
-                      ? "bg-[#F7D6E6] text-[#8C4A6E]"
-                      : "text-slate-600 hover:bg-[#FFF9FC] hover:text-[#8C4A6E]"
+                      ? "bg-[#FFE6D5] text-[#E07A00]"
+                      : "text-slate-600 hover:bg-[#FFF9F5] hover:text-[#E07A00]"
                   }`}
                 >
                   <Icon className="w-5 h-5 shrink-0" />
@@ -275,7 +287,7 @@ export default function UMKMSidebar({ profile, exportLimit = 5, currentExports =
 
                   {/* Tooltip on Hover when Collapsed */}
                   {isCollapsed && (
-                    <div className="absolute left-16 bg-[#8C4A6E] text-white text-xs px-2.5 py-1.5 rounded-lg opacity-0 invisible group-hover/item:opacity-100 group-hover/item:visible transition-all duration-200 shadow-md whitespace-nowrap z-50">
+                    <div className="absolute left-16 bg-[#E07A00] text-white text-xs px-2.5 py-1.5 rounded-lg opacity-0 invisible group-hover/item:opacity-100 group-hover/item:visible transition-all duration-200 shadow-md whitespace-nowrap z-50">
                       {item.name}
                     </div>
                   )}
@@ -286,20 +298,20 @@ export default function UMKMSidebar({ profile, exportLimit = 5, currentExports =
         </div>
 
         {/* Footer Quota & Profile & Logout */}
-        <div className="p-4 border-t border-[#F7D6E6] space-y-4 bg-[#FFF9FC]">
+        <div className="p-4 border-t border-[#FFE6D5] space-y-4 bg-[#FFF9F5]">
           
           {/* Quota Indicator - expanded */}
           {!isCollapsed && (
             <div className="px-1">
               <div className="flex items-center justify-between text-xs font-bold mb-1.5">
-                <span className="text-[#8C4A6E]">Sisa Ekspor</span>
-                <span className={currentExports >= exportLimit ? "text-red-500" : "text-[#C27BA0]"}>
+                <span className="text-[#E07A00]">Sisa Ekspor</span>
+                <span className={currentExports >= exportLimit ? "text-red-500" : "text-[#FF9100]"}>
                   {exportLimit - currentExports} / {exportLimit}
                 </span>
               </div>
-              <div className="w-full h-1.5 bg-white border border-[#F7D6E6] rounded-full overflow-hidden">
+              <div className="w-full h-1.5 bg-white border border-[#FFE6D5] rounded-full overflow-hidden">
                 <div 
-                  className={`h-full rounded-full transition-all duration-500 ${currentExports >= exportLimit ? 'bg-red-500' : 'bg-[#C27BA0]'}`}
+                  className={`h-full rounded-full transition-all duration-500 ${currentExports >= exportLimit ? 'bg-red-500' : 'bg-[#FF9100]'}`}
                   style={{ width: `${Math.min((currentExports / exportLimit) * 100, 100)}%` }}
                 />
               </div>
@@ -310,7 +322,7 @@ export default function UMKMSidebar({ profile, exportLimit = 5, currentExports =
           <div className="flex items-center gap-3 px-1 relative group/profile">
             {/* Avatar - always visible */}
             <div className="relative shrink-0">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#C27BA0] to-[#8C4A6E] border-2 border-[#F7D6E6] flex items-center justify-center text-white text-xs font-extrabold font-sans overflow-hidden shadow-sm">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#FF9100] to-[#E07A00] border-2 border-[#FFE6D5] flex items-center justify-center text-white text-xs font-extrabold font-sans overflow-hidden shadow-sm">
                 {profile?.avatar_url ? (
                   <img
                     src={profile.avatar_url}
@@ -325,7 +337,7 @@ export default function UMKMSidebar({ profile, exportLimit = 5, currentExports =
               {isCollapsed && (
                 <div
                   className={`absolute -top-1 -right-1 w-4 h-4 rounded-full text-[8px] font-extrabold flex items-center justify-center border border-white shadow-sm ${
-                    currentExports >= exportLimit ? "bg-red-500 text-white" : "bg-[#C27BA0] text-white"
+                    currentExports >= exportLimit ? "bg-red-500 text-white" : "bg-[#FF9100] text-white"
                   }`}
                   title={`Ekspor: ${exportLimit - currentExports} sisa`}
                 >
@@ -336,18 +348,18 @@ export default function UMKMSidebar({ profile, exportLimit = 5, currentExports =
 
             {!isCollapsed && (
               <div className="truncate">
-                <p className="text-xs font-bold text-[#8C4A6E] truncate">
+                <p className="text-xs font-bold text-[#E07A00] truncate">
                   {profile?.nama_lengkap || "Pemilik UMKM"}
                 </p>
-                <p className="text-[10px] text-[#C27BA0]">Pemilik Usaha</p>
+                <p className="text-[10px] text-[#FF9100]">Pemilik Usaha</p>
               </div>
             )}
 
             {/* Tooltip when collapsed */}
             {isCollapsed && (
-              <div className="absolute left-14 bottom-0 bg-[#3D1E30] text-white text-xs px-2.5 py-1.5 rounded-lg opacity-0 invisible group-hover/profile:opacity-100 group-hover/profile:visible transition-all duration-200 shadow-md whitespace-nowrap z-50">
+              <div className="absolute left-14 bottom-0 bg-[#E07A00] text-white text-xs px-2.5 py-1.5 rounded-lg opacity-0 invisible group-hover/profile:opacity-100 group-hover/profile:visible transition-all duration-200 shadow-md whitespace-nowrap z-50">
                 {profile?.nama_lengkap || "Pemilik UMKM"}<br/>
-                <span className={currentExports >= exportLimit ? "text-red-300" : "text-[#F7D6E6]"}>
+                <span className={currentExports >= exportLimit ? "text-red-300" : "text-[#FFE6D5]"}>
                   Ekspor: {exportLimit - currentExports}/{exportLimit}
                 </span>
               </div>

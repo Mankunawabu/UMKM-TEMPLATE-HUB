@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { translateError } from "@/lib/error-translator";
 
 export async function submitOnboarding(prevState: any, formData: FormData) {
   const user = await getCurrentUser();
@@ -41,7 +42,7 @@ export async function submitOnboarding(prevState: any, formData: FormData) {
     .eq("id", user.id);
 
   if (error) {
-    return { error: error.message };
+    return { error: translateError(error.message) };
   }
 
   revalidatePath("/dashboard");

@@ -140,7 +140,7 @@ export function FileUploader({
   return (
     <div className="space-y-1.5 w-full">
       {label && (
-        <label className="text-xs font-semibold text-[#8C4A6E] tracking-wide uppercase">
+        <label className="text-xs font-semibold text-[#E07A00] tracking-wide uppercase">
           {label}
         </label>
       )}
@@ -148,8 +148,8 @@ export function FileUploader({
       <div
         className={`relative flex flex-col items-center justify-center border-2 border-dashed rounded-2xl p-6 min-h-[140px] transition-all ${
           dragActive
-            ? "border-[#C27BA0] bg-[#FFF0F7]"
-            : "border-[#F7D6E6] bg-white hover:border-[#C27BA0] hover:bg-[#FFF0F7]/10"
+            ? "border-[#FF9100] bg-[#FFF5EE]"
+            : "border-[#FFE6D5] bg-white hover:border-[#FF9100] hover:bg-[#FFF5EE]/10"
         } ${error ? "border-red-300 bg-red-50/10" : ""}`}
         onDragEnter={handleDrag}
         onDragOver={handleDrag}
@@ -167,13 +167,13 @@ export function FileUploader({
 
         {uploading ? (
           <div className="flex flex-col items-center gap-3 py-2">
-            <Loader2 className="h-8 w-8 text-[#C27BA0] animate-spin" />
+            <Loader2 className="h-8 w-8 text-[#FF9100] animate-spin" />
             <div className="text-sm font-semibold text-[#3D1E30]">
               Mengunggah {fileName}...
             </div>
             <div className="w-48 bg-slate-100 rounded-full h-1.5 overflow-hidden">
               <div
-                className="bg-[#C27BA0] h-1.5 rounded-full transition-all duration-300"
+                className="bg-[#FF9100] h-1.5 rounded-full transition-all duration-300"
                 style={{ width: `${progress}%` }}
               ></div>
             </div>
@@ -181,7 +181,7 @@ export function FileUploader({
         ) : fileUrl ? (
           <div className="flex flex-col items-center gap-4 w-full">
             {isImage ? (
-              <div className="relative group w-32 h-32 rounded-xl border border-[#F7D6E6] bg-[#FFF0F7]/30 overflow-hidden flex items-center justify-center p-1">
+              <div className="relative group w-32 h-32 rounded-xl border border-[#FFE6D5] bg-[#FFF5EE]/30 overflow-hidden flex items-center justify-center p-1">
                 <img
                   src={fileUrl}
                   alt="Preview"
@@ -189,9 +189,9 @@ export function FileUploader({
                 />
               </div>
             ) : (
-              <div className="flex items-center gap-3 bg-[#FFF0F7] border border-[#F7D6E6] px-4 py-2.5 rounded-xl max-w-full">
-                <FileJson className="h-5 w-5 text-[#C27BA0] shrink-0" />
-                <span className="text-xs font-semibold text-[#8C4A6E] truncate max-w-[200px]">
+              <div className="flex items-center gap-3 bg-[#FFF5EE] border border-[#FFE6D5] px-4 py-2.5 rounded-xl max-w-full">
+                <FileJson className="h-5 w-5 text-[#FF9100] shrink-0" />
+                <span className="text-xs font-semibold text-[#E07A00] truncate max-w-[200px]">
                   {fileName || fileUrl.split("/").pop()}
                 </span>
                 <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
@@ -209,13 +209,13 @@ export function FileUploader({
           </div>
         ) : (
           <div className="flex flex-col items-center text-center gap-2 py-2 pointer-events-none">
-            <div className="p-3 bg-[#FFF0F7] rounded-2xl border border-[#F7D6E6]">
-              <Upload className="h-6 w-6 text-[#C27BA0]" />
+            <div className="p-3 bg-[#FFF5EE] rounded-2xl border border-[#FFE6D5]">
+              <Upload className="h-6 w-6 text-[#FF9100]" />
             </div>
             <div className="text-sm font-bold text-[#3D1E30]">
-              Drag & Drop file di sini, atau <span className="text-[#C27BA0] underline">Pilih File</span>
+              Drag & Drop file di sini, atau <span className="text-[#FF9100] underline">Pilih File</span>
             </div>
-            <div className="text-xs font-medium text-[#8C4A6E]">
+            <div className="text-xs font-medium text-[#E07A00]">
               {accept.includes("image/*") ? "Format Gambar (PNG, JPG, WEBP)" : "Format JSON (.json)"} hingga {maxMb}MB
             </div>
           </div>

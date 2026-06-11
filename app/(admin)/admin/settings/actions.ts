@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { logActivity } from "@/lib/activity";
+import { translateError } from "@/lib/error-translator";
 
 export async function updateMaintenanceSettings(prevState: any, formData: FormData) {
   try {
@@ -29,7 +30,7 @@ export async function updateMaintenanceSettings(prevState: any, formData: FormDa
     revalidatePath("/admin");
     return { success: true };
   } catch (err: any) {
-    return { success: false, error: err.message };
+    return { success: false, error: translateError(err.message) };
   }
 }
 
@@ -56,7 +57,7 @@ export async function updateAccessSettings(prevState: any, formData: FormData) {
     revalidatePath("/admin");
     return { success: true };
   } catch (err: any) {
-    return { success: false, error: err.message };
+    return { success: false, error: translateError(err.message) };
   }
 }
 
@@ -84,7 +85,7 @@ export async function updateLimitsSettings(prevState: any, formData: FormData) {
     revalidatePath("/admin");
     return { success: true };
   } catch (err: any) {
-    return { success: false, error: err.message };
+    return { success: false, error: translateError(err.message) };
   }
 }
 
@@ -103,7 +104,7 @@ export async function getGroqModels() {
     const json = await res.json();
     return { success: true, models: json.data || [] };
   } catch (err: any) {
-    return { success: false, error: err.message };
+    return { success: false, error: translateError(err.message) };
   }
 }
 
@@ -132,7 +133,7 @@ export async function updateAiSettings(prevState: any, formData: FormData) {
     revalidatePath("/admin");
     return { success: true };
   } catch (err: any) {
-    return { success: false, error: err.message };
+    return { success: false, error: translateError(err.message) };
   }
 }
 

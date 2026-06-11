@@ -41,7 +41,7 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
   const currentExports = exportsToday || 0;
 
   return (
-    <div className="min-h-screen w-full flex flex-col lg:flex-row bg-[#FFF9FC]">
+    <div className="min-h-screen w-full flex flex-col lg:flex-row bg-[#FFFFFF]">
       {/* Sidebar navigation system */}
       <UMKMSidebar 
         profile={profile} 

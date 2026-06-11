@@ -85,7 +85,7 @@ export default async function TemplateEditorPage({ params }: EditorPageProps) {
         font_family: "Poppins",
         font_size: 64,
         font_weight: "800",
-        color: "#3D1E30",
+        color: "#111827",
         text_align: "center"
       },
       {
@@ -105,7 +105,7 @@ export default async function TemplateEditorPage({ params }: EditorPageProps) {
         font_family: "Inter",
         font_size: 32,
         font_weight: "500",
-        color: "#8C4A6E",
+        color: "#374151",
         text_align: "center"
       },
       {
@@ -125,7 +125,7 @@ export default async function TemplateEditorPage({ params }: EditorPageProps) {
         font_family: "Plus Jakarta Sans",
         font_size: 28,
         font_weight: "700",
-        color: "#C27BA0",
+        color: "#111827",
         text_align: "center"
       }
     ];

@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { ArrowLeft, Download, Layers, Type, Image as ImageIcon, Square, Palette, ZoomIn, ZoomOut, Upload, Grip, Undo, Redo, Loader2, Sparkles, X, Heart, MessageCircle, Send, Bookmark, Star, MapPin, MoreHorizontal, Share2, Battery, Wifi, SignalHigh, ShoppingCart, Search as SearchIcon, Menu } from "lucide-react";
+import toast from "react-hot-toast";
 import * as htmlToImage from "html-to-image";
 
 interface TemplateField {
@@ -150,7 +151,7 @@ const DeviceMockup = ({ platform, imageUrl, shopName, shopLogo }: { platform: st
               </div>
               <div className="flex-1">
                 <div className="text-sm font-bold text-slate-800 flex items-center gap-1">
-                  {displayName} <span className="bg-purple-100 text-purple-700 text-[8px] px-1 py-0.5 rounded font-bold">PRO</span>
+                  {displayName} <span className="bg-[#FFE6D5] text-[#E07A00] text-[8px] px-1 py-0.5 rounded font-bold">PRO</span>
                 </div>
                 <div className="text-[10px] text-slate-500 flex items-center gap-1 mt-0.5">
                   <MapPin className="w-3 h-3" /> Kota Anda
@@ -207,7 +208,7 @@ const DeviceMockup = ({ platform, imageUrl, shopName, shopLogo }: { platform: st
     return (
       <div className="relative w-full h-full bg-white flex flex-col overflow-y-auto [&::-webkit-scrollbar]:hidden">
         <div className="flex items-center gap-3 p-3 border-b border-slate-100">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-yellow-400 to-fuchsia-600 p-[2px] shrink-0">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-yellow-400 via-[#FF9100] to-[#E07A00] p-[2px] shrink-0">
             <div className="w-full h-full bg-white rounded-full border border-white overflow-hidden">
               {shopLogo ? <img src={shopLogo} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-slate-200" />}
             </div>
@@ -385,7 +386,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
     if (!file) return;
     
     if (file.size > maxUploadMb * 1024 * 1024) {
-      alert(`Ukuran gambar tidak boleh lebih dari ${maxUploadMb} MB`);
+      toast.error(`Ukuran gambar tidak boleh lebih dari ${maxUploadMb} MB`);
       return;
     }
     
@@ -449,7 +450,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
       }
     } catch (err) {
       console.error(err);
-      alert("Gagal memproses kata-kata. Pastikan koneksi dan API Key Anda benar.");
+      toast.error("Gagal memproses kata-kata. Pastikan koneksi dan API Key Anda benar.");
     } finally {
       setIsGeneratingText(null);
     }
@@ -509,7 +510,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
 
   const handleOpenExportMenu = async () => {
     if (currentExports >= exportLimit) {
-      alert(`Batas ekspor harian Anda (${exportLimit}) sudah habis.`);
+      toast.error(`Batas ekspor harian Anda (${exportLimit}) sudah habis.`);
       return;
     }
     setIsExporting(true);
@@ -543,9 +544,9 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const exportImage = async (format: "PNG" | "JPG" | "PDF") => {
+  const exportImage = async (format: "PNG", mode: "download" | "share" = "download") => {
     if (currentExports >= exportLimit) {
-      alert(`Batas ekspor harian Anda (${exportLimit}) sudah habis.`);
+      toast.error(`Batas ekspor harian Anda (${exportLimit}) sudah habis.`);
       return;
     }
     if (!canvasRef.current) return;
@@ -555,41 +556,46 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
       // Small delay to ensure all states are settled
       await new Promise(r => setTimeout(r, 100));
       
-      let dataUrl = "";
-      const isPortrait = template.target_platform === "instagram_story" || template.target_platform === "tiktok";
-      const w = 1080;
-      const h = isPortrait ? 1920 : 1080;
+      const dataUrl = await htmlToImage.toPng(canvasRef.current, {
+        quality: 1,
+        pixelRatio: 2,
+        fetchRequestInit: { cache: "no-cache" }
+      });
 
-      if (format === "PNG" || format === "PDF") {
-        dataUrl = await htmlToImage.toPng(canvasRef.current, {
-          quality: 1,
-          pixelRatio: 2,
-          fetchRequestInit: { cache: "no-cache" }
-        });
-      } else if (format === "JPG") {
-        dataUrl = await htmlToImage.toJpeg(canvasRef.current, {
-          quality: 0.95,
-          pixelRatio: 2,
-          fetchRequestInit: { cache: "no-cache" }
-        });
-      }
-
-      if (format === "PDF") {
-        const { jsPDF } = await import("jspdf");
-        // Create PDF with exact dimensions (in pixels, mapped to points/mm)
-        // A standard portrait is 1080x1920 px. Let's use pt.
-        const pdf = new jsPDF({
-          orientation: isPortrait ? "portrait" : "landscape",
-          unit: "px",
-          format: [w, h]
-        });
-        pdf.addImage(dataUrl, "PNG", 0, 0, w, h);
-        pdf.save(`UMKM-Desain-${template.nama_template}.pdf`);
-      } else {
+      if (mode === "download") {
         const link = document.createElement("a");
-        link.download = `UMKM-Desain-${template.nama_template}.${format.toLowerCase()}`;
+        link.download = `KANCING-Desain-${template.nama_template}.png`;
         link.href = dataUrl;
         link.click();
+      } else if (mode === "share") {
+        try {
+          if (navigator.share) {
+            const res = await fetch(dataUrl);
+            const blob = await res.blob();
+            const file = new File([blob], `KANCING-Desain-${template.nama_template}.png`, { type: 'image/png' });
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+              await navigator.share({
+                title: `Desain dari KANCING`,
+                text: `Lihat desain promosi saya untuk ${template.nama_template}!`,
+                files: [file]
+              });
+            } else {
+              await navigator.share({
+                title: `Desain dari KANCING`,
+                text: `Lihat desain promosi saya untuk ${template.nama_template}!`,
+              });
+            }
+          } else {
+            toast.error("Browser Anda tidak mendukung fitur berbagi langsung. Silakan download terlebih dahulu.");
+            return;
+          }
+        } catch (shareErr: any) {
+          if (shareErr.name === "AbortError" || (shareErr.message && shareErr.message.toLowerCase().includes("abort"))) {
+            console.log("User cancelled share");
+            return;
+          }
+          throw shareErr;
+        }
       }
 
       // Upload to exports bucket
@@ -624,7 +630,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
       
     } catch (err) {
       console.error("Export error:", err);
-      alert("Gagal mengekspor desain. Silakan coba lagi.");
+      toast.error("Gagal mengekspor desain. Silakan coba lagi.");
     } finally {
       setIsExporting(false);
     }
@@ -642,37 +648,37 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
   const fontUrl = `https://fonts.googleapis.com/css2?${fonts.map(f => `family=${f.replace(/ /g, '+')}:wght@400;500;600;700;800`).join('&')}&display=swap`;
 
   return (
-    <div className="fixed inset-0 bg-[#FFF9FC] z-[100] flex flex-col font-sans">
+    <div className="fixed inset-0 bg-[#FFFFFF] z-[100] flex flex-col font-sans">
       <style dangerouslySetInnerHTML={{ __html: `@import url('${fontUrl}');` }} />
       
       {/* ── HEADER ── */}
-      <header className="h-16 bg-white border-b border-[#F7D6E6] flex items-center justify-between px-4 shrink-0 shadow-sm z-20 relative">
+      <header className="h-16 bg-white border-b border-[#FFE6D5] flex items-center justify-between px-4 shrink-0 shadow-sm z-20 relative">
         <div className="flex items-center gap-2 sm:gap-4">
-          <Link href="/dashboard/template" className="w-10 h-10 rounded-xl hover:bg-[#FFF0F7] flex items-center justify-center text-[#8C4A6E] transition-colors shrink-0">
+          <Link href="/dashboard/template" className="w-10 h-10 rounded-xl hover:bg-[#F3F4F6] flex items-center justify-center text-[#1E293B] transition-colors shrink-0">
             <ArrowLeft className="w-5 h-5" />
           </Link>
-          <div className="h-6 w-px bg-[#F7D6E6] hidden sm:block" />
+          <div className="h-6 w-px bg-[#F1F5F9] hidden sm:block" />
           <button 
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className={`w-10 h-10 rounded-xl flex lg:hidden items-center justify-center transition-colors shrink-0 ${isSidebarOpen ? 'bg-[#8C4A6E] text-white' : 'hover:bg-[#FFF0F7] text-[#8C4A6E]'}`}
+            className={`w-10 h-10 rounded-xl flex lg:hidden items-center justify-center transition-colors shrink-0 ${isSidebarOpen ? 'bg-[#E07A00] text-white' : 'hover:bg-[#F3F4F6] text-[#1E293B]'}`}
           >
             <Menu className="w-5 h-5" />
           </button>
           <div className="hidden sm:block">
-            <h1 className="text-sm font-bold text-[#3D1E30] truncate max-w-[150px] md:max-w-xs">{template.nama_template}</h1>
-            <p className="text-[10px] text-[#C27BA0] font-medium mt-0.5">Otomatis tersimpan</p>
+            <h1 className="text-sm font-bold text-[#1E293B] truncate max-w-[150px] md:max-w-xs">{template.nama_template}</h1>
+            <p className="text-[10px] text-[#1E293B] font-medium mt-0.5">Otomatis tersimpan</p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-1 mr-2 border-r border-[#F7D6E6] pr-4">
+          <div className="hidden sm:flex items-center gap-1 mr-2 border-r border-[#FFE6D5] pr-4">
             <button 
               onClick={handleUndo}
               disabled={historyIndex <= 0}
               className={`p-2 rounded-lg transition-all ${
                 historyIndex <= 0 
                   ? "text-slate-300 opacity-50 cursor-not-allowed" 
-                  : "text-[#8C4A6E] bg-[#FFF0F7] hover:bg-[#F7D6E6] cursor-pointer font-bold shadow-sm"
+                  : "text-[#1E293B] bg-[#F3F4F6] hover:bg-[#F1F5F9] cursor-pointer font-bold shadow-sm"
               }`}
               title="Undo"
             >
@@ -684,7 +690,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
               className={`p-2 rounded-lg transition-all ${
                 historyIndex >= history.length - 1 
                   ? "text-slate-300 opacity-50 cursor-not-allowed" 
-                  : "text-[#8C4A6E] bg-[#FFF0F7] hover:bg-[#F7D6E6] cursor-pointer font-bold shadow-sm"
+                  : "text-[#1E293B] bg-[#F3F4F6] hover:bg-[#F1F5F9] cursor-pointer font-bold shadow-sm"
               }`}
               title="Redo"
             >
@@ -694,7 +700,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
           <button 
             onClick={handleOpenExportMenu}
             disabled={isExporting}
-            className="px-5 py-2.5 bg-gradient-to-r from-[#C27BA0] to-[#8C4A6E] text-white text-sm font-bold rounded-xl shadow-md hover:shadow-lg disabled:opacity-50 transition-all flex items-center gap-2"
+            className="px-5 py-2.5 bg-gradient-to-r from-[#FF9100] to-[#E07A00] text-white text-sm font-bold rounded-xl shadow-md hover:shadow-lg disabled:opacity-50 transition-all flex items-center gap-2"
           >
             {isExporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
             <span>Ekspor Desain</span>
@@ -706,10 +712,10 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
       <div className="flex-1 flex overflow-hidden">
         
         {/* ── LEFT SIDEBAR (TOOLS) ── */}
-        <aside className={`absolute lg:relative w-80 h-[calc(100vh-4rem)] lg:h-auto bg-white border-r border-[#F7D6E6] flex flex-col shrink-0 z-20 shadow-2xl lg:shadow-sm overflow-y-auto custom-scrollbar transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
-          <div className="p-5 border-b border-[#F7D6E6] flex justify-between items-center bg-white sticky top-0 z-10">
+        <aside className={`absolute lg:relative w-80 h-[calc(100vh-4rem)] lg:h-auto bg-white border-r border-[#FFE6D5] flex flex-col shrink-0 z-20 shadow-2xl lg:shadow-sm overflow-y-auto custom-scrollbar transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+          <div className="p-5 border-b border-[#FFE6D5] flex justify-between items-center bg-white sticky top-0 z-10">
             <div>
-              <h2 className="text-lg font-extrabold text-[#3D1E30] font-heading">Edit Konten</h2>
+              <h2 className="text-lg font-extrabold text-[#1E293B] font-heading">Edit Konten</h2>
               <p className="text-xs text-slate-500">Sesuaikan promosi Anda.</p>
             </div>
             <button 
@@ -724,7 +730,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
             {/* Image Fields */}
             {imageFields.length > 0 && (
               <div className="space-y-4">
-                <div className="flex items-center gap-2 text-[#8C4A6E] font-bold text-sm">
+                <div className="flex items-center gap-2 text-[#1E293B] font-bold text-sm">
                   <ImageIcon className="w-4 h-4" /> <h3>Gambar Produk</h3>
                 </div>
                 {imageFields.map(field => {
@@ -733,7 +739,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                   return (
                     <div 
                       key={field.id} 
-                      className={`p-4 rounded-xl border-2 transition-all ${isActive ? "border-[#C27BA0] bg-[#FFF0F7]" : "border-[#F7D6E6] bg-white hover:border-[#C27BA0]/50"}`}
+                      className={`p-4 rounded-xl border-2 transition-all ${isActive ? "border-[#FF9100] bg-[#F3F4F6]" : "border-[#FFE6D5] bg-white hover:border-[#FF9100]/50"}`}
                       onClick={() => setActiveFieldId(field.id)}
                     >
                       <div className="flex justify-between items-center mb-2">
@@ -744,10 +750,10 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                         type="file" 
                         accept="image/*"
                         onChange={(e) => handleImageUpload(field.id, e)}
-                        className="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#F7D6E6]/40 file:text-[#8C4A6E] hover:file:bg-[#F7D6E6]"
+                        className="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#F1F5F9]/40 file:text-[#1E293B] hover:file:bg-[#F1F5F9]"
                       />
                       {val.imageUrl && isActive && (
-                        <div className="mt-4 p-3 bg-white rounded-lg border border-[#F7D6E6] space-y-3">
+                        <div className="mt-4 p-3 bg-white rounded-lg border border-[#FFE6D5] space-y-3">
                           <div>
                             <label className="text-[10px] font-bold text-slate-500 flex justify-between">
                               <span>Perbesar (Zoom)</span>
@@ -757,7 +763,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                               type="range" min="0.1" max="5" step="0.05" 
                               value={val.imageScale}
                               onChange={(e) => handlePanZoom(field.id, parseFloat(e.target.value), val.imageTranslateX, val.imageTranslateY)}
-                              className="w-full accent-[#C27BA0]"
+                              className="w-full accent-[#FF9100]"
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-2">
@@ -767,7 +773,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                                 type="range" min="-1500" max="1500" step="5" 
                                 value={val.imageTranslateX}
                                 onChange={(e) => handlePanZoom(field.id, val.imageScale, parseFloat(e.target.value), val.imageTranslateY)}
-                                className="w-full accent-[#C27BA0]"
+                                className="w-full accent-[#FF9100]"
                               />
                             </div>
                             <div>
@@ -776,13 +782,13 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                                 type="range" min="-1500" max="1500" step="5" 
                                 value={val.imageTranslateY}
                                 onChange={(e) => handlePanZoom(field.id, val.imageScale, val.imageTranslateX, parseFloat(e.target.value))}
-                                className="w-full accent-[#C27BA0]"
+                                className="w-full accent-[#FF9100]"
                               />
                             </div>
                           </div>
                           
                           {/* One-Tap Enhance Filters */}
-                          <div className="pt-2 border-t border-[#F7D6E6]">
+                          <div className="pt-2 border-t border-[#FFE6D5]">
                             <label className="text-[10px] font-bold text-slate-500 mb-2 block">One-Tap Enhance (Filter)</label>
                             <div className="flex gap-2 overflow-x-auto pb-1 custom-scrollbar">
                               {[
@@ -798,8 +804,8 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                                   onClick={(e) => { e.stopPropagation(); handleFilterChange(field.id, f.css); }}
                                   className={`shrink-0 px-3 py-1.5 rounded-lg text-[9px] font-bold border transition-colors ${
                                     (val.imageFilter || "none") === f.css 
-                                      ? "bg-[#C27BA0] text-white border-[#C27BA0]" 
-                                      : "bg-slate-50 text-slate-600 border-slate-200 hover:border-[#C27BA0]"
+                                      ? "bg-[#FF9100] text-white border-[#FF9100]" 
+                                      : "bg-slate-50 text-slate-600 border-slate-200 hover:border-[#FF9100]"
                                   }`}
                                 >
                                   {f.label}
@@ -818,7 +824,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
             {/* Text Fields */}
             {textFields.length > 0 && (
               <div className="space-y-4">
-                <div className="flex items-center gap-2 text-[#8C4A6E] font-bold text-sm">
+                <div className="flex items-center gap-2 text-[#1E293B] font-bold text-sm">
                   <Type className="w-4 h-4" /> <h3>Teks Promosi</h3>
                 </div>
                 {textFields.map(field => {
@@ -827,13 +833,13 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                   return (
                     <div 
                       key={field.id} 
-                      className={`p-4 rounded-xl border-2 transition-all ${isActive ? "border-[#C27BA0] bg-[#FFF0F7]" : "border-[#F7D6E6] bg-white hover:border-[#C27BA0]/50"}`}
+                      className={`p-4 rounded-xl border-2 transition-all ${isActive ? "border-[#FF9100] bg-[#F3F4F6]" : "border-[#FFE6D5] bg-white hover:border-[#FF9100]/50"}`}
                       onClick={() => setActiveFieldId(field.id)}
                     >
                       <div className="flex justify-between items-center mb-2">
                         <label className="text-xs font-bold text-slate-700">{field.placeholder_label || "Teks"}</label>
                         {field.max_chars && (
-                          <span className={`text-[10px] font-bold ${val.text?.length === field.max_chars ? "text-rose-500" : "text-slate-400"}`}>
+                          <span className={`text-[10px] font-bold ${val.text?.length === field.max_chars ? "text-red-500" : "text-slate-400"}`}>
                             {val.text?.length || 0} / {field.max_chars}
                           </span>
                         )}
@@ -842,17 +848,17 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                         value={val.text || ""}
                         onChange={(e) => handleTextChange(field.id, e.target.value, field.max_chars)}
                         placeholder={`Masukkan ${field.placeholder_label}...`}
-                        className="w-full bg-white border border-[#F7D6E6] rounded-lg p-2.5 text-sm text-slate-700 focus:outline-none focus:border-[#C27BA0] resize-none"
+                        className="w-full bg-white border border-[#FFE6D5] rounded-lg p-2.5 text-sm text-slate-700 focus:outline-none focus:border-[#FF9100] resize-none"
                         rows={2}
                       />
                       {isActive && (
-                        <div className="mt-4 pt-3 border-t border-[#F7D6E6] grid grid-cols-2 gap-3 bg-white/50 p-2.5 rounded-lg">
+                        <div className="mt-4 pt-3 border-t border-[#FFE6D5] grid grid-cols-2 gap-3 bg-white/50 p-2.5 rounded-lg">
                           <div className="space-y-1.5 col-span-2">
-                            <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider">Font Family</label>
+                            <label className="text-[10px] font-bold text-[#1E293B] uppercase tracking-wider">Font Family</label>
                             <select
                               value={val.fontFamilyOverride || field.font_family || "Poppins"}
                               onChange={(e) => handleFieldOverrideChange(field.id, "fontFamilyOverride", e.target.value)}
-                              className="w-full px-3 py-1.5 text-xs border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white cursor-pointer"
+                              className="w-full px-3 py-1.5 text-xs border border-[#FFE6D5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF9100] bg-white cursor-pointer"
                             >
                               <option value="Poppins">Poppins</option>
                               <option value="Inter">Inter</option>
@@ -862,20 +868,20 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                             </select>
                           </div>
                           <div className="space-y-1.5">
-                            <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider">Ukuran (px)</label>
+                            <label className="text-[10px] font-bold text-[#1E293B] uppercase tracking-wider">Ukuran (px)</label>
                             <input
                               type="number"
                               value={val.fontSizeOverride || field.font_size || 32}
                               onChange={(e) => handleFontSizeChange(field.id, parseInt(e.target.value) || 12)}
-                              className="w-full px-3 py-1.5 text-xs border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white"
+                              className="w-full px-3 py-1.5 text-xs border border-[#FFE6D5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF9100] bg-white"
                             />
                           </div>
                           <div className="space-y-1.5">
-                            <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider">Ketebalan</label>
+                            <label className="text-[10px] font-bold text-[#1E293B] uppercase tracking-wider">Ketebalan</label>
                             <select
                               value={val.fontWeightOverride || field.font_weight || "normal"}
                               onChange={(e) => handleFieldOverrideChange(field.id, "fontWeightOverride", e.target.value)}
-                              className="w-full px-3 py-1.5 text-xs border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white cursor-pointer"
+                              className="w-full px-3 py-1.5 text-xs border border-[#FFE6D5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF9100] bg-white cursor-pointer"
                             >
                               <option value="normal">Normal</option>
                               <option value="500">Medium</option>
@@ -885,28 +891,28 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                             </select>
                           </div>
                           <div className="space-y-1.5">
-                            <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider">Warna (Hex)</label>
+                            <label className="text-[10px] font-bold text-[#1E293B] uppercase tracking-wider">Warna (Hex)</label>
                             <div className="flex gap-2">
                               <input
                                 type="color"
                                 value={val.colorOverride || field.color || "#000000"}
                                 onChange={(e) => handleFieldOverrideChange(field.id, "colorOverride", e.target.value)}
-                                className="w-8 h-8 border border-[#F7D6E6] rounded cursor-pointer shrink-0"
+                                className="w-8 h-8 border border-[#FFE6D5] rounded cursor-pointer shrink-0"
                               />
                               <input
                                 type="text"
                                 value={val.colorOverride || field.color || "#000000"}
                                 onChange={(e) => handleFieldOverrideChange(field.id, "colorOverride", e.target.value)}
-                                className="w-full px-2 py-1.5 text-xs border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white uppercase"
+                                className="w-full px-2 py-1.5 text-xs border border-[#FFE6D5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF9100] bg-white uppercase"
                               />
                             </div>
                           </div>
                           <div className="space-y-1.5">
-                            <label className="text-[10px] font-bold text-[#8C4A6E] uppercase tracking-wider">Align</label>
+                            <label className="text-[10px] font-bold text-[#1E293B] uppercase tracking-wider">Align</label>
                             <select
                               value={val.textAlignOverride || field.text_align || "left"}
                               onChange={(e) => handleFieldOverrideChange(field.id, "textAlignOverride", e.target.value)}
-                              className="w-full px-3 py-1.5 text-xs border border-[#F7D6E6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C27BA0] bg-white cursor-pointer"
+                              className="w-full px-3 py-1.5 text-xs border border-[#FFE6D5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF9100] bg-white cursor-pointer"
                             >
                               <option value="left">Kiri</option>
                               <option value="center">Tengah</option>
@@ -918,7 +924,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                       <button 
                         onClick={() => handleMagicText(field.id)}
                         disabled={isGeneratingText === field.id}
-                        className="mt-3 w-full py-2 bg-gradient-to-r from-purple-500 to-indigo-500 text-white text-[10px] font-bold rounded-lg flex items-center justify-center gap-1.5 hover:shadow-md disabled:opacity-50 transition-all"
+                        className="mt-3 w-full py-2 bg-gradient-to-r from-[#FF9100] to-[#E07A00] text-white text-[10px] font-bold rounded-lg flex items-center justify-center gap-1.5 hover:shadow-md disabled:opacity-50 transition-all"
                       >
                         {isGeneratingText === field.id ? (
                           <>
@@ -943,12 +949,12 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
         {/* ── CANVAS AREA ── */}
         <main className="flex-1 bg-[#F5F5F5] relative overflow-auto custom-scrollbar">
           
-          <div className="fixed bottom-6 right-6 bg-white rounded-xl shadow-md border border-[#F7D6E6] flex items-center p-1 z-50">
-            <button onClick={() => setZoom(Math.max(20, zoom - 10))} className="p-2 text-slate-500 hover:text-[#8C4A6E] hover:bg-[#FFF0F7] rounded-lg">
+          <div className="fixed bottom-6 right-6 bg-white rounded-xl shadow-md border border-[#FFE6D5] flex items-center p-1 z-50">
+            <button onClick={() => setZoom(Math.max(20, zoom - 10))} className="p-2 text-slate-500 hover:text-[#1E293B] hover:bg-[#F3F4F6] rounded-lg">
               <ZoomOut className="w-4 h-4" />
             </button>
             <span className="text-xs font-bold text-slate-700 px-2 w-16 text-center">{zoom}%</span>
-            <button onClick={() => setZoom(Math.min(200, zoom + 10))} className="p-2 text-slate-500 hover:text-[#8C4A6E] hover:bg-[#FFF0F7] rounded-lg">
+            <button onClick={() => setZoom(Math.min(200, zoom + 10))} className="p-2 text-slate-500 hover:text-[#1E293B] hover:bg-[#F3F4F6] rounded-lg">
               <ZoomIn className="w-4 h-4" />
             </button>
           </div>
@@ -997,7 +1003,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                     width: `${field.width}px`,
                     height: `${field.height}px`,
                     zIndex: fieldZIndex,
-                    outline: isSelected ? "2px dashed #C27BA0" : "none",
+                    outline: isSelected ? "2px dashed #111827" : "none",
                   };
 
                   // Custom polygon shape clipping (only for image fields)
@@ -1137,14 +1143,14 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
 
             {/* Right Side: Export Options */}
             <div className="w-full md:w-1/2 flex flex-col bg-white">
-              <div className="px-8 py-8 border-b border-[#F7D6E6] flex items-start justify-between bg-gradient-to-br from-[#FFF0F7]/50 to-white">
+              <div className="px-8 py-8 border-b border-[#FFE6D5] flex items-start justify-between bg-gradient-to-br from-[#F3F4F6]/50 to-white">
                 <div>
-                  <h3 className="text-2xl font-black text-[#3D1E30] mb-1">Format Ekspor</h3>
-                  <p className="text-sm font-semibold text-[#8C4A6E]">Pilih format yang paling sesuai untuk kebutuhan promosi Anda.</p>
+                  <h3 className="text-2xl font-black text-[#1E293B] mb-1">Opsi Ekspor & Bagikan</h3>
+                  <p className="text-sm font-semibold text-[#1E293B]">Simpan desain Anda atau langsung bagikan ke pelanggan.</p>
                 </div>
                 <button 
                   onClick={() => setShowExportMenu(false)}
-                  className="p-2 -mr-2 text-slate-400 hover:text-[#8C4A6E] hover:bg-[#FFF0F7] rounded-full transition-colors"
+                  className="p-2 -mr-2 text-slate-400 hover:text-[#1E293B] hover:bg-[#F3F4F6] rounded-full transition-colors"
                 >
                   <X className="w-6 h-6" />
                 </button>
@@ -1154,42 +1160,28 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                 {/* PNG */}
                 <button 
                   onClick={() => exportImage("PNG")}
-                  className="group flex items-center text-left p-4 border-2 border-[#F7D6E6] rounded-2xl hover:border-[#C27BA0] hover:bg-[#FFF9FC] hover:shadow-md transition-all"
+                  className="group flex items-center text-left p-4 border-2 border-[#FFE6D5] rounded-2xl hover:border-[#FF9100] hover:bg-[#FFFFFF] hover:shadow-md transition-all"
                 >
-                  <div className="w-12 h-12 shrink-0 bg-[#FFF0F7] rounded-xl flex items-center justify-center text-[#C27BA0] mr-4 group-hover:scale-110 transition-transform">
-                    <ImageIcon className="w-6 h-6" />
+                  <div className="w-12 h-12 shrink-0 bg-[#F3F4F6] rounded-xl flex items-center justify-center text-[#1E293B] mr-4 group-hover:scale-110 transition-transform">
+                    <Download className="w-6 h-6" />
                   </div>
                   <div>
-                    <h4 className="text-base font-black text-[#3D1E30] mb-0.5">PNG Kualitas Tinggi</h4>
-                    <p className="text-xs text-slate-500 font-medium">Resolusi maksimal. Cocok untuk banner web atau poster.</p>
+                    <h4 className="text-base font-black text-[#1E293B] mb-0.5">Download Otomatis (PNG)</h4>
+                    <p className="text-xs text-slate-500 font-medium">Simpan desain dengan resolusi tinggi (Otomatis Format PNG).</p>
                   </div>
                 </button>
 
-                {/* JPG */}
+                {/* Share */}
                 <button 
-                  onClick={() => exportImage("JPG")}
-                  className="group flex items-center text-left p-4 border-2 border-[#F7D6E6] rounded-2xl hover:border-[#C27BA0] hover:bg-[#FFF9FC] hover:shadow-md transition-all"
+                  onClick={() => exportImage("PNG", "share")}
+                  className="group flex items-center text-left p-4 border-2 border-[#FFE6D5] rounded-2xl hover:border-[#FF9100] hover:bg-[#FFFFFF] hover:shadow-md transition-all"
                 >
-                  <div className="w-12 h-12 shrink-0 bg-[#FFF0F7] rounded-xl flex items-center justify-center text-[#C27BA0] mr-4 group-hover:scale-110 transition-transform">
-                    <ImageIcon className="w-6 h-6" />
+                  <div className="w-12 h-12 shrink-0 bg-[#F3F4F6] rounded-xl flex items-center justify-center text-[#1E293B] mr-4 group-hover:scale-110 transition-transform">
+                    <Share2 className="w-6 h-6" />
                   </div>
                   <div>
-                    <h4 className="text-base font-black text-[#3D1E30] mb-0.5">JPG Standar</h4>
-                    <p className="text-xs text-slate-500 font-medium">Ukuran file ringkas. Paling pas untuk Feed atau Story Instagram.</p>
-                  </div>
-                </button>
-
-                {/* PDF */}
-                <button 
-                  onClick={() => exportImage("PDF")}
-                  className="group flex items-center text-left p-4 border-2 border-[#F7D6E6] rounded-2xl hover:border-[#C27BA0] hover:bg-[#FFF9FC] hover:shadow-md transition-all"
-                >
-                  <div className="w-12 h-12 shrink-0 bg-[#FFF0F7] rounded-xl flex items-center justify-center text-[#C27BA0] mr-4 group-hover:scale-110 transition-transform">
-                    <Layers className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h4 className="text-base font-black text-[#3D1E30] mb-0.5">Dokumen PDF</h4>
-                    <p className="text-xs text-slate-500 font-medium">Format cetak. Gunakan jika desain ingin dicetak ke brosur.</p>
+                    <h4 className="text-base font-black text-[#1E293B] mb-0.5">Bagikan ke Media Sosial</h4>
+                    <p className="text-xs text-slate-500 font-medium">Langsung bagikan ke Instagram, WhatsApp, dll.</p>
                   </div>
                 </button>
               </div>

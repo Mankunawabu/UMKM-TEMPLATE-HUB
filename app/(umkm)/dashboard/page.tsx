@@ -68,20 +68,20 @@ export default async function DashboardPage() {
 
   // Category gradient colors (cycling)
   const catColors = [
-    "bg-[#FFF9FC] text-[#8C4A6E] border-[#F7D6E6]",
-    "bg-[#F7D6E6]/40 text-[#8C4A6E] border-[#F7D6E6]",
-    "bg-[#C27BA0]/10 text-[#8C4A6E] border-[#C27BA0]/30",
-    "bg-purple-50 text-purple-700 border-purple-100",
-    "bg-rose-50 text-rose-700 border-rose-100",
+    "bg-[#FFF9F5] text-[#E07A00] border-[#FFE6D5]",
+    "bg-[#FFE6D5]/40 text-[#E07A00] border-[#FFE6D5]",
+    "bg-[#E07A00]/10 text-[#E07A00] border-[#E07A00]/30",
+    "bg-[#FFF5EE] text-[#E07A00] border-[#FFE6D5]",
+    "bg-[#FFF9F5] text-[#FF9100] border-[#FFE6D5]",
   ];
 
   // Template card gradients (cycling)
   const tplGradients = [
-    "from-[#F7D6E6] via-[#C27BA0]/45 to-[#FFF9FC]",
-    "from-[#C27BA0]/20 to-[#8C4A6E]/40",
-    "from-[#FFF9FC] to-[#F7D6E6]",
-    "from-purple-100 to-pink-100",
-    "from-rose-100 to-orange-50",
+    "from-[#FFE6D5] via-[#E07A00]/45 to-[#FFF9F5]",
+    "from-[#E07A00]/20 to-[#E07A00]/40",
+    "from-[#FFF9F5] to-[#FFE6D5]",
+    "from-[#FFE6D5] to-[#FFF9F5]",
+    "from-[#FFF5EE] to-[#FFF9F5]",
   ];
 
   function formatRelativeTime(dateStr: string) {
@@ -97,18 +97,18 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-8 font-sans">
       {/* Welcome Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-[#F7D6E6] shadow-sm">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-[#FFE6D5] shadow-sm">
         <div>
-          <h1 className="text-3xl font-extrabold text-[#8C4A6E] font-heading">
+          <h1 className="text-3xl font-extrabold text-[#E07A00] font-heading">
             Halo, {profile?.nama_usaha || "Sobat UMKM"} 👋
           </h1>
-          <p className="text-sm text-[#C27BA0] font-medium mt-1">
+          <p className="text-sm text-[#E07A00] font-medium mt-1">
             Siap untuk membuat desain promosi yang estetik hari ini?
           </p>
         </div>
         <Link
           href="/dashboard/template"
-          className="inline-flex items-center gap-2 px-5 py-3.5 bg-[#C27BA0] hover:bg-[#8C4A6E] text-white font-bold rounded-xl text-sm transition-all shadow-md hover:shadow-lg active:scale-95 shrink-0"
+          className="inline-flex items-center gap-2 px-5 py-3.5 bg-[#E07A00] hover:bg-[#FF9100] text-white font-bold rounded-xl text-sm transition-all shadow-md hover:shadow-lg active:scale-95 shrink-0"
         >
           <Plus className="w-5 h-5" />
           <span>Buat Desain Baru</span>
@@ -118,19 +118,19 @@ export default async function DashboardPage() {
       {/* Stats Row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: "Template Tersedia", value: totalTemplates ?? 0, icon: Palette, color: "text-[#C27BA0]", bg: "bg-[#FFF0F7]" },
-          { label: "Kategori", value: categories?.length ?? 0, icon: LayoutGrid, color: "text-purple-500", bg: "bg-purple-50" },
+          { label: "Template Tersedia", value: totalTemplates ?? 0, icon: Palette, color: "text-[#E07A00]", bg: "bg-[#FFF5EE]" },
+          { label: "Kategori", value: categories?.length ?? 0, icon: LayoutGrid, color: "text-[#FF9100]", bg: "bg-[#FFF9F5]" },
           { label: "Total Ekspor", value: recentExports?.length ?? 0, icon: Clock, color: "text-emerald-500", bg: "bg-emerald-50" },
           { label: "Hari Ini", value: recentExports?.filter(e => new Date(e.created_at).toDateString() === new Date().toDateString()).length ?? 0, icon: Sparkles, color: "text-amber-500", bg: "bg-amber-50" },
         ].map((stat, i) => {
           const Icon = stat.icon;
           return (
-            <div key={i} className="bg-white border border-[#F7D6E6] rounded-2xl p-4 flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
+            <div key={i} className="bg-white border border-[#FFE6D5] rounded-2xl p-4 flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
               <div className={`w-11 h-11 rounded-xl ${stat.bg} flex items-center justify-center shrink-0`}>
                 <Icon className={`w-5 h-5 ${stat.color}`} />
               </div>
               <div>
-                <p className="text-2xl font-extrabold text-[#3D1E30]">{stat.value}</p>
+                <p className="text-2xl font-extrabold text-[#1E293B]">{stat.value}</p>
                 <p className="text-[10px] text-slate-500 font-medium">{stat.label}</p>
               </div>
             </div>
@@ -141,10 +141,10 @@ export default async function DashboardPage() {
       {/* Categories */}
       <div className="space-y-3">
         <div className="flex justify-between items-center">
-          <h2 className="text-lg font-bold text-[#8C4A6E] font-heading">Kategori Template</h2>
+          <h2 className="text-lg font-bold text-[#E07A00] font-heading">Kategori Template</h2>
           <Link
             href="/dashboard/template"
-            className="text-xs font-bold text-[#C27BA0] hover:text-[#8C4A6E] hover:underline"
+            className="text-xs font-bold text-[#E07A00] hover:text-[#E07A00] hover:underline"
           >
             Lihat Semua
           </Link>
@@ -163,7 +163,7 @@ export default async function DashboardPage() {
             ))}
           </div>
         ) : (
-          <div className="p-6 bg-white border border-dashed border-[#F7D6E6] rounded-2xl text-center text-slate-400 text-sm">
+          <div className="p-6 bg-white border border-dashed border-[#FFE6D5] rounded-2xl text-center text-slate-400 text-sm">
             Belum ada kategori. Admin sedang menyiapkan kategori untuk Anda!
           </div>
         )}
@@ -174,10 +174,10 @@ export default async function DashboardPage() {
         {/* Popular Templates */}
         <div className="lg:col-span-2 space-y-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-lg font-bold text-[#8C4A6E] font-heading">Template Terbaru</h2>
+            <h2 className="text-lg font-bold text-[#E07A00] font-heading">Template Terbaru</h2>
             <Link
               href="/dashboard/template"
-              className="text-xs font-bold text-[#C27BA0] hover:text-[#8C4A6E] hover:underline"
+              className="text-xs font-bold text-[#E07A00] hover:text-[#E07A00] hover:underline"
             >
               Lihat Semua
             </Link>
@@ -190,8 +190,8 @@ export default async function DashboardPage() {
               ))}
             </div>
           ) : (
-            <div className="p-10 bg-white border border-dashed border-[#F7D6E6] rounded-2xl text-center space-y-3">
-              <Palette className="w-10 h-10 text-[#F7D6E6] mx-auto" />
+            <div className="p-10 bg-white border border-dashed border-[#FFE6D5] rounded-2xl text-center space-y-3">
+              <Palette className="w-10 h-10 text-[#FFE6D5] mx-auto" />
               <p className="text-slate-500 text-sm font-medium">Belum ada template yang dipublikasikan.</p>
               <p className="text-xs text-slate-400">Admin sedang menyiapkan template terbaik untuk Anda!</p>
             </div>
@@ -199,12 +199,12 @@ export default async function DashboardPage() {
         </div>
 
         {/* Recent Export History */}
-        <div className="p-6 bg-white border border-[#F7D6E6] rounded-2xl shadow-xs space-y-6">
+        <div className="p-6 bg-white border border-[#FFE6D5] rounded-2xl shadow-xs space-y-6">
           <div className="flex items-center justify-between pb-2">
-            <h3 className="text-base font-bold text-[#3D1E30]">Riwayat Ekspor Terbaru</h3>
+            <h3 className="text-base font-bold text-[#1E293B]">Riwayat Ekspor Terbaru</h3>
             <Link
               href="/dashboard/riwayat-desain"
-              className="text-xs font-bold text-[#C27BA0] hover:text-[#8C4A6E] hover:underline"
+              className="text-xs font-bold text-[#E07A00] hover:text-[#E07A00] hover:underline"
             >
               Lihat Semua
             </Link>
@@ -214,10 +214,10 @@ export default async function DashboardPage() {
               recentExports.map((log: any) => (
                 <div
                   key={log.id}
-                  className="flex items-center justify-between p-3 border border-[#F7D6E6] rounded-xl hover:bg-[#FFF0F7]/10 transition-colors"
+                  className="flex items-center justify-between p-3 border border-[#FFE6D5] rounded-xl hover:bg-[#FFF5EE]/10 transition-colors"
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0 pr-2">
-                    <div className="w-10 h-10 rounded-lg bg-[#FFF0F7] border border-[#F7D6E6] flex items-center justify-center text-[#8C4A6E] shrink-0 overflow-hidden">
+                    <div className="w-10 h-10 rounded-lg bg-[#FFF5EE] border border-[#FFE6D5] flex items-center justify-center text-[#E07A00] shrink-0 overflow-hidden">
                       {log.exported_image_url || (log.templates as any)?.thumbnail_url ? (
                         <img src={log.exported_image_url || (log.templates as any)?.thumbnail_url} className="w-full h-full object-cover" alt="Export" />
                       ) : (
@@ -242,8 +242,8 @@ export default async function DashboardPage() {
                   <div className="flex flex-col items-end gap-1 font-sans">
                     {(() => {
                        const fileType = log.exported_image_url ? (log.exported_image_url.split('.').pop()?.split('?')[0].toUpperCase() || 'JPG') : 'JPG';
-                       const formatColors: any = { PNG: "#C27BA0", JPG: "#8C4A6E", PDF: "#8C4A6E" };
-                       const color = formatColors[fileType] || "#8C4A6E";
+                       const formatColors: any = { PNG: "#E07A00", JPG: "#E07A00", PDF: "#E07A00" };
+                       const color = formatColors[fileType] || "#E07A00";
                        return (
                          <span
                            style={{ backgroundColor: color + "1A", color: color }}
@@ -258,7 +258,7 @@ export default async function DashboardPage() {
               ))
             ) : (
               <div className="text-center py-6 space-y-2">
-                <Clock className="w-8 h-8 text-[#F7D6E6] mx-auto" />
+                <Clock className="w-8 h-8 text-[#FFE6D5] mx-auto" />
                 <p className="text-xs text-slate-400 font-medium">Belum ada riwayat ekspor.</p>
                 <p className="text-[10px] text-slate-300">Mulai unduh desain pertama Anda!</p>
               </div>

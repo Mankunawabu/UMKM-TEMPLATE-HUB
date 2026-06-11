@@ -52,7 +52,7 @@ export default async function EditTemplatePage({ params }: EditTemplatePageProps
     <div className="max-w-5xl mx-auto space-y-6 font-sans">
       <Link
         href="/admin/templates"
-        className="inline-flex items-center gap-1.5 text-xs font-bold text-[#8C4A6E] hover:text-[#C27BA0] transition-colors uppercase tracking-wider"
+        className="inline-flex items-center gap-1.5 text-xs font-bold text-[#E07A00] hover:text-[#FF9100] transition-colors uppercase tracking-wider"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
         Kembali ke Daftar Template

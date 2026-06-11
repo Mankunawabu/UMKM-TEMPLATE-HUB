@@ -1,4 +1,5 @@
 "use client";
+import { translateError } from "@/lib/error-translator";
 import { createClient } from "@/lib/supabase/client";
 
 export async function logExportAction(
@@ -23,7 +24,7 @@ export async function logExportAction(
     
   if (error) {
     console.error("Failed to log export:", error);
-    return { success: false, error: error.message };
+    return { success: false, error: translateError(error.message) };
   }
   return { success: true, id: data.id };
 }

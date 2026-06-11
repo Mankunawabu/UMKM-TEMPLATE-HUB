@@ -1,4 +1,5 @@
 "use server";
+import { translateError } from "@/lib/error-translator";
 
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
@@ -26,7 +27,7 @@ export async function toggleUserStatus(id: string, currentStatus: boolean) {
 
     if (error) {
       console.error("Error toggling user status:", error.message);
-      return { success: false, error: error.message };
+      return { success: false, error: translateError(error.message) };
     }
 
     await logActivity(
@@ -91,7 +92,7 @@ export async function updateUser(id: string, prevState: any, formData: FormData)
 
     if (error) {
       console.error("Error updating user profile:", error.message);
-      return { success: false, error: error.message };
+      return { success: false, error: translateError(error.message) };
     }
 
     await logActivity(
@@ -142,7 +143,7 @@ export async function deleteUserAction(id: string, name: string) {
 
     if (error) {
       console.error("Error deleting user:", error.message);
-      return { success: false, error: error.message };
+      return { success: false, error: translateError(error.message) };
     }
 
     await logActivity(

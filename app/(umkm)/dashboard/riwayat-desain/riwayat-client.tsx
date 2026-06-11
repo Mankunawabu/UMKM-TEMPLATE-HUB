@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { Search, History, Download, ImageIcon, ArrowRight, LayoutDashboard, Palette, Eye, X, Trash2, Loader2, CheckSquare, Square } from "lucide-react";
+import toast from "react-hot-toast";
 import { deleteExportLog, deleteMultipleExportLogs } from "./actions";
 
 interface Log {
@@ -26,8 +27,8 @@ interface RiwayatClientProps {
 }
 
 const catColors = [
-  "from-pink-100 to-rose-100",
-  "from-purple-100 to-fuchsia-100",
+  "from-orange-100 to-[#FFF9F5]",
+  "from-[#FFE6D5] to-[#FFF9F5]",
   "from-sky-100 to-indigo-100",
   "from-amber-100 to-orange-100",
   "from-emerald-100 to-teal-100"
@@ -63,7 +64,7 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
     setIsDeletingBulk(true);
     const res = await deleteMultipleExportLogs(selectedIds);
     if (!res.success) {
-      alert("Gagal menghapus: " + res.error);
+      toast.error("Gagal menghapus: " + res.error);
     } else {
       setSelectedIds([]);
     }
@@ -77,7 +78,7 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
     setIsDeleting(logId);
     const res = await deleteExportLog(logId);
     if (!res.success) {
-      alert("Gagal menghapus: " + res.error);
+      toast.error("Gagal menghapus: " + res.error);
     }
     setIsDeleting(null);
   };
@@ -127,13 +128,13 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         {/* Search Bar */}
         <div className="relative w-full lg:max-w-md">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#C27BA0]" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1E293B]" />
           <input
             type="text"
             placeholder="Cari desain yang diekspor..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-10 py-2.5 bg-white border border-[#F7D6E6] rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C27BA0] focus:border-transparent transition-all shadow-sm"
+            className="w-full pl-12 pr-10 py-2.5 bg-white border border-[#FFE6D5] rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#FF9100] focus:border-transparent transition-all shadow-sm"
           />
           {searchTerm && (
             <button onClick={() => setSearchTerm("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
@@ -155,8 +156,8 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
               onClick={() => setActiveTime(filter.id)}
               className={`px-4 py-2 rounded-full text-xs font-bold border transition-all ${
                 activeTime === filter.id
-                  ? "bg-[#C27BA0] text-white border-[#C27BA0] shadow-md shadow-[#C27BA0]/30"
-                  : "bg-white text-[#8C4A6E] border-[#F7D6E6] hover:border-[#C27BA0] hover:bg-[#FFF0F7]"
+                  ? "bg-[#FF9100] text-white border-[#FF9100] shadow-md shadow-[#FF9100]/30"
+                  : "bg-white text-[#1E293B] border-[#FFE6D5] hover:border-[#FF9100] hover:bg-[#F3F4F6]"
               }`}
             >
               {filter.label}
@@ -176,8 +177,8 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
             }}
             className={`relative flex items-center px-4 py-2 rounded-full text-xs font-bold border transition-all ${
             activeTime === "custom"
-              ? "bg-[#C27BA0] text-white border-[#C27BA0] shadow-md shadow-[#C27BA0]/30"
-              : "bg-white text-[#8C4A6E] border-[#F7D6E6] hover:border-[#C27BA0] hover:bg-[#FFF0F7]"
+              ? "bg-[#FF9100] text-white border-[#FF9100] shadow-md shadow-[#FF9100]/30"
+              : "bg-white text-[#1E293B] border-[#FFE6D5] hover:border-[#FF9100] hover:bg-[#F3F4F6]"
           }`}>
             <span>{activeTime === "custom" && startDate ? new Date(startDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : "Pilih Tanggal"}</span>
             <input
@@ -201,16 +202,16 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
 
       {/* Bulk Actions Bar */}
       {selectedIds.length > 0 && (
-        <div className="flex items-center justify-between bg-[#FFF0F7] border border-[#F7D6E6] rounded-xl p-3 animate-in fade-in slide-in-from-top-2">
+        <div className="flex items-center justify-between bg-[#F3F4F6] border border-[#FFE6D5] rounded-xl p-3 animate-in fade-in slide-in-from-top-2">
           <div className="flex items-center gap-3">
             <button
               onClick={handleSelectAll}
-              className="flex items-center gap-2 text-sm font-bold text-[#8C4A6E] hover:text-[#C27BA0] transition-colors"
+              className="flex items-center gap-2 text-sm font-bold text-[#1E293B] hover:text-[#1E293B] transition-colors"
             >
               <CheckSquare className="w-4 h-4" />
               {selectedIds.length === filteredLogs.length ? "Batal Pilih Semua" : "Pilih Semua"}
             </button>
-            <span className="text-sm text-slate-500 bg-white px-2 py-0.5 rounded-md border border-[#F7D6E6]">
+            <span className="text-sm text-slate-500 bg-white px-2 py-0.5 rounded-md border border-[#FFE6D5]">
               {selectedIds.length} dipilih
             </span>
           </div>
@@ -226,11 +227,11 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
       )}
 
       {filteredLogs.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-dashed border-[#F7D6E6] p-12 text-center shadow-sm">
-          <div className="w-16 h-16 bg-[#FFF0F7] text-[#C27BA0] rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="bg-white rounded-2xl border border-dashed border-[#FFE6D5] p-12 text-center shadow-sm">
+          <div className="w-16 h-16 bg-[#F3F4F6] text-[#1E293B] rounded-full flex items-center justify-center mx-auto mb-4">
             <ImageIcon className="w-8 h-8" />
           </div>
-          <h3 className="text-lg font-bold text-[#8C4A6E] mb-2 font-heading">
+          <h3 className="text-lg font-bold text-[#1E293B] mb-2 font-heading">
             {searchTerm ? "Desain Tidak Ditemukan" : "Belum Ada Riwayat Desain"}
           </h3>
           <p className="text-slate-500 max-w-md mx-auto mb-6">
@@ -241,7 +242,7 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
           {!searchTerm && (
             <Link
               href="/dashboard/template"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[#C27BA0] text-white rounded-xl font-bold hover:bg-[#8C4A6E] transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#FF9100] text-white rounded-xl font-bold hover:bg-[#E07A00] transition-all"
             >
               Pilih Template <ArrowRight className="w-4 h-4" />
             </Link>
@@ -255,7 +256,7 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
             const displayImage = log.exported_image_url || template?.thumbnail_url;
             
             return (
-              <div key={log.id} className="group border border-[#F7D6E6] rounded-2xl overflow-hidden bg-white hover:shadow-lg hover:shadow-[#C27BA0]/10 hover:-translate-y-1 transition-all duration-300 flex flex-col">
+              <div key={log.id} className="group border border-[#FFE6D5] rounded-2xl overflow-hidden bg-white hover:shadow-lg hover:shadow-[#111827]/10 hover:-translate-y-1 transition-all duration-300 flex flex-col">
                 {/* Template Thumbnail (Click to Preview) */}
                 <div 
                   onClick={() => setShowPreview(log)}
@@ -269,7 +270,7 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
                     />
                   ) : (
                     <>
-                      <Palette className="w-8 h-8 text-[#8C4A6E]/40 group-hover:scale-110 transition-transform" />
+                      <Palette className="w-8 h-8 text-[#1E293B]/40 group-hover:scale-110 transition-transform" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                     </>
                   )}
@@ -281,8 +282,8 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
                     }}
                     className={`absolute top-2.5 left-2.5 z-30 p-1.5 rounded-md backdrop-blur-sm transition-all duration-300 ${
                       selectedIds.includes(log.id)
-                        ? "bg-[#C27BA0] text-white opacity-100"
-                        : "bg-white/80 text-slate-400 hover:text-[#C27BA0] opacity-0 group-hover:opacity-100"
+                        ? "bg-[#FF9100] text-white opacity-100"
+                        : "bg-white/80 text-slate-400 hover:text-[#1E293B] opacity-0 group-hover:opacity-100"
                     }`}
                   >
                     {selectedIds.includes(log.id) ? (
@@ -293,7 +294,7 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
                   </div>
 
                   {template?.categories?.name && (
-                    <span className={`absolute bottom-2.5 left-2.5 text-[9px] font-bold bg-white/85 backdrop-blur-sm px-2 py-0.5 rounded-full text-[#8C4A6E] shadow-sm z-10 transition-opacity ${selectedIds.includes(log.id) ? "opacity-0 group-hover:opacity-100" : ""}`}>
+                    <span className={`absolute bottom-2.5 left-2.5 text-[9px] font-bold bg-white/85 backdrop-blur-sm px-2 py-0.5 rounded-full text-[#1E293B] shadow-sm z-10 transition-opacity ${selectedIds.includes(log.id) ? "opacity-0 group-hover:opacity-100" : ""}`}>
                       {template.categories.name}
                     </span>
                   )}
@@ -322,8 +323,8 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
                 </div>
 
                 {/* Info Block */}
-                <div className="p-3.5 border-t border-[#F7D6E6] flex-1 flex flex-col bg-white">
-                  <h4 className="text-xs font-bold text-[#8C4A6E] truncate">{template?.nama_template || "Dihapus"}</h4>
+                <div className="p-3.5 border-t border-[#FFE6D5] flex-1 flex flex-col bg-white">
+                  <h4 className="text-xs font-bold text-[#1E293B] truncate">{template?.nama_template || "Dihapus"}</h4>
                   <div className="flex items-center gap-1 mt-1.5 mb-2 text-[9px] font-medium text-slate-500 bg-slate-50 border border-slate-100 rounded-md px-1.5 py-1 w-fit">
                     <Download className="w-3 h-3 shrink-0" />
                     <span className="truncate">{new Intl.DateTimeFormat('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(log.created_at))}</span>
@@ -332,7 +333,7 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
                     {template ? (
                       <Link 
                         href={`/dashboard/template/${template.id}?exportId=${log.id}`}
-                        className="w-full inline-block text-center py-1.5 bg-[#FFF0F7] text-[#C27BA0] hover:bg-[#C27BA0] hover:text-white transition-colors text-[10px] font-bold rounded-lg border border-[#F7D6E6]"
+                        className="w-full inline-block text-center py-1.5 bg-[#F3F4F6] text-[#1E293B] hover:bg-[#FF9100] hover:text-white transition-colors text-[10px] font-bold rounded-lg border border-[#FFE6D5]"
                       >
                         Gunakan Lagi
                       </Link>
@@ -357,13 +358,13 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
           <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-3xl flex flex-col md:flex-row overflow-hidden animate-in fade-in zoom-in-95 duration-200">
             <button 
               onClick={() => setShowPreview(null)}
-              className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center bg-white/80 backdrop-blur-sm hover:bg-[#FFF0F7] text-slate-500 hover:text-[#C27BA0] rounded-full transition-colors"
+              className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center bg-white/80 backdrop-blur-sm hover:bg-[#F3F4F6] text-slate-500 hover:text-[#1E293B] rounded-full transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
 
             {/* Modal Image */}
-            <div className={`w-full md:w-1/2 aspect-square md:aspect-auto flex items-center justify-center relative bg-slate-100 ${showPreview.exported_image_url || showPreview.templates.thumbnail_url ? "" : "bg-gradient-to-tr from-pink-100 to-rose-100"}`}>
+            <div className={`w-full md:w-1/2 aspect-square md:aspect-auto flex items-center justify-center relative bg-slate-100 ${showPreview.exported_image_url || showPreview.templates.thumbnail_url ? "" : "bg-gradient-to-tr from-[#FFE6D5] to-[#FFF9F5]"}`}>
               {showPreview.exported_image_url || showPreview.templates.thumbnail_url ? (
                 <img
                   src={showPreview.exported_image_url || showPreview.templates.thumbnail_url || ""}
@@ -371,7 +372,7 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
                   className="w-full h-full object-contain p-4"
                 />
               ) : (
-                <Palette className="w-16 h-16 text-[#8C4A6E]/30" />
+                <Palette className="w-16 h-16 text-[#1E293B]/30" />
               )}
             </div>
 
@@ -379,11 +380,11 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
             <div className="w-full md:w-1/2 p-6 md:p-8 flex flex-col bg-white">
               <div className="mb-auto">
                 {showPreview.templates.categories?.name && (
-                  <span className="inline-block mb-3 text-[10px] font-bold bg-[#FFF0F7] px-2.5 py-1 rounded-md text-[#C27BA0]">
+                  <span className="inline-block mb-3 text-[10px] font-bold bg-[#F3F4F6] px-2.5 py-1 rounded-md text-[#1E293B]">
                     {showPreview.templates.categories.name}
                   </span>
                 )}
-                <h2 className="text-2xl font-extrabold text-[#3D1E30] font-heading leading-tight mb-3">
+                <h2 className="text-2xl font-extrabold text-[#1E293B] font-heading leading-tight mb-3">
                   {showPreview.templates.nama_template}
                 </h2>
                 <p className="text-sm text-slate-500 leading-relaxed mb-6">
@@ -391,9 +392,9 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
                 </p>
 
                 <div className="space-y-3">
-                  <div className="flex justify-between items-center py-3 border-t border-[#F7D6E6]">
+                  <div className="flex justify-between items-center py-3 border-t border-[#FFE6D5]">
                     <span className="text-sm text-slate-500 font-medium">Tanggal Ekspor</span>
-                    <span className="text-sm font-bold text-[#8C4A6E]">
+                    <span className="text-sm font-bold text-[#1E293B]">
                       {new Intl.DateTimeFormat('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(showPreview.created_at))}
                     </span>
                   </div>
@@ -402,7 +403,7 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
 
               <Link
                 href={`/dashboard/template/${showPreview.templates.id}?exportId=${showPreview.id}`}
-                className="mt-8 w-full block text-center px-6 py-3.5 bg-gradient-to-r from-[#C27BA0] to-[#8C4A6E] text-white font-bold rounded-xl shadow-md hover:shadow-lg hover:shadow-[#C27BA0]/20 hover:scale-[1.02] transition-all"
+                className="mt-8 w-full block text-center px-6 py-3.5 bg-gradient-to-r from-[#FF9100] to-[#E07A00] text-white font-bold rounded-xl shadow-md hover:shadow-lg hover:shadow-[#111827]/20 hover:scale-[1.02] transition-all"
               >
                 Gunakan Template Lagi
               </Link>

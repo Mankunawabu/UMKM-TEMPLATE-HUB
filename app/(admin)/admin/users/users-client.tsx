@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Edit, ToggleLeft, ToggleRight, X, Phone, Loader2, Trash2, Plus } from "lucide-react";
+import toast from "react-hot-toast";
 import { PageHeader } from "@/components/admin/page-header";
 import { DataTable, Column } from "@/components/admin/data-table";
 import { StatusBadge } from "@/components/admin/status-badge";
@@ -88,7 +89,7 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
       if (result.success) {
         setUsers((prev) => prev.filter((u) => u.id !== id));
       } else {
-        alert("Gagal menghapus akun: " + result.error);
+        toast.error("Gagal menghapus akun: " + result.error);
       }
       setLoadingMap((prev) => ({ ...prev, [id]: false }));
     }
@@ -118,7 +119,7 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
           prev.map((u) => (u.id === id ? { ...u, is_active: !currentStatus } : u))
         );
       } else {
-        alert("Gagal mengubah status: " + result.error);
+        toast.error("Gagal mengubah status: " + result.error);
       }
       setLoadingMap((prev) => ({ ...prev, [id]: false }));
     }
@@ -180,7 +181,7 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
       header: "Logo",
       accessorKey: "logo_url",
       render: (row) => (
-        <div className="w-10 h-10 rounded-lg bg-[#FFF0F7] border border-[#F7D6E6] flex items-center justify-center p-0.5 overflow-hidden shadow-xs shrink-0">
+        <div className="w-10 h-10 rounded-lg bg-[#FFF5EE] border border-[#FFE6D5] flex items-center justify-center p-0.5 overflow-hidden shadow-xs shrink-0">
           {row.logo_url ? (
             <img
               src={row.logo_url}
@@ -188,7 +189,7 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
               className="w-full h-full object-contain rounded"
             />
           ) : (
-            <span className="text-xs font-extrabold text-[#8C4A6E]">
+            <span className="text-xs font-extrabold text-[#E07A00]">
               {row.nama_usaha ? row.nama_usaha.slice(0, 2).toUpperCase() : "UM"}
             </span>
           )}
@@ -212,14 +213,14 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
       header: "Pemilik",
       accessorKey: "nama_lengkap",
       sortable: true,
-      render: (row) => <span className="font-semibold text-[#8C4A6E]">{row.nama_lengkap || "-"}</span>,
+      render: (row) => <span className="font-semibold text-[#E07A00]">{row.nama_lengkap || "-"}</span>,
     },
     {
       header: "WhatsApp",
       accessorKey: "no_wa",
       render: (row) => (
         <div className="flex items-center gap-1.5 text-xs text-slate-600 font-medium">
-          <Phone className="h-3.5 w-3.5 text-[#C27BA0]" />
+          <Phone className="h-3.5 w-3.5 text-[#FF9100]" />
           <span>{row.no_wa || "-"}</span>
         </div>
       ),
@@ -229,13 +230,13 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
       accessorKey: "instagram",
       render: (row) => (
         <div className="flex items-center gap-1.5 text-xs text-slate-600 font-medium">
-          <InstagramIcon className="h-3.5 w-3.5 text-[#C27BA0]" />
+          <InstagramIcon className="h-3.5 w-3.5 text-[#FF9100]" />
           {row.instagram ? (
             <a
               href={`https://instagram.com/${row.instagram.replace("@", "")}`}
               target="_blank"
               rel="noreferrer"
-              className="hover:underline text-[#C27BA0] font-bold"
+              className="hover:underline text-[#FF9100] font-bold"
             >
               @{row.instagram.replace("@", "")}
             </a>
@@ -269,7 +270,7 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
       accessorKey: "export_count",
       sortable: true,
       render: (row) => (
-        <div className="flex items-center gap-1.5 justify-center w-8 h-8 rounded-full bg-[#FFF0F7] text-[#C27BA0] font-bold text-xs mx-auto">
+        <div className="flex items-center gap-1.5 justify-center w-8 h-8 rounded-full bg-[#FFF5EE] text-[#FF9100] font-bold text-xs mx-auto">
           {row.export_count || 0}
         </div>
       ),
@@ -303,8 +304,8 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
             disabled={loadingMap[row.id]}
             className={`p-1.5 rounded-lg border transition-all ${
               row.is_active
-                ? "border-[#F7D6E6] bg-white text-slate-400 hover:bg-slate-50"
-                : "border-[#C27BA0] bg-[#FFF0F7] text-[#C27BA0] hover:bg-[#F7D6E6]"
+                ? "border-[#FFE6D5] bg-white text-slate-400 hover:bg-slate-50"
+                : "border-[#FF9100] bg-[#FFF5EE] text-[#FF9100] hover:bg-[#FFE6D5]"
             }`}
             title={row.is_active ? "Suspend Akun" : "Aktifkan Akun"}
           >
@@ -316,7 +317,7 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
           </button>
           <button
             onClick={() => handleOpenEdit(row)}
-            className="p-1.5 rounded-lg border border-[#F7D6E6] bg-white text-[#8C4A6E] hover:bg-[#FFF0F7] transition-all"
+            className="p-1.5 rounded-lg border border-[#FFE6D5] bg-white text-[#E07A00] hover:bg-[#FFF5EE] transition-all"
             title="Edit Data UMKM"
           >
             <Edit className="h-4 w-4" />
@@ -345,7 +346,7 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
               setIsCreateModalOpen(true);
               setFormError(null);
             }}
-            className="flex items-center gap-2 px-4 py-2 bg-[#C27BA0] text-white font-bold rounded-xl shadow-md hover:bg-[#8C4A6E] transition-all active:scale-95"
+            className="flex items-center gap-2 px-4 py-2 bg-[#FF9100] text-white font-bold rounded-xl shadow-md hover:bg-[#E07A00] transition-all active:scale-95"
           >
             <Plus className="h-4 w-4" />
             <span>Tambah UMKM</span>
@@ -359,15 +360,15 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
         searchKey="nama_usaha"
         searchPlaceholder="Cari berdasarkan nama usaha..."
         searchAction={
-          <div className="flex items-center gap-2 border-b sm:border-b-0 border-[#F7D6E6] pb-1 sm:pb-0">
+          <div className="flex items-center gap-2 border-b sm:border-b-0 border-[#FFE6D5] pb-1 sm:pb-0">
             {(["all", "active", "suspended"] as const).map((status) => (
               <button
                 key={status}
                 onClick={() => setFilterStatus(status)}
                 className={`px-4 py-2 text-sm font-bold border-b-2 sm:border-b-0 sm:rounded-xl transition-all capitalize ${
                   filterStatus === status
-                    ? "border-[#C27BA0] sm:border-none sm:bg-[#C27BA0] text-[#C27BA0] sm:text-white shadow-xs"
-                    : "border-transparent text-[#8C4A6E]/70 hover:text-[#8C4A6E] hover:bg-[#FFF0F7]"
+                    ? "border-[#FF9100] sm:border-none sm:bg-[#FF9100] text-[#FF9100] sm:text-white shadow-xs"
+                    : "border-transparent text-[#E07A00]/70 hover:text-[#E07A00] hover:bg-[#FFF5EE]"
                 }`}
               >
                 {status === "all" ? "Semua" : status === "active" ? "Aktif" : "Suspended"}
@@ -380,14 +381,14 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
       {/* EDIT MODAL */}
       {editingUser && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fade-in">
-          <div className="bg-white rounded-2xl border border-[#F7D6E6] shadow-2xl max-w-lg w-full flex flex-col overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b border-[#F7D6E6] bg-[#FFF0F7]/20">
+          <div className="bg-white rounded-2xl border border-[#FFE6D5] shadow-2xl max-w-lg w-full flex flex-col overflow-hidden">
+            <div className="flex items-center justify-between p-4 border-b border-[#FFE6D5] bg-[#FFF5EE]/20">
               <h3 className="text-base font-bold text-[#3D1E30]">
                 Edit Profil UMKM: {editingUser.nama_usaha}
               </h3>
               <button
                 onClick={() => setEditingUser(null)}
-                className="text-[#8C4A6E] hover:text-[#C27BA0] p-1 rounded-lg"
+                className="text-[#E07A00] hover:text-[#FF9100] p-1 rounded-lg"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -402,35 +403,35 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
 
               {/* Nama Lengkap */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-[#8C4A6E] uppercase">Nama Pemilik</label>
+                <label className="text-[10px] font-bold text-[#E07A00] uppercase">Nama Pemilik</label>
                 <input
                   type="text"
                   name="nama_lengkap"
                   required
                   defaultValue={editingUser.nama_lengkap || ""}
-                  className="w-full px-3 py-2 text-sm border border-[#F7D6E6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C27BA0]"
+                  className="w-full px-3 py-2 text-sm border border-[#FFE6D5] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF9100]"
                 />
               </div>
 
               {/* Nama Usaha */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-[#8C4A6E] uppercase">Nama Usaha</label>
+                <label className="text-[10px] font-bold text-[#E07A00] uppercase">Nama Usaha</label>
                 <input
                   type="text"
                   name="nama_usaha"
                   required
                   defaultValue={editingUser.nama_usaha || ""}
-                  className="w-full px-3 py-2 text-sm border border-[#F7D6E6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C27BA0]"
+                  className="w-full px-3 py-2 text-sm border border-[#FFE6D5] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF9100]"
                 />
               </div>
 
               {/* Kategori */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-[#8C4A6E] uppercase">Kategori Bisnis</label>
+                <label className="text-[10px] font-bold text-[#E07A00] uppercase">Kategori Bisnis</label>
                 <select
                   name="category_id"
                   defaultValue={editingUser.category_id || ""}
-                  className="w-full px-3 py-2 text-sm border border-[#F7D6E6] bg-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C27BA0]"
+                  className="w-full px-3 py-2 text-sm border border-[#FFE6D5] bg-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF9100]"
                 >
                   <option value="">-- Pilih Kategori --</option>
                   {categories.map((c) => (
@@ -443,11 +444,11 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
 
               {/* Peran Akses */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-[#8C4A6E] uppercase">Peran Akses</label>
+                <label className="text-[10px] font-bold text-[#E07A00] uppercase">Peran Akses</label>
                 <select
                   name="role"
                   defaultValue={editingUser.role || "umkm"}
-                  className="w-full px-3 py-2 text-sm border border-[#F7D6E6] bg-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C27BA0]"
+                  className="w-full px-3 py-2 text-sm border border-[#FFE6D5] bg-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF9100]"
                 >
                   <option value="umkm">Mitra UMKM</option>
                   <option value="admin">Administrator</option>
@@ -456,51 +457,51 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
 
               {/* WhatsApp */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-[#8C4A6E] uppercase">No. WhatsApp</label>
+                <label className="text-[10px] font-bold text-[#E07A00] uppercase">No. WhatsApp</label>
                 <input
                   type="text"
                   name="no_wa"
                   required
                   defaultValue={editingUser.no_wa || ""}
-                  className="w-full px-3 py-2 text-sm border border-[#F7D6E6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C27BA0]"
+                  className="w-full px-3 py-2 text-sm border border-[#FFE6D5] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF9100]"
                 />
               </div>
 
               {/* Instagram */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-[#8C4A6E] uppercase">Username Instagram</label>
+                <label className="text-[10px] font-bold text-[#E07A00] uppercase">Username Instagram</label>
                 <input
                   type="text"
                   name="instagram"
                   defaultValue={editingUser.instagram || ""}
                   placeholder="Contoh: kuliner.bunda"
-                  className="w-full px-3 py-2 text-sm border border-[#F7D6E6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C27BA0]"
+                  className="w-full px-3 py-2 text-sm border border-[#FFE6D5] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF9100]"
                 />
               </div>
 
               {/* Alamat */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-[#8C4A6E] uppercase">Alamat Usaha</label>
+                <label className="text-[10px] font-bold text-[#E07A00] uppercase">Alamat Usaha</label>
                 <textarea
                   name="alamat"
                   rows={2}
                   defaultValue={editingUser.alamat || ""}
-                  className="w-full px-3 py-2 text-sm border border-[#F7D6E6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C27BA0] resize-none"
+                  className="w-full px-3 py-2 text-sm border border-[#FFE6D5] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF9100] resize-none"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#F7D6E6]">
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#FFE6D5]">
                 <button
                   type="button"
                   onClick={() => setEditingUser(null)}
-                  className="px-4 py-2 text-xs font-bold border border-[#F7D6E6] bg-white rounded-xl text-[#8C4A6E] hover:bg-[#FFF0F7]"
+                  className="px-4 py-2 text-xs font-bold border border-[#FFE6D5] bg-white rounded-xl text-[#E07A00] hover:bg-[#FFF5EE]"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold bg-[#C27BA0] text-white rounded-xl hover:bg-[#8C4A6E] disabled:opacity-50"
+                  className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold bg-[#FF9100] text-white rounded-xl hover:bg-[#E07A00] disabled:opacity-50"
                 >
                   {isPending && <Loader2 className="h-3 w-3 animate-spin" />}
                   Simpan Perubahan
@@ -513,10 +514,10 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
       {/* CREATE MODAL */}
       {isCreateModalOpen && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fade-in">
-          <div className="bg-white rounded-2xl border border-[#F7D6E6] shadow-2xl max-w-lg w-full flex flex-col overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b border-[#F7D6E6] bg-[#FFF0F7]/20">
+          <div className="bg-white rounded-2xl border border-[#FFE6D5] shadow-2xl max-w-lg w-full flex flex-col overflow-hidden">
+            <div className="flex items-center justify-between p-4 border-b border-[#FFE6D5] bg-[#FFF5EE]/20">
               <h3 className="text-base font-bold text-[#3D1E30]">Tambah Pengguna UMKM</h3>
-              <button onClick={() => setIsCreateModalOpen(false)} className="text-[#8C4A6E] hover:text-[#C27BA0] p-1 rounded-lg">
+              <button onClick={() => setIsCreateModalOpen(false)} className="text-[#E07A00] hover:text-[#FF9100] p-1 rounded-lg">
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -529,16 +530,16 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
               )}
 
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-[#8C4A6E] uppercase">Email Login</label>
-                <input type="email" name="email" required placeholder="umkm@email.com" className="w-full px-3 py-2 text-sm border border-[#F7D6E6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C27BA0]" />
+                <label className="text-[10px] font-bold text-[#E07A00] uppercase">Email Login</label>
+                <input type="email" name="email" required placeholder="umkm@email.com" className="w-full px-3 py-2 text-sm border border-[#FFE6D5] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF9100]" />
               </div>
 
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-[#8C4A6E] uppercase">Peran Akses</label>
+                <label className="text-[10px] font-bold text-[#E07A00] uppercase">Peran Akses</label>
                 <select
                   name="role"
                   defaultValue="umkm"
-                  className="w-full px-3 py-2 text-sm border border-[#F7D6E6] bg-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C27BA0]"
+                  className="w-full px-3 py-2 text-sm border border-[#FFE6D5] bg-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF9100]"
                 >
                   <option value="umkm">Mitra UMKM</option>
                   <option value="admin">Administrator</option>
@@ -546,16 +547,16 @@ export function UsersClient({ initialUsers, categories }: UsersClientProps) {
               </div>
 
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-[#8C4A6E] uppercase">Password</label>
-                <input type="text" name="password" required placeholder="Gunakan password kuat (min. 8 karakter, ada angka & simbol)" className="w-full px-3 py-2 text-sm border border-[#F7D6E6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C27BA0]" />
+                <label className="text-[10px] font-bold text-[#E07A00] uppercase">Password</label>
+                <input type="text" name="password" required placeholder="Gunakan password kuat (min. 8 karakter, ada angka & simbol)" className="w-full px-3 py-2 text-sm border border-[#FFE6D5] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF9100]" />
                 <p className="text-[10px] text-slate-500 mt-1">Sistem hanya akan membuat akun kunci. UMKM yang bersangkutan akan diminta mengisi sisa profil secara mandiri ketika mereka pertama kali login.</p>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#F7D6E6]">
-                <button type="button" onClick={() => setIsCreateModalOpen(false)} className="px-4 py-2 text-xs font-bold border border-[#F7D6E6] bg-white rounded-xl text-[#8C4A6E] hover:bg-[#FFF0F7]">
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#FFE6D5]">
+                <button type="button" onClick={() => setIsCreateModalOpen(false)} className="px-4 py-2 text-xs font-bold border border-[#FFE6D5] bg-white rounded-xl text-[#E07A00] hover:bg-[#FFF5EE]">
                   Batal
                 </button>
-                <button type="submit" disabled={isPending} className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold bg-[#C27BA0] text-white rounded-xl hover:bg-[#8C4A6E] disabled:opacity-50">
+                <button type="submit" disabled={isPending} className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold bg-[#FF9100] text-white rounded-xl hover:bg-[#E07A00] disabled:opacity-50">
                   {isPending && <Loader2 className="h-3 w-3 animate-spin" />}
                   Buat Kunci Akses
                 </button>

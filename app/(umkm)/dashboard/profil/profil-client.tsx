@@ -197,7 +197,7 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
       />
       <div className="flex flex-col md:flex-row gap-6">
         {/* TABS SIDEBAR */}
-        <div className="w-full md:w-64 shrink-0 flex flex-row md:flex-col gap-1 border-b md:border-b-0 md:border-r border-[#F7D6E6] pb-2 md:pb-0 md:pr-4 overflow-x-auto">
+        <div className="w-full md:w-64 shrink-0 flex flex-row md:flex-col gap-1 border-b md:border-b-0 md:border-r border-[#FFE6D5] pb-2 md:pb-0 md:pr-4 overflow-x-auto">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -207,8 +207,8 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${
                   isActive
-                    ? "bg-[#C27BA0] text-white shadow-sm"
-                    : "text-[#8C4A6E] hover:bg-[#FFF0F7]"
+                    ? "bg-[#FF9100] text-white shadow-sm"
+                    : "text-[#1E293B] hover:bg-[#F3F4F6]"
                 }`}
               >
                 <Icon className="h-4.5 w-4.5" />
@@ -219,14 +219,14 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
         </div>
 
         {/* TAB CONTENTS */}
-        <div className="flex-1 bg-white rounded-2xl border border-[#F7D6E6] p-6 md:p-8 shadow-sm min-h-[400px]">
+        <div className="flex-1 bg-white rounded-2xl border border-[#FFE6D5] p-6 md:p-8 shadow-sm min-h-[400px]">
           {/* TAB 1 & 2: BISNIS & KONTAK */}
           {(activeTab === "bisnis" || activeTab === "kontak") && (
             <form onSubmit={handleBusinessSubmit} className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
             
             {businessState?.error && (
-              <div className="flex items-center gap-2 p-3 text-sm text-[#8C4A6E] bg-[#FFF9FC] border border-[#F7D6E6] rounded-xl">
-                <AlertCircle className="w-4 h-4 shrink-0 text-[#C27BA0]" />
+              <div className="flex items-center gap-2 p-3 text-sm text-[#1E293B] bg-[#FFFFFF] border border-[#FFE6D5] rounded-xl">
+                <AlertCircle className="w-4 h-4 shrink-0 text-[#1E293B]" />
                 <span>{businessState.error}</span>
               </div>
             )}
@@ -242,13 +242,13 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
               <div className="space-y-4">
                 {/* Logo Uploader */}
                 <div className="mb-6">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#8C4A6E] mb-2">Logo Usaha</label>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#1E293B] mb-2">Logo Usaha</label>
                   <div className="flex items-center gap-4">
-                    <div className="w-20 h-20 rounded-full border-2 border-dashed border-[#F7D6E6] bg-[#FFF0F7]/50 flex items-center justify-center overflow-hidden relative">
+                    <div className="w-20 h-20 rounded-full border-2 border-dashed border-[#FFE6D5] bg-[#F3F4F6]/50 flex items-center justify-center overflow-hidden relative">
                       {preview ? (
                         <img src={preview} alt="Logo" className="w-full h-full object-cover rounded-full" />
                       ) : (
-                        <User className="w-8 h-8 text-[#C27BA0]/40 rounded-full" />
+                        <User className="w-8 h-8 text-[#1E293B]/40 rounded-full" />
                       )}
                       {uploading && (
                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
@@ -270,7 +270,7 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
                           type="button"
                           onClick={() => fileInputRef.current?.click()}
                           disabled={isBusinessPending || uploading}
-                          className="px-4 py-2 text-xs font-bold bg-[#FFF0F7] text-[#C27BA0] hover:bg-[#F7D6E6] rounded-lg transition-colors"
+                          className="px-4 py-2 text-xs font-bold bg-[#F3F4F6] text-[#1E293B] hover:bg-[#F1F5F9] rounded-lg transition-colors"
                         >
                           Pilih Gambar
                         </button>
@@ -305,22 +305,22 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[#8C4A6E] mb-1.5">Nama Lengkap Pemilik</label>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[#1E293B] mb-1.5">Nama Lengkap Pemilik</label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><User className="w-4 h-4 text-[#C27BA0]" /></div>
-                      <input type="text" name="nama_lengkap" defaultValue={initialProfile?.nama_lengkap || ""} disabled={isBusinessPending} className="w-full pl-9 pr-3 py-2.5 bg-[#FFF9FC] border border-[#F7D6E6] rounded-xl text-sm focus:ring-2 focus:ring-[#C27BA0] focus:outline-none" />
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><User className="w-4 h-4 text-[#1E293B]" /></div>
+                      <input type="text" name="nama_lengkap" defaultValue={initialProfile?.nama_lengkap || ""} disabled={isBusinessPending} className="w-full pl-9 pr-3 py-2.5 bg-[#FFFFFF] border border-[#FFE6D5] rounded-xl text-sm focus:ring-2 focus:ring-[#FF9100] focus:outline-none" />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[#8C4A6E] mb-1.5">Nama Usaha / Brand</label>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[#1E293B] mb-1.5">Nama Usaha / Brand</label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><Briefcase className="w-4 h-4 text-[#C27BA0]" /></div>
-                      <input type="text" name="nama_usaha" defaultValue={initialProfile?.nama_usaha || ""} disabled={isBusinessPending} className="w-full pl-9 pr-3 py-2.5 bg-[#FFF9FC] border border-[#F7D6E6] rounded-xl text-sm focus:ring-2 focus:ring-[#C27BA0] focus:outline-none" />
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><Briefcase className="w-4 h-4 text-[#1E293B]" /></div>
+                      <input type="text" name="nama_usaha" defaultValue={initialProfile?.nama_usaha || ""} disabled={isBusinessPending} className="w-full pl-9 pr-3 py-2.5 bg-[#FFFFFF] border border-[#FFE6D5] rounded-xl text-sm focus:ring-2 focus:ring-[#FF9100] focus:outline-none" />
                     </div>
                   </div>
                   <div className="md:col-span-2">
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[#8C4A6E] mb-1.5">Kategori Usaha</label>
-                    <select name="category_id" defaultValue={initialProfile?.category_id || ""} disabled={isBusinessPending} className="w-full px-3 py-2.5 bg-[#FFF9FC] border border-[#F7D6E6] rounded-xl text-sm focus:ring-2 focus:ring-[#C27BA0] focus:outline-none">
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[#1E293B] mb-1.5">Kategori Usaha</label>
+                    <select name="category_id" defaultValue={initialProfile?.category_id || ""} disabled={isBusinessPending} className="w-full px-3 py-2.5 bg-[#FFFFFF] border border-[#FFE6D5] rounded-xl text-sm focus:ring-2 focus:ring-[#FF9100] focus:outline-none">
                       {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
                     </select>
                   </div>
@@ -332,24 +332,24 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[#8C4A6E] mb-1.5">No WhatsApp Bisnis</label>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[#1E293B] mb-1.5">No WhatsApp Bisnis</label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><Phone className="w-4 h-4 text-[#C27BA0]" /></div>
-                      <input type="tel" name="no_wa" defaultValue={initialProfile?.no_wa || ""} disabled={isBusinessPending} className="w-full pl-9 pr-3 py-2.5 bg-[#FFF9FC] border border-[#F7D6E6] rounded-xl text-sm focus:ring-2 focus:ring-[#C27BA0] focus:outline-none" />
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><Phone className="w-4 h-4 text-[#1E293B]" /></div>
+                      <input type="tel" name="no_wa" defaultValue={initialProfile?.no_wa || ""} disabled={isBusinessPending} className="w-full pl-9 pr-3 py-2.5 bg-[#FFFFFF] border border-[#FFE6D5] rounded-xl text-sm focus:ring-2 focus:ring-[#FF9100] focus:outline-none" />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[#8C4A6E] mb-1.5">Username Instagram</label>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[#1E293B] mb-1.5">Username Instagram</label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><InstagramIcon className="w-4 h-4 text-[#C27BA0]" /></div>
-                      <input type="text" name="instagram" defaultValue={initialProfile?.instagram || ""} placeholder="@" disabled={isBusinessPending} className="w-full pl-9 pr-3 py-2.5 bg-[#FFF9FC] border border-[#F7D6E6] rounded-xl text-sm focus:ring-2 focus:ring-[#C27BA0] focus:outline-none" />
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><InstagramIcon className="w-4 h-4 text-[#1E293B]" /></div>
+                      <input type="text" name="instagram" defaultValue={initialProfile?.instagram || ""} placeholder="@" disabled={isBusinessPending} className="w-full pl-9 pr-3 py-2.5 bg-[#FFFFFF] border border-[#FFE6D5] rounded-xl text-sm focus:ring-2 focus:ring-[#FF9100] focus:outline-none" />
                     </div>
                   </div>
                   <div className="md:col-span-2">
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[#8C4A6E] mb-1.5">Alamat Usaha / Toko</label>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[#1E293B] mb-1.5">Alamat Usaha / Toko</label>
                     <div className="relative">
-                      <div className="absolute top-3 left-3 pointer-events-none"><MapPin className="w-4 h-4 text-[#C27BA0]" /></div>
-                      <textarea name="alamat" rows={3} defaultValue={initialProfile?.alamat || ""} disabled={isBusinessPending} className="w-full pl-9 pr-3 py-2 bg-[#FFF9FC] border border-[#F7D6E6] rounded-xl text-sm focus:ring-2 focus:ring-[#C27BA0] focus:outline-none resize-none" />
+                      <div className="absolute top-3 left-3 pointer-events-none"><MapPin className="w-4 h-4 text-[#1E293B]" /></div>
+                      <textarea name="alamat" rows={3} defaultValue={initialProfile?.alamat || ""} disabled={isBusinessPending} className="w-full pl-9 pr-3 py-2 bg-[#FFFFFF] border border-[#FFE6D5] rounded-xl text-sm focus:ring-2 focus:ring-[#FF9100] focus:outline-none resize-none" />
                     </div>
                   </div>
                 </div>
@@ -372,11 +372,11 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
               </>
             )}
 
-            <div className="pt-4 border-t border-[#F7D6E6]">
+            <div className="pt-4 border-t border-[#FFE6D5]">
               <button
                 type="submit"
                 disabled={isBusinessPending || uploading}
-                className="w-full sm:w-auto px-8 py-3 bg-[#C27BA0] hover:bg-[#8C4A6E] text-white font-bold rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-75"
+                className="w-full sm:w-auto px-8 py-3 bg-[#FF9100] hover:bg-[#E07A00] text-white font-bold rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-75"
               >
                 {isBusinessPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
                 Simpan Perubahan
@@ -390,8 +390,8 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
           <form onSubmit={handlePasswordSubmit} className="space-y-6">
             
             {passwordState?.error && (
-              <div className="flex items-center gap-2 p-3 text-sm text-[#8C4A6E] bg-[#FFF9FC] border border-[#F7D6E6] rounded-xl max-w-md">
-                <AlertCircle className="w-4 h-4 shrink-0 text-[#C27BA0]" />
+              <div className="flex items-center gap-2 p-3 text-sm text-[#1E293B] bg-[#FFFFFF] border border-[#FFE6D5] rounded-xl max-w-md">
+                <AlertCircle className="w-4 h-4 shrink-0 text-[#1E293B]" />
                 <span>{passwordState.error}</span>
               </div>
             )}
@@ -406,14 +406,14 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="space-y-6">
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#8C4A6E] mb-1.5">Password Saat Ini</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#1E293B] mb-1.5">Password Saat Ini</label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><Lock className="w-4 h-4 text-[#C27BA0]" /></div>
-                    <input type={showCurrentPassword ? "text" : "password"} name="current_password" required disabled={isPasswordPending} className="w-full pl-9 pr-10 py-2.5 bg-[#FFF9FC] border border-[#F7D6E6] rounded-xl text-sm focus:ring-2 focus:ring-[#C27BA0] focus:outline-none" />
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><Lock className="w-4 h-4 text-[#1E293B]" /></div>
+                    <input type={showCurrentPassword ? "text" : "password"} name="current_password" required disabled={isPasswordPending} className="w-full pl-9 pr-10 py-2.5 bg-[#FFFFFF] border border-[#FFE6D5] rounded-xl text-sm focus:ring-2 focus:ring-[#FF9100] focus:outline-none" />
                     <button
                       type="button"
                       onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-[#C27BA0] hover:text-[#8C4A6E]"
+                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-[#1E293B] hover:text-[#1E293B]"
                     >
                       {showCurrentPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -421,9 +421,9 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
                 </div>
 
                 <div className="pt-2">
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#8C4A6E] mb-1.5">Password Baru</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#1E293B] mb-1.5">Password Baru</label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><Lock className="w-4 h-4 text-[#C27BA0]" /></div>
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><Lock className="w-4 h-4 text-[#1E293B]" /></div>
                     <input 
                       type={showNewPassword ? "text" : "password"} 
                       name="new_password" 
@@ -432,12 +432,12 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
                       disabled={isPasswordPending} 
                       value={newPasswordValue}
                       onChange={(e) => setNewPasswordValue(e.target.value)}
-                      className="w-full pl-9 pr-10 py-2.5 bg-[#FFF9FC] border border-[#F7D6E6] rounded-xl text-sm focus:ring-2 focus:ring-[#C27BA0] focus:outline-none" 
+                      className="w-full pl-9 pr-10 py-2.5 bg-[#FFFFFF] border border-[#FFE6D5] rounded-xl text-sm focus:ring-2 focus:ring-[#FF9100] focus:outline-none" 
                     />
                     <button
                       type="button"
                       onClick={() => setShowNewPassword(!showNewPassword)}
-                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-[#C27BA0] hover:text-[#8C4A6E]"
+                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-[#1E293B] hover:text-[#1E293B]"
                     >
                       {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -445,25 +445,25 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#8C4A6E] mb-1.5">Konfirmasi Password Baru</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#1E293B] mb-1.5">Konfirmasi Password Baru</label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><Lock className="w-4 h-4 text-[#C27BA0]" /></div>
-                    <input type={showConfirmPassword ? "text" : "password"} name="confirm_password" required minLength={8} disabled={isPasswordPending} className="w-full pl-9 pr-10 py-2.5 bg-[#FFF9FC] border border-[#F7D6E6] rounded-xl text-sm focus:ring-2 focus:ring-[#C27BA0] focus:outline-none" />
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><Lock className="w-4 h-4 text-[#1E293B]" /></div>
+                    <input type={showConfirmPassword ? "text" : "password"} name="confirm_password" required minLength={8} disabled={isPasswordPending} className="w-full pl-9 pr-10 py-2.5 bg-[#FFFFFF] border border-[#FFE6D5] rounded-xl text-sm focus:ring-2 focus:ring-[#FF9100] focus:outline-none" />
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-[#C27BA0] hover:text-[#8C4A6E]"
+                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-[#1E293B] hover:text-[#1E293B]"
                     >
                       {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-[#F7D6E6]">
+                <div className="pt-4 border-t border-[#FFE6D5]">
                   <button
                     type="submit"
                     disabled={isPasswordPending}
-                    className="w-full px-8 py-3 bg-[#C27BA0] hover:bg-[#8C4A6E] text-white font-bold rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-75"
+                    className="w-full px-8 py-3 bg-[#FF9100] hover:bg-[#E07A00] text-white font-bold rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-75"
                   >
                     {isPasswordPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Perbarui Password"}
                   </button>
@@ -472,8 +472,8 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
 
               {/* RIGHT COLUMN: Password Requirements */}
               <div>
-                <div className="p-4 bg-[#FFF9FC] border border-[#F7D6E6]/50 rounded-xl space-y-2 font-sans h-full">
-                  <p className="text-xs font-bold uppercase tracking-wider text-[#8C4A6E] mb-3">
+                <div className="p-4 bg-[#FFFFFF] border border-[#FFE6D5]/50 rounded-xl space-y-2 font-sans h-full">
+                  <p className="text-xs font-bold uppercase tracking-wider text-[#1E293B] mb-3">
                     Syarat Keamanan Password:
                   </p>
                   {[
@@ -496,7 +496,7 @@ export function ProfilClient({ initialProfile, categories, maxUploadMb }: Profil
                       </span>
                     </div>
                   ))}
-                  <p className="mt-5 text-[11px] text-slate-400 font-medium pt-3 border-t border-[#F7D6E6]/50">
+                  <p className="mt-5 text-[11px] text-slate-400 font-medium pt-3 border-t border-[#FFE6D5]/50">
                     Pastikan indikator di atas hijau semua sebelum menyimpan password.
                   </p>
                 </div>

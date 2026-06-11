@@ -41,7 +41,7 @@ export function TemplateCard({ tpl, gradient }: TemplateCardProps) {
   return (
     <>
       {/* ── CARD ── */}
-      <div className="group border border-[#F7D6E6] rounded-2xl overflow-hidden bg-white hover:shadow-lg hover:shadow-[#C27BA0]/10 hover:-translate-y-1 transition-all duration-300 flex flex-col">
+      <div className="group border border-[#FFE6D5] rounded-2xl overflow-hidden bg-white hover:shadow-lg hover:shadow-[#E07A00]/10 hover:-translate-y-1 transition-all duration-300 flex flex-col">
         {/* Template Thumbnail (Click to Preview) */}
         <div 
           onClick={() => setShowPreview(true)}
@@ -55,12 +55,12 @@ export function TemplateCard({ tpl, gradient }: TemplateCardProps) {
             />
           ) : (
             <>
-              <Palette className="w-8 h-8 text-[#8C4A6E]/40 group-hover:scale-110 transition-transform" />
+              <Palette className="w-8 h-8 text-[#E07A00]/40 group-hover:scale-110 transition-transform" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </>
           )}
           {tpl.categories?.name && (
-            <span className="absolute top-2.5 left-2.5 text-[9px] font-bold bg-white/85 backdrop-blur-sm px-2 py-0.5 rounded-full text-[#8C4A6E] shadow-sm z-10">
+            <span className="absolute top-2.5 left-2.5 text-[9px] font-bold bg-white/85 backdrop-blur-sm px-2 py-0.5 rounded-full text-[#E07A00] shadow-sm z-10">
               {tpl.categories.name}
             </span>
           )}
@@ -75,15 +75,15 @@ export function TemplateCard({ tpl, gradient }: TemplateCardProps) {
         </div>
 
         {/* Info Block */}
-        <div className="p-3.5 border-t border-[#F7D6E6] flex-1 flex flex-col bg-white">
-          <h4 className="text-xs font-bold text-[#8C4A6E] truncate">{tpl.name}</h4>
+        <div className="p-3.5 border-t border-[#FFE6D5] flex-1 flex flex-col bg-white">
+          <h4 className="text-xs font-bold text-[#E07A00] truncate">{tpl.name}</h4>
           {tpl.description && (
             <p className="text-[10px] text-slate-400 mt-0.5 line-clamp-1">{tpl.description}</p>
           )}
           <div className="mt-2.5 mt-auto">
             <Link 
               href={`/dashboard/template/${tpl.id}`}
-              className="w-full inline-block text-center py-1.5 bg-[#FFF0F7] text-[#C27BA0] hover:bg-[#C27BA0] hover:text-white transition-colors text-[10px] font-bold rounded-lg border border-[#F7D6E6]"
+              className="w-full inline-block text-center py-1.5 bg-[#FFF5EE] text-[#E07A00] hover:bg-[#E07A00] hover:text-white transition-colors text-[10px] font-bold rounded-lg border border-[#FFE6D5]"
             >
               Gunakan Template
             </Link>
@@ -99,7 +99,7 @@ export function TemplateCard({ tpl, gradient }: TemplateCardProps) {
           <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-3xl flex flex-col md:flex-row overflow-hidden animate-in fade-in zoom-in-95 duration-200">
             <button 
               onClick={() => setShowPreview(false)}
-              className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center bg-white/80 backdrop-blur-sm hover:bg-[#FFF0F7] text-slate-500 hover:text-[#C27BA0] rounded-full transition-colors"
+              className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center bg-white/80 backdrop-blur-sm hover:bg-[#FFF5EE] text-slate-500 hover:text-[#E07A00] rounded-full transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -113,7 +113,7 @@ export function TemplateCard({ tpl, gradient }: TemplateCardProps) {
                   className="w-full h-full object-contain p-4"
                 />
               ) : (
-                <Palette className="w-16 h-16 text-[#8C4A6E]/30" />
+                <Palette className="w-16 h-16 text-[#E07A00]/30" />
               )}
             </div>
 
@@ -121,11 +121,11 @@ export function TemplateCard({ tpl, gradient }: TemplateCardProps) {
             <div className="w-full md:w-1/2 p-6 md:p-8 flex flex-col bg-white">
               <div className="mb-auto">
                 {tpl.categories?.name && (
-                  <span className="inline-block mb-3 text-[10px] font-bold bg-[#FFF0F7] px-2.5 py-1 rounded-md text-[#C27BA0]">
+                  <span className="inline-block mb-3 text-[10px] font-bold bg-[#FFF5EE] px-2.5 py-1 rounded-md text-[#E07A00]">
                     {tpl.categories.name}
                   </span>
                 )}
-                <h2 className="text-2xl font-extrabold text-[#3D1E30] font-heading leading-tight mb-3">
+                <h2 className="text-2xl font-extrabold text-[#1E293B] font-heading leading-tight mb-3">
                   {tpl.name}
                 </h2>
                 <p className="text-sm text-slate-500 leading-relaxed mb-6">
@@ -133,22 +133,22 @@ export function TemplateCard({ tpl, gradient }: TemplateCardProps) {
                 </p>
 
                 <div className="space-y-3">
-                  <div className="flex justify-between items-center py-3 border-t border-[#F7D6E6]">
+                  <div className="flex justify-between items-center py-3 border-t border-[#FFE6D5]">
                     <span className="text-sm text-slate-500 font-medium">Platform Target</span>
-                    <span className="text-sm font-bold text-[#8C4A6E]">
+                    <span className="text-sm font-bold text-[#E07A00]">
                       {platformLabel}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center py-3 border-t border-[#F7D6E6]">
+                  <div className="flex justify-between items-center py-3 border-t border-[#FFE6D5]">
                     <span className="text-sm text-slate-500 font-medium">Resolusi</span>
-                    <span className="text-sm font-bold text-[#C27BA0] bg-[#FFF0F7] px-2 py-0.5 rounded">{resolution}</span>
+                    <span className="text-sm font-bold text-[#E07A00] bg-[#FFF5EE] px-2 py-0.5 rounded">{resolution}</span>
                   </div>
                 </div>
               </div>
 
               <Link
                 href={`/dashboard/template/${tpl.id}`}
-                className="mt-8 w-full block text-center px-6 py-3.5 bg-gradient-to-r from-[#C27BA0] to-[#8C4A6E] text-white font-bold rounded-xl shadow-md hover:shadow-lg hover:shadow-[#C27BA0]/20 hover:scale-[1.02] transition-all"
+                className="mt-8 w-full block text-center px-6 py-3.5 bg-gradient-to-r from-[#FF9100] to-[#E07A00] text-white font-bold rounded-xl shadow-md hover:shadow-lg hover:shadow-[#E07A00]/20 hover:scale-[1.02] transition-all"
               >
                 Gunakan Template Ini
               </Link>

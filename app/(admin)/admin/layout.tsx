@@ -10,7 +10,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
   const { profile } = await requireAdmin();
 
   return (
-    <div className="min-h-screen w-full flex flex-col lg:flex-row bg-[#FFF9FC]">
+    <div className="min-h-screen w-full flex flex-col lg:flex-row bg-[#FFFFFF]">
       {/* Interactive Desktop Sidebar and Mobile Drawer Overlay */}
       <AdminSidebar profile={profile} />
 

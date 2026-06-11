@@ -47,11 +47,11 @@ export default function ResetPasswordForm() {
   ];
 
   return (
-    <div className="w-full max-w-md p-8 bg-white/85 backdrop-blur-md rounded-[24px] shadow-[0_8px_30px_rgb(194,123,160,0.12)] border border-[#F7D6E6] transition-all duration-300 hover:shadow-[0_8px_40px_rgb(194,123,160,0.18)]">
+    <div className="w-full max-w-md p-8 bg-white/85 backdrop-blur-md rounded-[24px] shadow-[0_8px_30px_rgb(224,122,0,0.12)] border border-[#FFE6D5] transition-all duration-300 hover:shadow-[0_8px_40px_rgb(224,122,0,0.18)]">
       {/* Back button */}
       <Link
         href="/login"
-        className="inline-flex items-center gap-1 text-xs font-bold text-[#8C4A6E] hover:text-[#C27BA0] transition-all uppercase tracking-wider mb-4"
+        className="inline-flex items-center gap-1 text-xs font-bold text-[#FF9100] hover:text-[#E07A00] transition-all uppercase tracking-wider mb-4"
       >
         <ArrowLeft className="w-3.5 h-3.5" />
         Kembali ke Login
@@ -59,18 +59,18 @@ export default function ResetPasswordForm() {
 
       {/* Title */}
       <div className="mb-6 text-center">
-        <h2 className="text-3xl font-bold tracking-tight text-[#8C4A6E] font-heading">
+        <h2 className="text-3xl font-bold tracking-tight text-[#E07A00] font-heading">
           Reset Kata Sandi
         </h2>
-        <p className="mt-2 text-sm text-[#C27BA0] font-sans font-medium">
+        <p className="mt-2 text-sm text-[#FF9100] font-sans font-medium">
           Silakan masukkan kata sandi baru Anda di bawah ini.
         </p>
       </div>
 
       {/* Error Message */}
       {state?.error && (
-        <div className="flex items-center gap-2 p-3 mb-5 text-sm text-[#8C4A6E] bg-[#FFF9FC] border border-[#F7D6E6] rounded-xl font-medium">
-          <AlertCircle className="w-4 h-4 shrink-0 text-[#C27BA0]" />
+        <div className="flex items-center gap-2 p-3 mb-5 text-sm text-[#FF9100] bg-[#FFF9F5] border border-[#FFE6D5] rounded-xl font-medium">
+          <AlertCircle className="w-4 h-4 shrink-0 text-[#FF9100]" />
           <span>{state.error}</span>
         </div>
       )}
@@ -89,12 +89,12 @@ export default function ResetPasswordForm() {
       >
         {/* Password Baru */}
         <div>
-          <label className="block text-[10px] font-bold uppercase tracking-wider text-[#8C4A6E] mb-1.5">
+          <label className="block text-[10px] font-bold uppercase tracking-wider text-[#E07A00] mb-1.5">
             Password Baru
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <Lock className="w-4 h-4 text-[#C27BA0]" />
+              <Lock className="w-4 h-4 text-[#FF9100]" />
             </div>
             <input
               type={showPassword ? "text" : "password"}
@@ -104,12 +104,12 @@ export default function ResetPasswordForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Masukkan password baru"
-              className="w-full pl-9 pr-9 py-2.5 bg-[#FFF9FC] text-slate-800 placeholder-slate-400 border border-[#F7D6E6] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C27BA0] focus:border-transparent transition-all duration-200"
+              className="w-full pl-9 pr-9 py-2.5 bg-[#FFF9F5] text-slate-800 placeholder-slate-400 border border-[#FFE6D5] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FF9100] focus:border-transparent transition-all duration-200"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 right-0 flex items-center pr-3 text-[#C27BA0] hover:text-[#8C4A6E] transition-colors"
+              className="absolute inset-y-0 right-0 flex items-center pr-3 text-[#FF9100] hover:text-[#FF9100] transition-colors"
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
@@ -117,8 +117,8 @@ export default function ResetPasswordForm() {
         </div>
 
         {/* Password Rules Checklist */}
-        <div className="p-3 bg-[#FFF9FC] border border-[#F7D6E6]/50 rounded-xl space-y-1.5 font-sans">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-[#8C4A6E] mb-1">
+        <div className="p-3 bg-[#FFF9F5] border border-[#FFE6D5]/50 rounded-xl space-y-1.5 font-sans">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-[#FF9100] mb-1">
             Syarat Keamanan Password:
           </p>
           {rules.map((rule, idx) => (
@@ -139,12 +139,12 @@ export default function ResetPasswordForm() {
 
         {/* Konfirmasi Password Baru */}
         <div>
-          <label className="block text-[10px] font-bold uppercase tracking-wider text-[#8C4A6E] mb-1.5">
+          <label className="block text-[10px] font-bold uppercase tracking-wider text-[#E07A00] mb-1.5">
             Konfirmasi Password Baru
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <Lock className="w-4 h-4 text-[#C27BA0]" />
+              <Lock className="w-4 h-4 text-[#FF9100]" />
             </div>
             <input
               type={showConfirmPassword ? "text" : "password"}
@@ -154,12 +154,12 @@ export default function ResetPasswordForm() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Ulangi password baru"
-              className="w-full pl-9 pr-9 py-2.5 bg-[#FFF9FC] text-slate-800 placeholder-slate-400 border border-[#F7D6E6] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C27BA0] focus:border-transparent transition-all duration-200"
+              className="w-full pl-9 pr-9 py-2.5 bg-[#FFF9F5] text-slate-800 placeholder-slate-400 border border-[#FFE6D5] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FF9100] focus:border-transparent transition-all duration-200"
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute inset-y-0 right-0 flex items-center pr-3 text-[#C27BA0] hover:text-[#8C4A6E] transition-colors"
+              className="absolute inset-y-0 right-0 flex items-center pr-3 text-[#FF9100] hover:text-[#FF9100] transition-colors"
             >
               {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
@@ -172,8 +172,8 @@ export default function ResetPasswordForm() {
                   <Check className="w-3.5 h-3.5" /> Password cocok
                 </span>
               ) : (
-                <span className="text-[#8C4A6E] font-bold flex items-center gap-0.5 animate-fade-in">
-                  <X className="w-3.5 h-3.5 text-[#C27BA0]" /> Password tidak cocok
+                <span className="text-[#FF9100] font-bold flex items-center gap-0.5 animate-fade-in">
+                  <X className="w-3.5 h-3.5 text-[#FF9100]" /> Password tidak cocok
                 </span>
               )}
             </div>
@@ -184,7 +184,7 @@ export default function ResetPasswordForm() {
         <button
           type="submit"
           disabled={isPending || !isFormValid}
-          className="w-full flex items-center justify-center gap-2 py-3.5 mt-2 bg-[#C27BA0] hover:bg-[#8C4A6E] text-white font-semibold rounded-xl text-sm transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
+          className="w-full flex items-center justify-center gap-2 py-3.5 mt-2 bg-[#FF9100] hover:bg-[#E07A00] text-white font-semibold rounded-xl text-sm transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
         >
           {isPending ? (
             <Loader2 className="w-4 h-4 animate-spin" />

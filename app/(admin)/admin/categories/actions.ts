@@ -1,4 +1,5 @@
 "use server";
+import { translateError } from "@/lib/error-translator";
 
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
@@ -33,7 +34,7 @@ export async function createCategory(prevState: any, formData: FormData) {
 
     if (error) {
       console.error("Error creating category:", error.message);
-      return { success: false, error: error.message };
+      return { success: false, error: translateError(error.message) };
     }
 
     await logActivity("category_created", "category", category.id, { name }, "success");
@@ -78,7 +79,7 @@ export async function updateCategory(
 
     if (error) {
       console.error("Error updating category:", error.message);
-      return { success: false, error: error.message };
+      return { success: false, error: translateError(error.message) };
     }
 
     await logActivity("category_updated", "category", id, { name }, "info");
@@ -109,7 +110,7 @@ export async function deleteCategory(id: string) {
 
     if (error) {
       console.error("Error deleting category:", error.message);
-      return { success: false, error: error.message };
+      return { success: false, error: translateError(error.message) };
     }
 
     await logActivity(
@@ -149,7 +150,7 @@ export async function toggleCategoryStatus(id: string, is_active: boolean) {
 
     if (error) {
       console.error("Error toggling category status:", error.message);
-      return { success: false, error: error.message };
+      return { success: false, error: translateError(error.message) };
     }
 
     await logActivity(

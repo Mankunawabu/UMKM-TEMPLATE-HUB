@@ -21,6 +21,12 @@ CREATE POLICY "Users can insert own export_logs"
     TO authenticated
     WITH CHECK (user_id = auth.uid());
 
+CREATE POLICY "Users can delete own export_logs"
+    ON public.export_logs
+    FOR DELETE
+    TO authenticated
+    USING (user_id = auth.uid());
+
 -- Admin bisa melihat semua log
 CREATE POLICY "Admin can view all export_logs"
     ON public.export_logs

@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { headers } from "next/headers";
 import { logActivity } from "@/lib/activity";
+import { translateError } from "@/lib/error-translator";
 
 export async function loginAction(prevState: any, formData: FormData) {
   const email = formData.get("email") as string;
@@ -19,7 +20,7 @@ export async function loginAction(prevState: any, formData: FormData) {
   });
 
   if (error) {
-    return { error: error.message };
+    return { error: translateError(error.message) };
   }
 
   if (!data.user) {
@@ -104,7 +105,7 @@ export async function registerAction(prevState: any, formData: FormData) {
   });
 
   if (error) {
-    return { error: error.message };
+    return { error: translateError(error.message) };
   }
 
   if (data.user) {
@@ -141,7 +142,7 @@ export async function googleLoginAction() {
   });
 
   if (error) {
-    return { error: error.message };
+    return { error: translateError(error.message) };
   }
 
   return { success: true, url: data.url };
@@ -167,7 +168,7 @@ export async function forgotPasswordAction(prevState: any, formData: FormData) {
   });
 
   if (error) {
-    return { error: error.message };
+    return { error: translateError(error.message) };
   }
 
   return { success: true, message: "Link pemulihan kata sandi telah dikirim ke email Anda. Silakan periksa inbox/spam Anda." };
@@ -212,7 +213,7 @@ export async function resetPasswordAction(prevState: any, formData: FormData) {
   });
 
   if (error) {
-    return { error: error.message };
+    return { error: translateError(error.message) };
   }
 
   // Sign out immediately to clear the recovery session

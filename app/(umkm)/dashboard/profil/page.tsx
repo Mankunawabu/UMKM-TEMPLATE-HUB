@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { ProfilClient } from "./profil-client";
 
 export const metadata = {
-  title: "Profil Usaha - UMKM Template Hub",
+  title: "Profil Usaha - KANCING",
 };
 
 export default async function UMKMProfilPage() {

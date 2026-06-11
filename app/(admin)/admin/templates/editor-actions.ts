@@ -1,4 +1,5 @@
 "use server";
+import { translateError } from "@/lib/error-translator";
 
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
@@ -37,12 +38,12 @@ export async function getTemplateFields(templateId: string) {
 
     if (error) {
       console.error("Error fetching template fields:", error);
-      return { success: false, error: error.message };
+      return { success: false, error: translateError(error.message) };
     }
 
     return { success: true, data: data as TemplateField[] };
   } catch (error: any) {
-    return { success: false, error: error.message };
+    return { success: false, error: translateError(error.message) };
   }
 }
 
@@ -90,6 +91,6 @@ export async function saveTemplateFields(templateId: string, fields: TemplateFie
 
     return { success: true };
   } catch (error: any) {
-    return { success: false, error: error.message };
+    return { success: false, error: translateError(error.message) };
   }
 }
