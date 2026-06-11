@@ -539,6 +539,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
   };
 
   const [showExportMenu, setShowExportMenu] = React.useState(false);
+  const [mockupType, setMockupType] = React.useState<string | null>(template.target_platform);
   const [exportPreviewUrl, setExportPreviewUrl] = React.useState<string | null>(null);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
 
@@ -1168,7 +1169,7 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
               <div className="absolute inset-0 opacity-50 bg-[radial-gradient(#CBD5E1_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
               {exportPreviewUrl ? (
                 <div className="relative z-10 w-full flex justify-center items-center">
-                  <DeviceMockup platform={template.target_platform} imageUrl={exportPreviewUrl} shopName={shopName} shopLogo={shopLogo} />
+                  <DeviceMockup platform={mockupType} imageUrl={exportPreviewUrl} shopName={shopName} shopLogo={shopLogo} />
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center text-slate-400 relative z-10">
@@ -1193,9 +1194,39 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
                 </button>
               </div>
 
-              <div className="p-8 flex-1 flex flex-col gap-4 overflow-y-auto">
-                {/* PNG */}
-                <button 
+              <div className="p-8 flex-1 flex flex-col gap-6 overflow-y-auto">
+                {/* Mockup Selector */}
+                <div>
+                  <h4 className="text-sm font-bold text-[#1E293B] mb-3">Pilih Tampilan Mockup:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      { id: "instagram_story", label: "IG Story" },
+                      { id: "instagram_post", label: "IG Feed" },
+                      { id: "tiktok_post", label: "TikTok" },
+                      { id: "facebook_post", label: "Facebook" },
+                      { id: "marketplace", label: "Marketplace" },
+                      { id: null, label: "Asli (Polos)" },
+                    ].map(mockup => (
+                      <button
+                        key={mockup.id || "asli"}
+                        onClick={() => setMockupType(mockup.id)}
+                        className={`px-4 py-2 rounded-full text-xs font-bold border transition-all shadow-sm ${
+                          mockupType === mockup.id
+                            ? "bg-[#FF9100] text-white border-[#FF9100] scale-105"
+                            : "bg-white text-slate-600 border-[#FFE6D5] hover:border-[#FF9100] hover:text-[#E07A00]"
+                        }`}
+                      >
+                        {mockup.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <hr className="border-[#FFE6D5]" />
+
+                <div className="flex flex-col gap-4">
+                  {/* PNG */}
+                  <button 
                   onClick={() => exportImage("PNG")}
                   className="group flex items-center text-left p-4 border-2 border-[#FFE6D5] rounded-2xl hover:border-[#FF9100] hover:bg-[#FFFFFF] hover:shadow-md transition-all"
                 >
