@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Search, History, Download, ImageIcon, ArrowRight, LayoutDashboard, Palette, Eye, X, Trash2, Loader2, CheckSquare, Square } from "lucide-react";
+import { Search, History, Download, ImageIcon, ArrowRight, LayoutDashboard, Palette, Eye, X, Trash2, Loader2, CheckSquare, Square, Bookmark, AlertCircle, Clock } from "lucide-react";
 import toast from "react-hot-toast";
 import { deleteExportLog, deleteMultipleExportLogs } from "./actions";
 
@@ -24,6 +24,13 @@ interface Log {
 
 interface RiwayatClientProps {
   logs: Log[];
+}
+
+export interface LocalDraft {
+  templateId: string;
+  templateName: string;
+  timestamp: number;
+  thumbnail: string;
 }
 
 const catColors = [
