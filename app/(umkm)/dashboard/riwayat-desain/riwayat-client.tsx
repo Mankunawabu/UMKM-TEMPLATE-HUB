@@ -34,7 +34,9 @@ const catColors = [
   "from-emerald-100 to-teal-100"
 ];
 
-export function RiwayatClient({ logs }: RiwayatClientProps) {
+export function RiwayatClient({ logs: initialLogs }: { logs: Log[] }) {
+  const [logs, setLogs] = React.useState(initialLogs);
+  const [localDrafts, setLocalDrafts] = React.useState<LocalDraft[]>([]);
   const [searchTerm, setSearchTerm] = React.useState("");
   const [activeTime, setActiveTime] = React.useState("all");
   const [startDate, setStartDate] = React.useState("");
@@ -44,6 +46,29 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
   const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
   const [isDeletingBulk, setIsDeletingBulk] = React.useState(false);
   const dateInputRef = React.useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    // Load local drafts from localStorage
+    const drafts: LocalDraft[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith("umkm_draft_")) {
+        try {
+          const item = JSON.parse(localStorage.getItem(key) || "");
+          if (item && item.templateId) {
+            drafts.push({
+              templateId: item.templateId,
+              templateName: item.templateName || "Desain Tanpa Nama",
+              timestamp: item.timestamp,
+              thumbnail: item.thumbnail
+            });
+          }
+        } catch (e) {}
+      }
+    }
+    drafts.sort((a, b) => b.timestamp - a.timestamp);
+    setLocalDrafts(drafts);
+  }, []);
 
   const toggleSelect = (id: string) => {
     setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
@@ -226,6 +251,52 @@ export function RiwayatClient({ logs }: RiwayatClientProps) {
         </div>
       )}
 
+      {/* LOCAL DRAFTS SECTION */}
+      {localDrafts.length > 0 && (
+        <div className="mb-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <h2 className="text-lg font-bold text-[#1E293B] mb-4 flex items-center gap-2">
+            <Bookmark className="w-5 h-5 text-[#FF9100]" /> Draf Tersimpan di Perangkat Ini
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {localDrafts.map(draft => (
+              <div key={draft.templateId} className="bg-white rounded-2xl border border-[#FFE6D5] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group relative">
+                <div className="relative w-full aspect-square bg-[#F3F4F6] overflow-hidden">
+                   {draft.thumbnail ? (
+                     <img src={draft.thumbnail} alt={draft.templateName} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                   ) : (
+                     <div className="w-full h-full flex items-center justify-center">
+                       <ImageIcon className="w-8 h-8 text-slate-300" />
+                     </div>
+                   )}
+                   <div className="absolute top-3 right-3 bg-[#FFF9F5] text-[#E07A00] text-[10px] font-bold px-2 py-0.5 rounded border border-[#FFE6D5] shadow-sm flex items-center gap-1">
+                     <AlertCircle className="w-3 h-3" /> Draf Lokal
+                   </div>
+                </div>
+                <div className="p-4 flex flex-col flex-1">
+                   <h3 className="font-bold text-[#1E293B] truncate mb-1" title={draft.templateName}>{draft.templateName}</h3>
+                   <div className="flex items-center text-xs text-slate-500 mb-4 gap-1">
+                     <Clock className="w-3 h-3" /> Diubah: {new Date(draft.timestamp).toLocaleDateString("id-ID", { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                   </div>
+                   <div className="flex gap-2 mt-auto">
+                     <Link href={`/dashboard/template/${draft.templateId}`} className="flex-1 bg-[#FFF9F5] border border-[#FFE6D5] text-[#E07A00] py-2 rounded-xl text-xs font-bold text-center hover:bg-[#FF9100] hover:text-white transition-colors">
+                       Lanjutkan
+                     </Link>
+                     <button onClick={() => {
+                        localStorage.removeItem(`umkm_draft_${draft.templateId}`);
+                        setLocalDrafts(prev => prev.filter(d => d.templateId !== draft.templateId));
+                        toast.success("Draf lokal berhasil dihapus.");
+                     }} className="px-3 py-2 border border-red-200 text-red-500 rounded-xl hover:bg-red-50 transition-colors" title="Hapus Draf">
+                       <Trash2 className="w-4 h-4" />
+                     </button>
+                   </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* EXPORT LOGS GRID */}
       {filteredLogs.length === 0 ? (
         <div className="bg-white rounded-2xl border border-dashed border-[#FFE6D5] p-12 text-center shadow-sm">
           <div className="w-16 h-16 bg-[#F3F4F6] text-[#1E293B] rounded-full flex items-center justify-center mx-auto mb-4">

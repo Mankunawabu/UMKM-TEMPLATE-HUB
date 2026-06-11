@@ -281,16 +281,50 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
     return init;
   });
 
+  const draftKey = `umkm_draft_${template.id}`;
+  const [isMounted, setIsMounted] = React.useState(false);
+
   React.useEffect(() => {
+    setIsMounted(true);
     if (exportId) {
       getExportLogData(exportId).then(data => {
         if (data && data.customization_data) {
-          // Merge with initial values to ensure all fields have at least default state
           setValues(prev => ({ ...prev, ...data.customization_data }));
         }
       });
+    } else {
+      // Auto-Restore Draft from LocalStorage
+      const savedDraftStr = localStorage.getItem(draftKey);
+      if (savedDraftStr) {
+        try {
+          const savedDraft = JSON.parse(savedDraftStr);
+          if (savedDraft && savedDraft.values) {
+            setValues(prev => ({ ...prev, ...savedDraft.values }));
+            toast.success("Draf lokal ditemukan dan dimuat otomatis. ✨");
+          }
+        } catch (err) {
+          console.error("Failed to parse local draft", err);
+        }
+      }
     }
-  }, [exportId]);
+  }, [exportId, draftKey]);
+
+  // Auto-Save to LocalStorage
+  React.useEffect(() => {
+    if (!isMounted) return;
+    
+    // To avoid saving empty/initial states as draft unnecessarily, 
+    // we only save if there's an actual change. But since we merge, 
+    // it's safe to just save the current values.
+    const draftData = {
+      templateId: template.id,
+      templateName: template.nama_template,
+      timestamp: Date.now(),
+      thumbnail: template.thumbnail_url,
+      values
+    };
+    localStorage.setItem(draftKey, JSON.stringify(draftData));
+  }, [values, isMounted, draftKey, template.id, template.nama_template, template.thumbnail_url]);
 
   const [activeTab, setActiveTab] = React.useState<"design" | "text" | "upload" | "layers">("design");
   const [selectedField, setSelectedField] = React.useState<string | null>(null);
@@ -624,6 +658,9 @@ export function EditorClient({ template, fields, userId, shopName, shopLogo, exp
 
       // Log export with the image and state
       await logExportAction(template.id, userId, format, uploadedUrl, values);
+      
+      // Clear draft upon successful export
+      localStorage.removeItem(`umkm_draft_${template.id}`);
       
       // Refresh router so the quota updates automatically in the sidebar
       router.refresh();
